@@ -1,0 +1,4 @@
+Log File. Ejecución Worms
+   Fecha  | Hora |  Gravedad  | 	 Mensaje 
+14/05/2014 16:36  Warning 	 Imagen de agua no fue cargada. Path incorrecto. Por defecto se carga imagen de agua de:TPTaller/imagenes/agua3.png
+14/05/2014 16:36    Error   	 No se puede cargar la máscara 'TPTaller/imagenes/final.png'. Se carga 'TPTaller/imagenes/mascara.png' por defecto.
