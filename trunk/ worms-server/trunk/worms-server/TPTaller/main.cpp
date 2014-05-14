@@ -4,7 +4,7 @@
 
 
 int main(int argc,char* argv[]){
-	bool server = false;
+	bool server = true;
 	if (server)	return main_server(argc, argv);
 	else 	return mainCliente(argc, argv);
 }
