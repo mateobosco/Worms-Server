@@ -21,7 +21,7 @@ int main_server(int argc,char* argv[]){
 		//log error todo
 	}
 	int contador = 0;
-	while (servidor->getCantidadClientes() < 1 || contador < 10000000){
+	while (servidor->getCantidadClientes() < 1 /*|| contador < 10000000*/){
 		contador ++;
 	}
 
