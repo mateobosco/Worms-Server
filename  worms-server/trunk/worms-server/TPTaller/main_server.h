@@ -20,6 +20,10 @@ int main_server(int argc,char* argv[]){
 		//ver que hacer
 		//log error todo
 	}
+	int contador = 0;
+	while (servidor->getCantidadClientes() < 1 || contador < 10000000){
+		contador ++;
+	}
 
 
 	Juego *juego = new Juego();
