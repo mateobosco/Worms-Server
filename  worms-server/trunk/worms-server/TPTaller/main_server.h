@@ -21,7 +21,7 @@ int main_server(int argc,char* argv[]){
 		//log error todo
 	}
 
-/*
+
 	Juego *juego = new Juego();
 	ManejadorPersonajes* manejador_personajes = new ManejadorPersonajes();
 	structInicial* paqueteInicial = juego->getPaqueteInicial();
@@ -51,24 +51,12 @@ int main_server(int argc,char* argv[]){
 		structEventos* evento;
 	    evento = (structEventos*) servidor->desencolarPaquete();
 	    juego->aplicarPaquete(evento, manejador_personajes);
-
-
-
-
-
-
-
-
-
+	    juego->getMundo()->step(0.1,100,100);
 
 	}
 
-
-
-
-
 	logFile.close();
-	delete juego; */
+	delete juego;
 	return retorno;
 
 }
