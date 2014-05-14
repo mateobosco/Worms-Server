@@ -1,0 +1,37 @@
+escenario:
+    alto-px:       600
+    ancho-px:      800
+    alto-un:       60
+    ancho-un:      80
+    alto-esc:      1000
+    ancho-esc:     1200
+    agua:          52
+
+    tierra:        "TPTaller/imagenes/final.png"
+    cielo:         "TPTaller/imagenes/cieloN.png"
+    obj:
+        - tipo:       circulo #1
+          x:        49
+          y:        -50
+          escala:   5
+          color:    "#0000ff" 
+          rotacion: 35
+          masa:     2
+          estatico: no
+        - tipo:     triangulo
+          x:        10
+          y:        10
+          escala:   3.5
+          color:    "#ff00A0" 
+          rotacion: 90
+          masa:     1
+          estatico: no
+        - tipo:     rectangulo
+          x:        5
+          y:        10
+          ancho:    4
+          alto:     3
+          color:    "#00FF00"
+          rotacion: 45
+          masa:     3
+          estatico: no
