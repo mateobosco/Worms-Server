@@ -78,7 +78,11 @@ int Cliente::runEnviarInfo(){
 		SDL_LockMutex(this->mutex);
 		memcpy(buffer, this->paquete_enviar, MAX_PACK);
 		int enviados = this->enviar(buffer, MAX_PACK); //todo
-		if (enviados > 0) printf("Voy a enviar: %s al servidor\n",buffer);
+		if (enviados >= 0) printf("Voy a enviar: %s al servidor\n",buffer);
+		else if(enviados == -1){
+			printf("Error al enviar info cliente a servidor\n");
+			break;
+		}
 
 		//this->enviarInformacion(this->socket_cl,this->paqueteEnviar,sizeof(this->paqueteEnviar)); //todo
 		//Se desbloquea
@@ -107,7 +111,7 @@ int Cliente::runRecibirInfo(){
 			printf("pack data recibida: %s\n", buffer);
 		}
 		else if(recibidos ==0){
-			printf("Desconexión\n");
+			printf("Servidor desconectado n\n");
 			break;
 		}
 		delete[] buffer;
