@@ -42,14 +42,16 @@ public:
 	int aceptarConexiones();
 
 	int runEnviarInfo(Cliente* cliente);
-	int enviarInformacion(Socket* sock, void* data, size_t longData);
+//	int enviarInformacion(Socket* sock, char* data, size_t longData);
 
 	int runRecibirInfo(void* paquete);
-	void recibirInformacion(Cliente* cliente, char* data, size_t tamanio);
+//	void recibirInformacion(Cliente* cliente, char* data, size_t tamanio);
 
 	int iniciarServidor();
 	int runEscucharConexiones();
 	int* getVectorClientes();
+
+	int aceptarConexiones2(); // todo
 
 private:
 	char paqueteEnviar[MAX_PACK];
@@ -57,7 +59,7 @@ private:
 	int cantidadMaxConexiones;
 	int cantClientes;
 	Socket* listener;
-	Socket* sockClientes[MAXJUG+1];
+	Cliente* clientes[MAXJUG];
 	SDL_mutex *mutex;
 	int maxFD;
 	const char* puerto;

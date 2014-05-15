@@ -26,16 +26,16 @@ class Cliente{
 		SDL_mutex *mutex;
 		char paquete_recibir[MAX_PACK];
 		char paquete_enviar[MAX_PACK];
-
-//		int id;
+		int id;
+		static int cant_clientes;
 
 	public:
 		Cliente(const char *name, const char *ip_sv, const char* puerto);
 		Cliente(int fd);
 		~Cliente();
 		int conectar();
-		int enviar(size_t longData, void *mensaje);
-		int recibir(char *mensaje, int longDataMax);
+		int enviar(char *mensaje, size_t longData);
+//		int recibir(char *mensaje, int longDataMax);
 		int runRecibirInfo();
 		int run();
 		int runEnviarInfo();

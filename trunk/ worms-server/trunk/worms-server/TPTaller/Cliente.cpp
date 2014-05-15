@@ -1,11 +1,15 @@
 #include "Cliente.h"
 
+int Cliente::cant_clientes = 0;
+
 Cliente::Cliente(int fd){
 	this->name_client = NULL;
 	this->socket_cl = new Socket(PUERTO,fd);
 	memset(paquete_enviar, 0, MAX_PACK);
 	memset(paquete_recibir, 0, MAX_PACK);
 	this->mutex = SDL_CreateMutex();
+	id = Cliente::cant_clientes;
+	Cliente::cant_clientes++;
 //	this->id = 1;// VER COMO GENERAR EL ID
 }
 
@@ -15,10 +19,13 @@ Cliente::Cliente(const char *name, const char *ip_sv, const char *puerto){
 	memset(paquete_enviar, 0, MAX_PACK);
 	memset(paquete_recibir, 0, MAX_PACK);
 	this->mutex = SDL_CreateMutex();
+	id = Cliente::cant_clientes;
+	Cliente::cant_clientes++;
 }
 
 Cliente::~Cliente(){
-	close(this->socket_cl->getFD());
+	//close(this->socket_cl->getFD());
+	delete this->socket_cl;
 	SDL_DestroyMutex(mutex);
 }
 
@@ -34,8 +41,8 @@ int runSendInfoCliente(void* cliente){
 
 int runRecvInfoCliente(void* cliente){
 	printf("Entro al recibir del cliente");
-	Cliente* clien = (Cliente*) cliente;
-	clien->runRecibirInfo();
+	Cliente* client = (Cliente*) cliente;
+	client->runRecibirInfo();
 	return EXIT_SUCCESS;
 }
 
@@ -63,8 +70,10 @@ int Cliente::conectar(){
 int Cliente::runEnviarInfo(){
 	while(true){
 		//se bloquea mutex
+		char buffer[MAX_PACK];
 		SDL_LockMutex(this->mutex);
-		this->enviar(sizeof(this->paquete_enviar), this->paquete_enviar); //todo
+		memcpy(buffer, this->paquete_enviar, MAX_PACK);
+		this->enviar(buffer, MAX_PACK); //todo
 		//this->enviarInformacion(this->socket_cl,this->paqueteEnviar,sizeof(this->paqueteEnviar)); //todo
 		//Se desbloquea
 		SDL_UnlockMutex(this->mutex);
@@ -74,35 +83,35 @@ int Cliente::runEnviarInfo(){
 
 
 //solo envia info al servidos a través del thread
-int Cliente::enviar(size_t longData, void* mensaje){
+int Cliente::enviar(char* mensaje, size_t longData){
 	return this->socket_cl->enviar(mensaje, longData);
 }
 
 
 int Cliente::runRecibirInfo(){
-
 	while(true){
-		if (this->recibir(paquete_recibir, MAX_PACK) > 0){
-			//todo ver tamanio
-//			structEventos evento_actual;
-			char pack[MAX_PACK];
-			memcpy(pack, this->paquete_recibir, sizeof (structEventos)); //todo ver como determinar el tamaño del paquete
-			printf("pack data: %s\n", pack);
-			//Ver tema de dibujar para q no se pisen los paquetes. Ver si sirve una cola como en servidor
-			//dibujar() todo
+		char *buffer = new char[MAX_PACK];
+		memset(buffer, 0, MAX_PACK);
+		if (this->socket_cl->recibir(buffer, MAX_PACK) > 0){
+			SDL_LockMutex(this->mutex);
+			memcpy(this->paquete_recibir, buffer, MAX_PACK); //todo ver como determinar el tamaño del paquete
+			SDL_UnlockMutex(this->mutex);
+			printf("pack data recibida: %s\n", buffer);
 		}
+		delete[] buffer;
 	}
 	return EXIT_SUCCESS;
-
 }
 
 
 //En mensaje se almacena la información recibida.
 //Retorna -1 si hubo error y sino la cantidad de bytes del mensaje recibido.
-int Cliente::recibir(char* mensaje, int longDataMax){
-	return this->socket_cl->recibir(mensaje,longDataMax);
-
-}
+//int Cliente::recibir(char* mensaje, int longDataMax){
+//	int retorno;
+//	char buffer[MAX_PACK];
+//	retorno = this->socket_cl->recibir(buffer,longDataMax);
+//	return retorno;
+//}
 
 int Cliente::run(){
 	return 0;
@@ -114,7 +123,7 @@ int Cliente::getID(){
 
 char* Cliente::getPaquete(){
 	SDL_LockMutex(this->mutex);
-	char* buffer = new char[MAX_PACK];
+	char* buffer = new char[MAX_PACK];  //ver delete todo
 	memcpy(buffer, this->paquete_recibir, MAX_PACK);
 	SDL_UnlockMutex(this->mutex);
 	return buffer;
