@@ -21,7 +21,7 @@ bool KEYSClient[322];
 int mainCliente(int argc, char* argv[]){
 
 	if(checkCantParametros(argc) == EXIT_FAILURE){
-		exit(1);
+		return EXIT_FAILURE;
 	}
 	const char* name = argv[POS_NAME_USER];
 	const char* ip_sv = argv[POS_IP];
@@ -32,12 +32,8 @@ int mainCliente(int argc, char* argv[]){
 	if(cliente.conectar() != EXIT_SUCCESS){
 		return EXIT_FAILURE;
 	}
-	SDL_Delay(600000);
-	SDL_WaitThread(NULL, 0);//Todo esto no funciona correctamente
-	//Hay que lograr que no corte. Seguramente habría que crear un hilo para el juego y
-	//esperar a ese hilo.
 
-
+	SDL_Delay(60000);
 /*
 	char mensaje[sizeof(structInicial)];
 	cliente.recibir(mensaje, sizeof(mensaje) );

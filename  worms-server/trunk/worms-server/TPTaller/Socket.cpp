@@ -36,16 +36,16 @@ Socket::Socket(const char *ip, const char *puerto) {
 }
 Socket::Socket(const char* puerto, int sockfd) {
 	this->puerto = puerto;
-	struct addrinfo hints;
-	memset(&hints,0,sizeof hints);
-	hints.ai_family = AF_INET;
-	hints.ai_socktype = SOCK_STREAM;
-	hints.ai_flags = AI_PASSIVE;
-	int estado = getaddrinfo(NULL,this->puerto,&hints,&this->info);
-	if(estado !=0){
-		//loguear error
-		exit(1);
-	}
+//	struct addrinfo hints;
+//	memset(&hints,0,sizeof hints);
+//	hints.ai_family = AF_INET;
+//	hints.ai_socktype = SOCK_STREAM;
+//	hints.ai_flags = AI_PASSIVE;
+//	int estado = getaddrinfo(NULL,this->puerto,&hints,&this->info);
+//	if(estado !=0){
+//		//loguear error
+//		exit(1);
+//	}
 	this->sockFD = sockfd;
 	this->activo = true;
 }
@@ -89,6 +89,7 @@ int Socket::escuchar(int cantMaxCon){
 	return l;
 }
 
+// Aceptar devuelve un FD (file descriptor)
 Socket* Socket::aceptar(){
 	socklen_t len;
 	int nuevoFD;
@@ -101,11 +102,11 @@ Socket* Socket::aceptar(){
 	if (nuevoFD == -1) {
 		//loguear error todo
 		close(nuevoFD);
-		perror("accept");
+		//perror("accept");
 		return NULL;
 	}
-	Socket* sock = new Socket(PUERTO,nuevoFD);
-	sock->setInfo((struct sockaddr *)&infoCliente);
+	Socket* sock = new Socket(PUERTO, nuevoFD);
+//	sock->setInfo((struct sockaddr *)&infoCliente);
 	return sock;
 
 }
@@ -135,8 +136,9 @@ int Socket::enviar(const void* dato, size_t longDato){
 }
 
 int Socket::recibir(char* buffer, int longBuffer){
-	memset(buffer, NULL, longBuffer);
-	return recv(this->sockFD, buffer, longBuffer, 0);
+	//memset(buffer, 0, longBuffer);
+	int bytes_enviados = recv(this->sockFD, buffer, longBuffer, 0);
+	return bytes_enviados;
 }
 
 int Socket::getFD(){

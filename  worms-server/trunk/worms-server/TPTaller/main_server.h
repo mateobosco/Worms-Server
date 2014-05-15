@@ -8,24 +8,31 @@ int runServidor(void* serv){
 	return ((Servidor*) serv)->runEscucharConexiones();
 }
 
+int aceptarConex(void* servidor){
+	Servidor* serv = (Servidor*) servidor;
+	while(serv->getCantidadClientes() < serv->getCantidadMaxConexiones()){
+		printf("Thread de aceptar conexiones\n");
+		serv->aceptarConexiones();
+	}
+	return 0;
+}
+
 int main_server(int argc,char* argv[]){
 	int retorno = 0;
 	Servidor *servidor = new Servidor(MAXJUG);
 	printf("Servidor corriendo\n");
 
 	SDL_Thread* listener =  SDL_CreateThread(runServidor,"listener",(void*)servidor);
+	SDL_Thread* aceptar = SDL_CreateThread(aceptarConex,"aceptar",(void*)servidor);
+
 	int thread = 0;
-//	SDL_WaitThread(listener, &thread);
+	SDL_WaitThread(listener, &thread);
 	if(listener == NULL){
 		//ver que hacer
 		//log error todo
 	}
-	int contador = 0;
-	while (servidor->getCantidadClientes() < 1 /*|| contador < 10000000*/){
-		contador ++;
-	}
 
-
+/*
 	Juego *juego = new Juego();
 	ManejadorPersonajes* manejador_personajes = new ManejadorPersonajes();
 	structInicial* paqueteInicial = juego->getPaqueteInicial();
@@ -55,12 +62,24 @@ int main_server(int argc,char* argv[]){
 		structEventos* evento;
 	    evento = (structEventos*) servidor->desencolarPaquete();
 	    juego->aplicarPaquete(evento, manejador_personajes);
-	    juego->getMundo()->step(0.1,100,100);
+
+
+
+
+
+
+
+
+
 
 	}
 
+
+
+
+
 	logFile.close();
-	delete juego;
+	delete juego; */
 	return retorno;
 
 }
