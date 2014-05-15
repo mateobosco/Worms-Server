@@ -50,6 +50,7 @@ public:
 	int iniciarServidor();
 	int runEscucharConexiones();
 	int* getVectorClientes();
+	int validarSocket(Socket* sock);
 
 	int aceptarConexiones2(); // todo
 

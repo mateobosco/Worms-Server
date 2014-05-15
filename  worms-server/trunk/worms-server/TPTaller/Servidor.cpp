@@ -75,8 +75,23 @@ int Servidor::aceptarConexiones2(){
 	return 0;
 }
 
+int Servidor::validarSocket(Socket* sock){
+	int fdSock = sock->getFD();
+	int i;
+	for(i=0; i< this->cantClientes; i++){
+		int fd = this->clientes[i]->getSocket()->getFD();
+		if(fd != fdSock) return 0;
+		else return 1;
+	}
+
+}
+
 int Servidor::aceptarConexiones(){
 	Socket* sockCliente = this->listener->aceptar();
+	while(validarSocket(sockCliente) == 1){
+		delete sockCliente;
+		sockCliente = this->listener->aceptar();
+	}
 	//Se crea un cliente y un thread asociado a el y se invoca el método run.
 	if(sockCliente != NULL){
 		printf("entre en sockCliente!=NULL");
