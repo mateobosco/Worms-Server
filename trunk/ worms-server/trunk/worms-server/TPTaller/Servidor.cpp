@@ -13,7 +13,7 @@ Servidor::Servidor(int maxCon){
 	this->listener = new Socket(NULL, PUERTO);
 	this->mutex = SDL_CreateMutex();
 	memset(this->paqueteEnviar, 0, MAX_PACK);
-	strcpy(paqueteEnviar, "facuuuuuuuu");
+	strcpy(paqueteEnviar, "facuuuuuuuu\n");
 
 	for (int i=0; i < MAXJUG; i++){
 		vector_clientes[i]=0;
@@ -89,6 +89,7 @@ int Servidor::validarSocket(Socket* sock){
 int Servidor::aceptarConexiones(){
 	Socket* sockCliente = this->listener->aceptar();
 	while(validarSocket(sockCliente) == 1){
+		printf("ASigno mismo fd : %d\n",sockCliente->getFD());
 		delete sockCliente;
 		sockCliente = this->listener->aceptar();
 	}
@@ -96,6 +97,7 @@ int Servidor::aceptarConexiones(){
 	if(sockCliente != NULL){
 		printf("entre en sockCliente!=NULL");
 		Cliente* cliente = new Cliente(sockCliente->getFD());
+		printf("fd del socket creado desde accept: %d\n",cliente->getSocket()->getFD());
 		conexion_t par;
 		par.cliente = cliente;
 		par.servidor = this;
@@ -131,8 +133,8 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 		SDL_UnlockMutex(this->mutex);
 
 		if(cliente->getSocket()->enviar(envio, MAX_PACK) > 0){
-			SDL_Delay(5000);
-			this->actualizarPaquete("nahueeeeee");//todo
+			//SDL_Delay(5000);
+			this->actualizarPaquete("nahueeeeee\n");//todo
 		}
 	}
 	return EXIT_SUCCESS;
@@ -148,12 +150,18 @@ int Servidor::runRecibirInfo(void* cliente){
 		Cliente* client = (Cliente*) cliente;
 		char paquete[MAX_PACK];
 		memset(paquete, 0, MAX_PACK);
-		client->getSocket()->recibir(paquete, MAX_PACK); //todo ver tamanio
+		int cantidad = client->getSocket()->recibir(paquete, MAX_PACK); //todo ver tamanio
 
-		void* novedad = malloc (sizeof (structEventos));
-		memcpy(novedad, paquete, sizeof (structEventos)); //todo ver como determinar el tamaño del paquete
-		this->paquetesRecibir.push(novedad);
-
+		if(cantidad >0){
+			void* novedad = malloc (sizeof (structEventos));
+			memcpy(novedad, paquete, sizeof (structEventos)); //todo ver como determinar el tamaño del paquete
+			this->paquetesRecibir.push(novedad);
+			printf("Recibí: %s del cliente",paquete);
+		}
+		else if(cantidad ==0){
+			printf("Cliente desconectado\n");
+			break;
+		}
 		SDL_UnlockMutex(this->mutex);
 	}
 	return EXIT_SUCCESS;

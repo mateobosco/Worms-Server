@@ -41,7 +41,7 @@ class Cliente{
 		int runEnviarInfo();
 		Socket* getSocket();
 		int getID();
-		string getNombre();
+		const char* getNombre();
 		char* getPaquete();
 
 };
