@@ -88,14 +88,14 @@ int Servidor::validarSocket(Socket* sock){
 
 int Servidor::aceptarConexiones(){
 	Socket* sockCliente = this->listener->aceptar();
-	while(validarSocket(sockCliente) == 1){
-		printf("ASigno mismo fd : %d\n",sockCliente->getFD());
-		delete sockCliente;
-		sockCliente = this->listener->aceptar();
-	}
+
 	//Se crea un cliente y un thread asociado a el y se invoca el método run.
 	if(sockCliente != NULL){
-		printf("entre en sockCliente!=NULL");
+		while(validarSocket(sockCliente) == 1){
+			printf("ASigno mismo fd : %d\n",sockCliente->getFD());
+			delete sockCliente;
+			sockCliente = this->listener->aceptar();
+		}
 		Cliente* cliente = new Cliente(sockCliente->getFD());
 		printf("fd del socket creado desde accept: %d\n",cliente->getSocket()->getFD());
 		conexion_t par;
@@ -131,10 +131,14 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 		SDL_LockMutex(this->mutex);
 		memcpy(envio, this->paqueteEnviar, MAX_PACK);
 		SDL_UnlockMutex(this->mutex);
-
-		if(cliente->getSocket()->enviar(envio, MAX_PACK) > 0){
+		int enviados = cliente->getSocket()->enviar(envio, MAX_PACK);
+		if(enviados > 0){
 			//SDL_Delay(5000);
 			this->actualizarPaquete("nahueeeeee\n");//todo
+		}
+		else if(enviados == -1){
+			printf("Error del servidor al enviar al cliente\n");
+			break;
 		}
 	}
 	return EXIT_SUCCESS;
@@ -160,6 +164,10 @@ int Servidor::runRecibirInfo(void* cliente){
 		}
 		else if(cantidad ==0){
 			printf("Cliente desconectado\n");
+			break;
+		}
+		else if(cantidad ==-1){
+			printf("Error al recibir información del cliente\n");
 			break;
 		}
 		SDL_UnlockMutex(this->mutex);
@@ -193,7 +201,6 @@ int Servidor::runEscucharConexiones(){
 		return EXIT_FAILURE;
 		//loguear error
 	}
-	int ciclo = 0;
 	int i = 0;
 	while(true){
 		while((this->cantClientes < this->cantidadMaxConexiones)){
@@ -201,6 +208,10 @@ int Servidor::runEscucharConexiones(){
 			//printf("ciclo numero: %d \n",i);
 			//SDL_Thread* aceptar = SDL_CreateThread(aceptarConex,"aceptar",(void*)this);
 			conexiones = this->escucharConexiones();
+			if (conexiones == -1){
+				printf("Error al escuchar conexiones \n");
+				break;
+			}
 			i++;
 
 		}
