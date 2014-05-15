@@ -26,7 +26,9 @@ int main_server(int argc,char* argv[]){
 	SDL_Thread* aceptar = SDL_CreateThread(aceptarConex,"aceptar",(void*)servidor);
 
 	int thread = 0;
+	int thread_2 = 0;
 	SDL_WaitThread(listener, &thread);
+	SDL_WaitThread(aceptar, &thread_2);
 	if(listener == NULL){
 		//ver que hacer
 		//log error todo
@@ -80,6 +82,7 @@ int main_server(int argc,char* argv[]){
 
 	logFile.close();
 	delete juego; */
+	delete servidor;
 	return retorno;
 
 }
