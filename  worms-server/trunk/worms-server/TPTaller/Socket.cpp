@@ -20,7 +20,6 @@ Socket::Socket(const char *ip, const char *puerto) {
 	hints.ai_family = AF_INET;
 	hints.ai_socktype = SOCK_STREAM;
 	if (!ip) hints.ai_flags = AI_PASSIVE;
-//	struct addrinfo *lista;
 	int estado = getaddrinfo(ip,this->puerto,&hints,&this->info);
 	if(estado !=0){
 		//loguear error
@@ -30,7 +29,6 @@ Socket::Socket(const char *ip, const char *puerto) {
 		//log error
 		perror("socket");
 	}
-	//freeaddrinfo(lista);
 	this->activo = true;
 
 }
@@ -67,7 +65,7 @@ int Socket::conectar(){
 int Socket::EnlazarYEscuchar(int cantMaxCon){
 	int yes = 1;
 	setsockopt(this->sockFD, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int));
-				//log errot todo
+		//log errot todo
 	if (bind(this->sockFD, this->info->ai_addr, this->info->ai_addrlen) == -1) {
 		//log error
 		close(this->sockFD);
@@ -103,10 +101,7 @@ int Socket::aceptar(){
 		//loguear error todo
 		close(nuevoFD);
 		//perror("accept");
-		//return NULL;
 	}
-	//Socket* sock = new Socket(PUERTO, nuevoFD);
-//	sock->setInfo((struct sockaddr *)&infoCliente);
 	return nuevoFD;
 
 }

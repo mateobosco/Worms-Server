@@ -26,7 +26,6 @@ Cliente::Cliente(const char *name, const char *ip_sv, const char *puerto){
 }
 
 Cliente::~Cliente(){
-	//close(this->socket_cl->getFD());
 	delete this->socket_cl;
 	SDL_DestroyMutex(mutex);
 }
@@ -36,14 +35,12 @@ Socket* Cliente::getSocket(){
 }
 
 int runSendInfoCliente(void* cliente){
-	printf("Entro a enviar info al servidor \n");
 	Cliente* clien = (Cliente*) cliente;
 	clien->runEnviarInfo();
 	return EXIT_SUCCESS;
 }
 
 int runRecvInfoCliente(void* cliente){
-	printf("Entro al recibir del servidor \n");
 	Cliente* client = (Cliente*) cliente;
 	client->runRecibirInfo();
 	return EXIT_SUCCESS;
@@ -56,7 +53,6 @@ int Cliente::conectar(){
 	}
 	printf("Conecte cliente %s con servidor. num de fd es: %d\n", this->name_client,this->socket_cl->getFD());
 	SDL_Thread* recibirDelServidor = SDL_CreateThread(runRecvInfoCliente, "recibirServidor",(void*)this);
-	//printf("Uno\n");
 	if(recibirDelServidor == NULL){
 		//ver que hacer
 		//loguear error todo
@@ -74,6 +70,7 @@ int Cliente::conectar(){
 int Cliente::runEnviarInfo(){
 	while(true){
 		//se bloquea mutex
+		SDL_Delay(2000);
 		char buffer[MAX_PACK];
 		SDL_LockMutex(this->mutex);
 		memcpy(buffer, this->paquete_enviar, MAX_PACK);
@@ -83,8 +80,6 @@ int Cliente::runEnviarInfo(){
 			printf("Error al enviar info cliente a servidor\n");
 			break;
 		}
-
-		//this->enviarInformacion(this->socket_cl,this->paqueteEnviar,sizeof(this->paqueteEnviar)); //todo
 		//Se desbloquea
 		SDL_UnlockMutex(this->mutex);
 	}
@@ -94,7 +89,6 @@ int Cliente::runEnviarInfo(){
 
 //solo envia info al servidos a través del thread
 int Cliente::enviar(char* mensaje, size_t longData){
-	//printf("Enviando: %s al servidor\n",mensaje);
 	return this->socket_cl->enviar(mensaje, longData);
 }
 
@@ -105,6 +99,7 @@ int Cliente::runRecibirInfo(){
 		memset(buffer, 0, MAX_PACK);
 		int recibidos = this->socket_cl->recibir(buffer, MAX_PACK);
 		if (recibidos > 0){
+			SDL_Delay(2000);
 			SDL_LockMutex(this->mutex);
 			memcpy(this->paquete_recibir, buffer, MAX_PACK); //todo ver como determinar el tamaño del paquete
 			SDL_UnlockMutex(this->mutex);
@@ -122,19 +117,6 @@ int Cliente::runRecibirInfo(){
 	return EXIT_SUCCESS;
 }
 
-
-//En mensaje se almacena la información recibida.
-//Retorna -1 si hubo error y sino la cantidad de bytes del mensaje recibido.
-//int Cliente::recibir(char* mensaje, int longDataMax){
-//	int retorno;
-//	char buffer[MAX_PACK];
-//	retorno = this->socket_cl->recibir(buffer,longDataMax);
-//	return retorno;
-//}
-
-int Cliente::run(){
-	return 0;
-}
 
 int Cliente::getID(){
 	return EXIT_SUCCESS;

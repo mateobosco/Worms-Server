@@ -11,7 +11,6 @@ int runServidor(void* serv){
 int aceptarConex(void* servidor){
 	Servidor* serv = (Servidor*) servidor;
 	while(serv->getCantidadClientes() < serv->getCantidadMaxConexiones()){
-		//printf("Thread de aceptar conexiones\n");
 		int accept = serv->aceptarConexiones();
 		if (accept != EXIT_SUCCESS) printf("Error al aceptar\n");
 	}
@@ -83,7 +82,7 @@ int main_server(int argc,char* argv[]){
 
 	logFile.close();
 	delete juego; */
-	//delete servidor;
+	delete servidor;
 	return retorno;
 
 }
