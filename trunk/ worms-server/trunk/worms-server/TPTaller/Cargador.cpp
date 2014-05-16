@@ -11,7 +11,7 @@ using namespace std;
 
 Cargador::Cargador(const char* filename){
 
-	datos = new structInicial;
+	this->datos = new structInicial;
 	(this->f_input).open(filename,ios::in);
 	if(!f_input){
 		loguear();
@@ -119,7 +119,7 @@ Agua* Cargador::loadAgua(Node nodo,string pathAgua ){
 		logFile <<"    Warning " <<"\t No se pudo cargar el nivel de agua. Por defecto seteamos nivel = 40 " << endl;
 		nivelAgua = 40;
 	}
-	Agua* agua = new Agua(nivelAgua,pathAgua);
+	Agua* agua = new Agua(nivelAgua,pathAgua); //ver delete todo
 	datos->agua = pathAgua;
 	datos->nivel_agua = nivelAgua;
 	return agua;
@@ -225,7 +225,7 @@ Escalador* Cargador::loadEscalador(Node nodo){
 	datos->ancho_ventana = (int) anchoPx;
 	datos->alto_ventana = (int) altoPx;
 
-	return escalador;
+	return escalador; //ver delete todo
 
 }
 
@@ -255,7 +255,7 @@ Rectangulo* Cargador::loadRectangulo(Node nodo, Mundo* mundo, Escalador *escalad
 	float32 rotacion = obtenerRotacion(nodo,i);
 	Rectangulo* rect = new Rectangulo(mundo, posicion,ancho,alto,estatico,color,masa,rotacion);
 	if (mundo->checkOverlap(rect, escalador,i)){
-		return rect;
+		return rect; //ver delete todo
 	} else{
 		delete rect;
 		return NULL;
@@ -271,7 +271,7 @@ Circulo* Cargador::loadCirculo (Node nodo, Mundo* mundo, Escalador *escalador,si
 	float32 escala = obtenerEscala(nodo,i);
 	Circulo* circulo = new Circulo(mundo, posicion,(int)escala, estatico, color, masa, rotacion);
 	if (mundo->checkOverlap(circulo, escalador,i)){
-		return circulo;
+		return circulo; //ver delete todo
 	} else{
 		delete circulo;
 		return NULL;
@@ -288,7 +288,7 @@ Poligono* Cargador::loadPoligono (Node nodo, Mundo* mundo, Escalador *escalador,
 	float32 rotacion = obtenerRotacion(nodo,i);
 	Poligono* poligono = new Poligono(mundo, posicion, escala, cantLados,estatico,color, masa,rotacion);
 	if (mundo->checkOverlap(poligono, escalador,i)){
-		return poligono;
+		return poligono; //ver delete todo
 	} else{
 		delete poligono;
 		return NULL;

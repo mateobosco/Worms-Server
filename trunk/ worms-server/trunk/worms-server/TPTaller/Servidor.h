@@ -63,7 +63,6 @@ private:
 	const char* puerto;
 	int vector_clientes[4];
 
-
 };
 
 #endif /* SERVIDOR_H_ */

@@ -39,7 +39,7 @@ Juego::~Juego(){
 }
 
 uint8 Juego::crearJugador(){
-	jugadores[cantidad_jugadores] = new Jugador(mundo, cantidad_jugadores + 1, manejador);
+	jugadores[cantidad_jugadores] = new Jugador(mundo, cantidad_jugadores + 1, manejador); //ver delete todo
 	cantidad_jugadores++;
 }
 
@@ -112,15 +112,15 @@ Node* Juego::cargaInicial(Cargador* cargador){
 		loguear();
 		logFile << "    Error   " << "\t No se encuentra el escenario. Se carga escenario por defecto."<<endl;
 		delete cargador;
-		cargador = new Cargador(pathDefEs.c_str());
+		cargador = new Cargador(pathDefEs.c_str()); //ver delete todo
 		(*nodo_escenario) = cargador->getNodo()["escenario"];
 	}
-	return nodo_escenario;
+	return nodo_escenario; //ver delete todo<
 }
 
 void Juego::cargarEscalador(Cargador *cargador, Node nodo_escenario){
-	escalador = cargador->loadEscalador(nodo_escenario);
-	if(!escalador){
+	this->escalador = cargador->loadEscalador(nodo_escenario);
+	if(!this->escalador){
 		loguear();
 		logFile << "    Error   " << "\t  No se pudo escalar la información "<< endl;
 	}
@@ -128,17 +128,17 @@ void Juego::cargarEscalador(Cargador *cargador, Node nodo_escenario){
 
 void Juego::cargarAgua(Cargador *cargador, Node nodo_escenario){
 	string imagen_agua = pathAgua;
-	agua = cargador->loadAgua(nodo_escenario, imagen_agua);
-	if(!agua){
+	this->agua = cargador->loadAgua(nodo_escenario, imagen_agua);
+	if(!this->agua){
 		loguear();
 		logFile << "    Error   " << "\t  No se pudo crear el agua. "<< endl;
 	}
 }
 
 void Juego::cargarMundo(){
-	b2Vec2 escalas = b2Vec2(escalador->getEscalaX(), escalador->getEscalaY());
-	mundo = new Mundo(b2Vec2(GRAVEDAD_X,GRAVEDAD_Y), agua, escalas);
-	if(!mundo){
+	b2Vec2 escalas = b2Vec2(this->escalador->getEscalaX(), this->escalador->getEscalaY());
+	this->mundo = new Mundo(b2Vec2(GRAVEDAD_X,GRAVEDAD_Y), this->agua, escalas);
+	if(!this->mundo){
 		loguear();
 		logFile << "    Error   " << "\t  No se pudo crear el mundo."<< endl;
 	}
@@ -164,26 +164,26 @@ void Juego::cargarCielo(Cargador *cargador, Node nodo_escenario){
 }
 
 void Juego::cargarLector(string tierra){
-	lector = new LectorMascara(tierra);
-	if(!lector){
+	this->lector = new LectorMascara(tierra); //ver delete todo
+	if(!this->lector){
 		loguear();
 		logFile << "    Error   " << "\t  No se pudo crear el Lector de Máscara. " <<  SDL_GetError()<< endl;
 	}
 }
 
 void Juego::generarTierra(){
-	b2Vec2* vectorTierra = lector->LeerMascara(escalador);
-	mundo->Crear_Chains(vectorTierra, lector->GetPixelAncho());
+	b2Vec2* vectorTierra = this->lector->LeerMascara(this->escalador);
+	this->mundo->Crear_Chains(vectorTierra, this->lector->GetPixelAncho());
 }
 
 void Juego::cargarFiguras(Cargador *cargador, Node nodo_escenario){
 	Node objetos;
 	if((cargador->getNodo(nodo_escenario,objetos,"objetos"))||(cargador->getNodo(nodo_escenario,objetos,"obj"))||
 			(cargador->getNodo(nodo_escenario,objetos,"o"))||(cargador->getNodo(nodo_escenario,objetos,"Objetos"))||(cargador->getNodo(nodo_escenario,objetos,"OBJETOS"))){
-		cantidad_figuras = objetos.size();
-		figuras = new Figura*[cantidad_figuras];
-		for(size_t i = 0; i < cantidad_figuras; i++){
-			figuras[i] = cargador->cargarFigura(objetos[i], mundo, escalador, i + 1);
+		this->cantidad_figuras = objetos.size();
+		this->figuras = new Figura*[this->cantidad_figuras];
+		for(size_t i = 0; i < this->cantidad_figuras; i++){
+			this->figuras[i] = cargador->cargarFigura(objetos[i], this->mundo, this->escalador, i + 1);
 		}
 	}else{
 		loguear();
@@ -199,16 +199,16 @@ void Juego::cargaPrincipal(Cargador *cargador, Node nodo_escenario){
 	string tierra = cargarTierra(cargador, nodo_escenario);
 	cargarCielo(cargador, nodo_escenario);
 	cargarLector(tierra);
-	if(lector == NULL){
-		delete mundo;
-		mundo = NULL;
+	if(this->lector == NULL){
+		delete this->mundo;
+		this->mundo = NULL;
 	}
 	generarTierra();
 	cargarFiguras(cargador, nodo_escenario);
 }
 
 structInicial* Juego::getPaqueteInicial(){
-	return inicial;
+	return this->inicial;
 }
 
 
