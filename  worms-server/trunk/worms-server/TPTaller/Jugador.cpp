@@ -26,36 +26,36 @@ void Jugador::seleccionarColor(){
 }
 
 Jugador::Jugador(Mundo *mundo, uint8 cantidad, ManejadorPersonajes *manejador){
-	numero = cantidad;
+	this->numero = cantidad;
 	seleccionarColor();
 	for(Uint8 i = 0; i < MAX_CANT_PERSONAJES; i++){
-		personajes[i] = new Personaje(mundo, numero);
-		manejador->agregarPersonaje(personajes[i], numero);
+		this->personajes[i] = new Personaje(mundo, this->numero);
+		manejador->agregarPersonaje(this->personajes[i], this->numero);
 	}
 //	Jugador::cantidad_jugadores++;
 }
 
 Jugador::~Jugador(){
 	for(Uint8 i = 0; i < MAX_CANT_PERSONAJES; i++){
-		if(personajes[i] != NULL){
-			delete personajes[i];
+		if(this->personajes[i] != NULL){
+			delete this->personajes[i];
 		}
 	}
 //	Jugador::cantidad_jugadores--;
 }
 
 Personaje** Jugador::getPersonajes(){
-	return personajes;
+	return this->personajes;
 }
 
 Personaje* Jugador::getPersonaje(Uint8 numero_pj){
-	return personajes[numero_pj];
+	return this->personajes[numero_pj];
 }
 
 Uint8 Jugador::getNumero(){
-	return numero;
+	return this->numero;
 }
 
 SDL_Color Jugador::getColor(){
-	return color;
+	return this->color;
 }

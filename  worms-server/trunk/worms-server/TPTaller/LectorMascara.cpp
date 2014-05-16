@@ -99,7 +99,7 @@ b2Vec2* LectorMascara::LeerMascara(Escalador* escalador){
 					tierra_escalada[i].y = (escalador->getEscalaY()) *1.5;
 				}
 			}
-	return tierra_escalada;
+	return tierra_escalada; //ver delete todo
 }
 
 SDL_Surface* LectorMascara :: GetSurface(){

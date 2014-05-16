@@ -21,6 +21,7 @@ int main_server(int argc,char* argv[]){
 	int retorno = 0;
 	Servidor *servidor = new Servidor(MAXJUG);
 	printf("Servidor corriendo\n");
+	Juego *juego = new Juego();
 
 	SDL_Thread* listener =  SDL_CreateThread(runServidor,"listener",(void*)servidor);
 	SDL_Thread* aceptar = SDL_CreateThread(aceptarConex,"aceptar",(void*)servidor);

@@ -29,7 +29,7 @@ void Mundo::crear_tierra(vector<int> vector_tierra){
 	size_t i;
 	int altura;
 	size_t ancho = vector_tierra.size();
-	b2Vec2* vector = new b2Vec2();
+	b2Vec2* vector = new b2Vec2(); //todo es necesario mantenerlo o se puede delete?
 	for (i = 0; i < ancho; i++){
 		altura = vector_tierra[i] ;
 		b2Vec2 posicion;
@@ -43,6 +43,7 @@ void Mundo::crear_tierra(vector<int> vector_tierra){
 	b2FixtureDef fd; // creo un fixture
 	fd.shape = &shape; // le pongo el shape creado
 	body->CreateFixture(&fd); // al body le pongo la fixture creada
+	//delete vector; todo
 
 }
 

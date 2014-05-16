@@ -59,20 +59,20 @@ b2Vec2 Escalador::escalarPosicion(b2Vec2 posicionPixel){
 b2Vec2* Escalador::pixelarPosicion(b2Vec2 posicionEscalar){
 	int pixelX = posicionEscalar.x / (this->escalaX/this->pixelesX);
 	int pixelY = posicionEscalar.y / (this->escalaY/this->pixelesY);
-	b2Vec2* pixelado = new b2Vec2(pixelX,pixelY);
+	b2Vec2* pixelado = new b2Vec2(pixelX,pixelY); //ver delete todo
 	return pixelado;
 }
 
 b2Vec2* Escalador::ventanarPosicion(b2Vec2 posicionEscalar){
 	int ventanadoX = ventanarEnX(posicionEscalar.x);
 	int ventanadoY = ventanarEnY(posicionEscalar.y);
-	b2Vec2* pixelado = new b2Vec2(ventanadoX,ventanadoY);
+	b2Vec2* pixelado = new b2Vec2(ventanadoX,ventanadoY); //ver delete todo
 	return pixelado;
 }
 
 Sint16* Escalador::pixelarVectorX(float32* vec, int cantidad){
 	int i;
-	Sint16* pixelado = new Sint16[cantidad];
+	Sint16* pixelado = new Sint16[cantidad]; //ver delete todo
 	for (i = 0 ; i < cantidad ; i++){
 		float32 numero = vec[i];
 		pixelado[i] = numero * (this->pixelesX / this->escalaX);
@@ -82,7 +82,7 @@ Sint16* Escalador::pixelarVectorX(float32* vec, int cantidad){
 
 Sint16* Escalador::pixelarVectorY(float32* vec, int cantidad){
 	int i;
-	Sint16* pixelado = new Sint16[cantidad];
+	Sint16* pixelado = new Sint16[cantidad]; //ver delete todo
 	for (i = 0 ; i < cantidad ; i++){
 		float32 numero = vec[i];
 		pixelado[i] =  numero * (this->pixelesY / this->escalaY);
@@ -107,7 +107,7 @@ int Escalador::ventanarEnY(float32 y){
 
 Sint16* Escalador::ventanarVectorX(float32* vec, int cantidad){
 	int i;
-	Sint16* ventanado = new Sint16[cantidad];
+	Sint16* ventanado = new Sint16[cantidad]; //ver delete todo
 	for (i = 0 ; i < cantidad ; i++){
 		float32 numero = vec[i];
 		ventanado[i] = ventanarEnX(numero);
@@ -117,7 +117,7 @@ Sint16* Escalador::ventanarVectorX(float32* vec, int cantidad){
 
 Sint16* Escalador::ventanarVectorY(float32* vec, int cantidad){
 	int i;
-	Sint16* ventanado = new Sint16[cantidad];
+	Sint16* ventanado = new Sint16[cantidad]; //ver delete todo
 	for (i = 0 ; i < cantidad ; i++){
 		float32 numero = vec[i];
 		ventanado[i] = ventanarEnY(numero);
@@ -127,7 +127,7 @@ Sint16* Escalador::ventanarVectorY(float32* vec, int cantidad){
 
 Sint16* Escalador::aplicarZoomXVector(float32* vec, int cantidad){
 	int i;
-	Sint16* ventanado = new Sint16[cantidad];
+	Sint16* ventanado = new Sint16[cantidad]; //ver delete todo
 	for (i = 0 ; i < cantidad ; i++){
 		float32 numero = vec[i];
 		ventanado[i] = aplicarZoomXaEscala(numero);
@@ -137,7 +137,7 @@ Sint16* Escalador::aplicarZoomXVector(float32* vec, int cantidad){
 
 Sint16* Escalador::aplicarZoomYVector(float32* vec, int cantidad){
 	int i;
-	Sint16* ventanado = new Sint16[cantidad];
+	Sint16* ventanado = new Sint16[cantidad]; //ver delete todo
 	for (i = 0 ; i < cantidad ; i++){
 		float32 numero = vec[i];
 		ventanado[i] = aplicarZoomYaEscala(numero);
@@ -190,7 +190,7 @@ b2Vec2* Escalador::aplicarZoomPixel(b2Vec2 posicionEscalar){
 b2Vec2* Escalador::aplicarZoomPosicion(b2Vec2 posicionEscalar){
 	int ventanadoX = aplicarZoomXaEscala(posicionEscalar.x);
 	int ventanadoY = aplicarZoomYaEscala(posicionEscalar.y);
-	b2Vec2* pixelado = new b2Vec2(ventanadoX,ventanadoY);
+	b2Vec2* pixelado = new b2Vec2(ventanadoX,ventanadoY); //ver delete todo
 	return pixelado;
 }
 
