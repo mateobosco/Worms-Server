@@ -41,7 +41,7 @@ public:
 	int escuchar(int maxConexiones);
 
 	// Acepta una conexión entrante.
-	Socket* aceptar();
+	int aceptar();
 
 	// Envía datos a través del socket de forma completa.
 	// Devuelve 0 si se ha realizado el envio correctamente o -1 en caso

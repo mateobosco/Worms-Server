@@ -22,12 +22,12 @@ Servidor::Servidor(int maxCon){
 
 
 Servidor::~Servidor() {
-	delete this->listener;
+	//delete this->listener;
 	SDL_DestroyMutex(mutex);
 }
 
 Socket* Servidor::getSocket(){
-	return this->listener;
+	return listener;
 }
 
 void Servidor::actualizarPaquete(char paquete[MAX_PACK]){
@@ -75,29 +75,31 @@ int Servidor::aceptarConexiones2(){
 	return 0;
 }
 
-int Servidor::validarSocket(Socket* sock){
-	int fdSock = sock->getFD();
+int Servidor::validarSocket(int sock){
+	int fdSock = sock;
 	int i;
+	int salida = 0;
 	for(i=0; i< this->cantClientes; i++){
 		int fd = this->clientes[i]->getSocket()->getFD();
-		if(fd != fdSock) return 0;
+		if(fd != fdSock) salida = 0;
 		else return 1;
 	}
 
+	return salida;
 }
 
 int Servidor::aceptarConexiones(){
-	Socket* sockCliente = this->listener->aceptar();
-
+	int sockCliente = this->listener->aceptar();
 	//Se crea un cliente y un thread asociado a el y se invoca el método run.
-	if(sockCliente != NULL){
+	if(sockCliente > 0){
 		while(validarSocket(sockCliente) == 1){
-			printf("ASigno mismo fd : %d\n",sockCliente->getFD());
-			delete sockCliente;
+			//delete sockCliente;
 			sockCliente = this->listener->aceptar();
+			printf("ASigno mismo fd : %d\n",sockCliente);
 		}
-		Cliente* cliente = new Cliente(sockCliente->getFD());
-		printf("fd del socket creado desde accept: %d\n",cliente->getSocket()->getFD());
+		//Socket* sock = new Socket(PUERTO, sockCliente);
+		Cliente* cliente = new Cliente(sockCliente);
+		printf("fd del socket creado desde accept: %d\n",sockCliente);
 		conexion_t par;
 		par.cliente = cliente;
 		par.servidor = this;
@@ -117,7 +119,7 @@ int Servidor::aceptarConexiones(){
 		this->cantClientes++;
 //		this->vector_clientes[cantClientes-1] = 1; // TODO ponerle un nombre / id de jugador
 		printf("Cantidad de clientes aceptados: %d\n",this->cantClientes);
-		delete sockCliente;
+		//delete sockCliente;
 		return EXIT_SUCCESS;
 	}else{
 		return EXIT_FAILURE;
@@ -201,7 +203,6 @@ int Servidor::runEscucharConexiones(){
 		return EXIT_FAILURE;
 		//loguear error
 	}
-	int i = 0;
 	while(true){
 		while((this->cantClientes < this->cantidadMaxConexiones)){
 
@@ -210,9 +211,8 @@ int Servidor::runEscucharConexiones(){
 			conexiones = this->escucharConexiones();
 			if (conexiones == -1){
 				printf("Error al escuchar conexiones \n");
-				break;
+				return EXIT_FAILURE;
 			}
-			i++;
 
 		}
 		if(this->cantClientes == this->cantidadMaxConexiones){

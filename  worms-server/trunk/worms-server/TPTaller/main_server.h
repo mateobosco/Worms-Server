@@ -83,7 +83,7 @@ int main_server(int argc,char* argv[]){
 
 	logFile.close();
 	delete juego; */
-	delete servidor;
+	//delete servidor;
 	return retorno;
 
 }

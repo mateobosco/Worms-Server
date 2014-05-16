@@ -111,8 +111,11 @@ int Cliente::runRecibirInfo(){
 			printf("pack data recibida: %s\n", buffer);
 		}
 		else if(recibidos ==0){
-			printf("Servidor desconectado n\n");
+			printf("Servidor desconectado \n");
 			break;
+		}
+		else if (recibidos == -1){
+			printf("Error\n");
 		}
 		delete[] buffer;
 	}
