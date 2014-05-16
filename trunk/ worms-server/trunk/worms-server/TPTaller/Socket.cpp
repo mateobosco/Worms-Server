@@ -90,7 +90,7 @@ int Socket::escuchar(int cantMaxCon){
 }
 
 // Aceptar devuelve un FD (file descriptor)
-Socket* Socket::aceptar(){
+int Socket::aceptar(){
 	socklen_t len;
 	int nuevoFD;
 	struct sockaddr_storage infoCliente;
@@ -103,11 +103,11 @@ Socket* Socket::aceptar(){
 		//loguear error todo
 		close(nuevoFD);
 		//perror("accept");
-		return NULL;
+		//return NULL;
 	}
-	Socket* sock = new Socket(PUERTO, nuevoFD);
+	//Socket* sock = new Socket(PUERTO, nuevoFD);
 //	sock->setInfo((struct sockaddr *)&infoCliente);
-	return sock;
+	return nuevoFD;
 
 }
 
