@@ -42,17 +42,14 @@ public:
 	int aceptarConexiones();
 
 	int runEnviarInfo(Cliente* cliente);
-//	int enviarInformacion(Socket* sock, char* data, size_t longData);
 
 	int runRecibirInfo(void* paquete);
-//	void recibirInformacion(Cliente* cliente, char* data, size_t tamanio);
 
 	int iniciarServidor();
 	int runEscucharConexiones();
 	int* getVectorClientes();
 	int validarSocket(int sock);
 
-	int aceptarConexiones2(); // todo
 
 private:
 	char paqueteEnviar[MAX_PACK];

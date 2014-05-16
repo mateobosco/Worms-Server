@@ -22,7 +22,7 @@ Servidor::Servidor(int maxCon){
 
 
 Servidor::~Servidor() {
-	//delete this->listener;
+	delete this->listener;
 	SDL_DestroyMutex(mutex);
 }
 
@@ -48,7 +48,6 @@ void* Servidor::desencolarPaquete(){
 }
 
 int Servidor::escucharConexiones(){
-	//printf("Entra en escucharConexiones\n");
 	int es = this->listener->escuchar(this->cantidadMaxConexiones);
 	return es;
 }
@@ -68,12 +67,6 @@ int runRecvInfo(void* par){
 	return 0;
 }
 
-int Servidor::aceptarConexiones2(){
-
-
-
-	return 0;
-}
 
 int Servidor::validarSocket(int sock){
 	int fdSock = sock;
@@ -93,11 +86,10 @@ int Servidor::aceptarConexiones(){
 	//Se crea un cliente y un thread asociado a el y se invoca el método run.
 	if(sockCliente > 0){
 		while(validarSocket(sockCliente) == 1){
-			//delete sockCliente;
+			close(sockCliente);
 			sockCliente = this->listener->aceptar();
 			printf("ASigno mismo fd : %d\n",sockCliente);
 		}
-		//Socket* sock = new Socket(PUERTO, sockCliente);
 		Cliente* cliente = new Cliente(sockCliente);
 		printf("fd del socket creado desde accept: %d\n",sockCliente);
 		conexion_t par;
@@ -119,7 +111,6 @@ int Servidor::aceptarConexiones(){
 		this->cantClientes++;
 //		this->vector_clientes[cantClientes-1] = 1; // TODO ponerle un nombre / id de jugador
 		printf("Cantidad de clientes aceptados: %d\n",this->cantClientes);
-		//delete sockCliente;
 		return EXIT_SUCCESS;
 	}else{
 		return EXIT_FAILURE;
@@ -129,6 +120,7 @@ int Servidor::aceptarConexiones(){
 int Servidor::runEnviarInfo(Cliente* cliente){
 
 	while(true){
+		SDL_Delay(5000);
 		char envio[MAX_PACK];
 		SDL_LockMutex(this->mutex);
 		memcpy(envio, this->paqueteEnviar, MAX_PACK);
@@ -136,6 +128,7 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 		int enviados = cliente->getSocket()->enviar(envio, MAX_PACK);
 		if(enviados > 0){
 			//SDL_Delay(5000);
+			printf("Actualizar paquete \n");
 			this->actualizarPaquete("nahueeeeee\n");//todo
 		}
 		else if(enviados == -1){
@@ -146,12 +139,10 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 	return EXIT_SUCCESS;
 }
 
-//int Servidor::enviarInformacion(Socket* sock, char* data, size_t longData){
-//	return sock->enviar(data,longData);
-//}
 
 int Servidor::runRecibirInfo(void* cliente){
 	while(true){
+		SDL_Delay(2000);
 		SDL_LockMutex(this->mutex);
 		Cliente* client = (Cliente*) cliente;
 		char paquete[MAX_PACK];
@@ -162,7 +153,7 @@ int Servidor::runRecibirInfo(void* cliente){
 			void* novedad = malloc (sizeof (structEventos));
 			memcpy(novedad, paquete, sizeof (structEventos)); //todo ver como determinar el tamaño del paquete
 			this->paquetesRecibir.push(novedad);
-			printf("Recibí: %s del cliente",paquete);
+			printf("Recibí: %s del cliente \n",paquete);
 		}
 		else if(cantidad ==0){
 			printf("Cliente desconectado\n");
@@ -177,37 +168,19 @@ int Servidor::runRecibirInfo(void* cliente){
 	return EXIT_SUCCESS;
 }
 
-//void Servidor::recibirInformacion(Cliente* cliente, char* data, size_t tamanio){
-//	cliente->getSocket()->recibir(data,tamanio);
-//
-//}
-
-//int aceptarConex(void* servidor){
-//	Servidor* serv = (Servidor*) servidor;
-//	while(serv->getCantidadClientes() < serv->getCantidadMaxConexiones()){
-//		printf("Thread de aceptar conexiones\n");
-//		serv->aceptarConexiones();
-//	}
-//	return 0;
-//}
 
 int Servidor::runEscucharConexiones(){
 	int conexiones;
 	try{
-		printf("Escuchar conexiones primera vez\n");
 		conexiones = this->getSocket()->EnlazarYEscuchar(this->cantidadMaxConexiones);
 
 	}catch(exception &e){
-		printf("No pudo escuchar primera vez\n");
 		close(this->listener->getFD());
 		return EXIT_FAILURE;
 		//loguear error
 	}
 	while(true){
 		while((this->cantClientes < this->cantidadMaxConexiones)){
-
-			//printf("ciclo numero: %d \n",i);
-			//SDL_Thread* aceptar = SDL_CreateThread(aceptarConex,"aceptar",(void*)this);
 			conexiones = this->escucharConexiones();
 			if (conexiones == -1){
 				printf("Error al escuchar conexiones \n");
