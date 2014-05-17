@@ -27,9 +27,9 @@ class Cliente{
 		char paquete_recibir[MAX_PACK];
 		char paquete_enviar[MAX_PACK];
 
+
 	public:
 		Cliente(const char *name, const char *ip_sv, const char* puerto);
-		Cliente(Socket *un_sock);
 		Cliente(int fd);
 		~Cliente();
 		int conectar();
@@ -43,5 +43,7 @@ class Cliente{
 		char* getPaquete();
 
 };
+
+
 
 #endif /* CLIENTE_H_ */

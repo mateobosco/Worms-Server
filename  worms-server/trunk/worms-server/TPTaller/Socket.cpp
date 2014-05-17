@@ -7,6 +7,8 @@
 
 #include "Socket.h"
 
+
+
 // Para Servidor debe pasarse el IP como NULL, Que luego se cargará la ip propia del servidor,
 // al cargar el flag AI_PASSIVE.
 // Para cliente debe pasarse la IP del servidor al que se desea conectar.
@@ -39,6 +41,7 @@ Socket::Socket(const char* puerto, int sockfd) {
 Socket::~Socket() {
 	freeaddrinfo(this->info);
 	close(this->sockFD);
+
 }
 
 int Socket::conectar(){
@@ -59,6 +62,8 @@ int Socket::EnlazarYEscuchar(int cantMaxCon){
 		perror("bind");
 	}
 	return this->escuchar(cantMaxCon);
+
+
 }
 
 int Socket::escuchar(int cantMaxCon){
@@ -107,7 +112,7 @@ int Socket::enviar(const void* dato, size_t longDato){
 	char buffer[longDato];
 	memcpy(buffer, (char*) dato, longDato);
 	while(bytesRestantes > 0) {
-		n = send(this->sockFD, buffer + bytesTotal, bytesRestantes, 0);
+		n = send(this->sockFD,  buffer + bytesTotal, bytesRestantes, 0);
 		if(n == -1)	break;
 		bytesTotal += n; // Incrementamos la cantidad de bytes ya enviados
 		bytesRestantes -= n;   // Decrementamos cantidad de bytes restantes

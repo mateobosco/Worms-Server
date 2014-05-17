@@ -27,9 +27,9 @@ int mainCliente(int argc, char* argv[]){
 	const char* ip_sv = argv[POS_IP];
 	const char* puerto = argv[POS_PORT];
 
-	Cliente* cliente = new Cliente(name, ip_sv, puerto);
+	Cliente cliente = Cliente(name, ip_sv, puerto);
 
-	if(cliente->conectar() != EXIT_SUCCESS){
+	if(cliente.conectar() != EXIT_SUCCESS){
 		return EXIT_FAILURE;
 	}
 
@@ -81,7 +81,6 @@ int mainCliente(int argc, char* argv[]){
 	free(posicion_mouse_movimiento);
 	close();
 */
-	delete cliente;
 	return 0;
 }
 
