@@ -21,6 +21,7 @@ typedef struct structPersonaje {
 }structPersonaje;
 
 typedef struct structPaquete{
+	int tipo;
 	structFigura** vector_figuras;
 	int cantidad_figuras;
 	structPersonaje** vector_personajes;
@@ -28,9 +29,10 @@ typedef struct structPaquete{
 }structPaquete;
 
 typedef struct structInicial {
-	string tierra;
-	string cielo;
-	string agua;
+	int tipo;
+	char tierra[50];
+	char cielo[50];
+	char agua[50];
 	int ancho_ventana;
 	int alto_ventana;
 	float32 nivel_agua;

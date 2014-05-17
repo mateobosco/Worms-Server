@@ -85,6 +85,9 @@ void Juego::cargar() {
 	Node *nodo_escenario = this->cargaInicial(cargador);
 	this->cargaPrincipal(cargador, *nodo_escenario);
 	inicial = cargador->getPaqueteInicial();
+	printf("path tierra %s \n",inicial->tierra);
+	printf("path agua JUAN MANUEL HIJO DE UNA GRAN PUTA %s \n",inicial->agua);
+	printf("path cielo %s \n",inicial->cielo);
 	delete cargador;
 }
 
@@ -133,6 +136,7 @@ void Juego::cargarAgua(Cargador *cargador, Node nodo_escenario){
 		loguear();
 		logFile << "    Error   " << "\t  No se pudo crear el agua. "<< endl;
 	}
+	//inicial->agua = imagen_agua;
 }
 
 void Juego::cargarMundo(){
@@ -151,6 +155,7 @@ string Juego::cargarTierra(Cargador *cargador, Node nodo_escenario){
 		logFile << "    Error  " <<"\t No se pudo cargar el path correspondiente a la clave buscada. " << endl;
 		tierra = pathDefMas;
 	}
+	//inicial->tierra = tierra;
 	return tierra;
 }
 
@@ -161,6 +166,7 @@ void Juego::cargarCielo(Cargador *cargador, Node nodo_escenario){
 		logFile << "    Error  " <<"\t No se pudo cargar el path correspondiente a la clave buscada. " << endl;
 		cielo = pathDefCielo;
 	}
+	//inicial->cielo = cielo;
 }
 
 void Juego::cargarLector(string tierra){
@@ -208,6 +214,7 @@ void Juego::cargaPrincipal(Cargador *cargador, Node nodo_escenario){
 }
 
 structInicial* Juego::getPaqueteInicial(){
+	printf("path tierra en getPaqueteInicial de juego %s \n",this->inicial->tierra);
 	return this->inicial;
 }
 

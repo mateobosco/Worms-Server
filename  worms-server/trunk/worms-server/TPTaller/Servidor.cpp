@@ -12,9 +12,9 @@ Servidor::Servidor(int maxCon){
 	this->maxFD = 0;
 	this->listener = new Socket(NULL, PUERTO);
 	this->mutex = SDL_CreateMutex();
-	this->paqueteEnviar = new char[MAX_PACK];
-	memset(this->paqueteEnviar, 0, MAX_PACK);
-	//strcpy(paqueteEnviar, "facuuuuuuuu\n");
+	this->enviar=true;
+
+
 
 	for (int i=0; i < MAXJUG; i++){
 		vector_clientes[i]=0;
@@ -24,17 +24,19 @@ Servidor::Servidor(int maxCon){
 
 Servidor::~Servidor() {
 	delete this->listener;
-	delete[] this->paqueteEnviar;
 	SDL_DestroyMutex(mutex);
 }
 
 Socket* Servidor::getSocket(){
-	return this->listener;
+	return listener;
 }
 
-void Servidor::actualizarPaquete(void* paquete){
+void Servidor::actualizarPaquete(char paquete[MAX_PACK]){
+	this->enviar=true;
 	SDL_LockMutex(mutex);
 	memcpy(this->paqueteEnviar, paquete, MAX_PACK);
+	structInicial* paquetito = (structInicial*) this->paqueteEnviar;
+	printf("path tierra en actualizarPaquete es  %s \n",paquetito->tierra);
 	SDL_UnlockMutex(mutex);
 }
 
@@ -122,25 +124,29 @@ int Servidor::aceptarConexiones(){
 int Servidor::runEnviarInfo(Cliente* cliente){
 
 	while(true){
+		if (enviar == false){
+			continue;
+		}
+		SDL_Delay(2000);
 		char envio[MAX_PACK];
-		SDL_LockMutex(this->mutex);
+		//SDL_LockMutex(this->mutex);
 		memcpy(envio, this->paqueteEnviar, MAX_PACK);
-		SDL_UnlockMutex(this->mutex);
+		//SDL_UnlockMutex(this->mutex);
 		int enviados = cliente->getSocket()->enviar(envio, MAX_PACK);
-
-		if(enviados == 0){
-			printf("Actualizar paquete \n");
+		printf("envie %d bytes al cliente \n", enviados);
+		structInicial* inicial = (structInicial*) envio;
+		printf("path tierra %s \n",inicial->tierra);
+		if (enviados > 0){
+			this->enviar = false;
+		}
+		if(enviados == -1){ // no se pudo enviar
+			printf("no se envio el paquete \n");
 			//this->actualizarPaquete("nahueeeeee\n");//todo
 		}
-		if(enviados == -1){
-			printf("Error del servidor al enviar al cliente\n");
-			break;
-		}
-		SDL_Delay(5000);
+		SDL_Delay(2000); // todo
 	}
 	return EXIT_SUCCESS;
 }
-
 
 int Servidor::runRecibirInfo(void* cliente){
 	while(true){
@@ -154,6 +160,7 @@ int Servidor::runRecibirInfo(void* cliente){
 			void* novedad = malloc (sizeof (structEventos));
 			memcpy(novedad, paquete, sizeof (structEventos)); //todo ver como determinar el tamaño del paquete
 			this->paquetesRecibir.push(novedad);
+			printf("Recibí: %s del cliente \n",paquete);
 		}
 		else if(cantidad ==0){
 			printf("Cliente desconectado\n");
@@ -163,18 +170,16 @@ int Servidor::runRecibirInfo(void* cliente){
 			printf("Error al recibir información del cliente\n");
 			break;
 		}
-		SDL_Delay(5000);
+		SDL_Delay(5000); // todo
 		SDL_UnlockMutex(this->mutex);
 	}
 	return EXIT_SUCCESS;
 }
 
-
 int Servidor::runEscucharConexiones(){
 	int conexiones;
 	try{
 		conexiones = this->getSocket()->EnlazarYEscuchar(this->cantidadMaxConexiones);
-
 	}catch(exception &e){
 		close(this->listener->getFD());
 		return EXIT_FAILURE;
@@ -187,7 +192,6 @@ int Servidor::runEscucharConexiones(){
 				printf("Error al escuchar conexiones \n");
 				return EXIT_FAILURE;
 			}
-
 		}
 		if(this->cantClientes > this->cantidadMaxConexiones){
 			printf("break\n");

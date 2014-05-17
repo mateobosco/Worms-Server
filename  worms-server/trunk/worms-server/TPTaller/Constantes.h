@@ -63,6 +63,6 @@ const string pathDefCielo = "TPTaller/imagenes/cieloN.jpg";
 #define POS_PORT 3
 
 #define SOCKET_CLIENTE 28
-#define MAX_PACK 1000
+#define MAX_PACK 2000
 
 #endif /* CONSTANTES_H_ */

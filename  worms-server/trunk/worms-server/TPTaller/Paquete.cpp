@@ -90,6 +90,7 @@ structEvento* crearPaqueteMovimiento(bool* KEYS, int id_jugador){
 
 structPaquete* crearPaqueteCiclo(Mundo* mundo){
 	structPaquete* paquete = (structPaquete*) malloc(sizeof(structPaquete));
+	paquete->tipo = 1;
 
 	Personaje** vector_personajes = mundo->getPersonajes();
 	int cantidad_personajes = mundo->getCantidadPersonajes();
