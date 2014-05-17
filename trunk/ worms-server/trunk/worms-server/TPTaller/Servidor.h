@@ -36,7 +36,7 @@ public:
 	int getCantidadMaxConexiones();
 	int getCantidadClientes();
 
-	void actualizarPaquete(void* paquete);
+	void actualizarPaquete(char paquete[MAX_PACK]);
 	void* desencolarPaquete();
 	int escucharConexiones();
 	int aceptarConexiones();
@@ -52,7 +52,7 @@ public:
 
 
 private:
-	char* paqueteEnviar;
+	char paqueteEnviar[MAX_PACK];
 	queue<void*> paquetesRecibir;
 	int cantidadMaxConexiones;
 	int cantClientes;
@@ -62,7 +62,7 @@ private:
 	int maxFD;
 	const char* puerto;
 	int vector_clientes[4];
-
+	bool enviar;
 
 };
 

@@ -21,11 +21,14 @@ int main_server(int argc,char* argv[]){
 	int retorno = 0;
 	Servidor *servidor = new Servidor(MAXJUG);
 	printf("Servidor corriendo\n");
+
 	Juego *juego = new Juego();
 	ManejadorPersonajes* manejador_personajes = new ManejadorPersonajes();
 	structInicial* paqueteInicial = juego->getPaqueteInicial();
-	//printf(" EN EL SERVIDOR, EL PAQUETE INICIAL EL ANCHO DEL MAPA ES %f \n", paqueteInicial->ancho_escenario);
-	servidor->actualizarPaquete(paqueteInicial);
+
+	printf("en el main path de tierra es %s \n",paqueteInicial->tierra);
+
+	servidor->actualizarPaquete((char*) paqueteInicial);
 
 	SDL_Thread* listener =  SDL_CreateThread(runServidor,"listener",(void*)servidor);
 	SDL_Thread* aceptar = SDL_CreateThread(aceptarConex,"aceptar",(void*)servidor);
@@ -40,9 +43,6 @@ int main_server(int argc,char* argv[]){
 	}
 
 /*
-	Juego *juego = new Juego();
-	ManejadorPersonajes* manejador_personajes = new ManejadorPersonajes();
-	structInicial* paqueteInicial = juego->getPaqueteInicial();
 
 	while(true){
 		int* clientes = servidor->getVectorClientes();
@@ -50,7 +50,6 @@ int main_server(int argc,char* argv[]){
 			if (clientes[i] != 0 && juego->getJugadores()[i] != NULL){
 				manejador_personajes->AgregarJugador(juego->getMundo(), clientes[i]);
 				//Cliente* cliente_actual = clientes[i];
-				//servidor->enviarInformacion(cliente_actual->getSocket(),paqueteInicial, sizeof(structInicial));
 			}
 		}
 
