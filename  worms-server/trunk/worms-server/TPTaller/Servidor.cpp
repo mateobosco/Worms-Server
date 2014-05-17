@@ -12,8 +12,9 @@ Servidor::Servidor(int maxCon){
 	this->maxFD = 0;
 	this->listener = new Socket(NULL, PUERTO);
 	this->mutex = SDL_CreateMutex();
+	this->paqueteEnviar = new char[MAX_PACK];
 	memset(this->paqueteEnviar, 0, MAX_PACK);
-	strcpy(paqueteEnviar, "facuuuuuuuu\n");
+	//strcpy(paqueteEnviar, "facuuuuuuuu\n");
 
 	for (int i=0; i < MAXJUG; i++){
 		vector_clientes[i]=0;
@@ -23,6 +24,7 @@ Servidor::Servidor(int maxCon){
 
 Servidor::~Servidor() {
 	delete this->listener;
+	delete[] this->paqueteEnviar;
 	SDL_DestroyMutex(mutex);
 }
 
@@ -30,7 +32,7 @@ Socket* Servidor::getSocket(){
 	return this->listener;
 }
 
-void Servidor::actualizarPaquete(char paquete[MAX_PACK]){
+void Servidor::actualizarPaquete(void* paquete){
 	SDL_LockMutex(mutex);
 	memcpy(this->paqueteEnviar, paquete, MAX_PACK);
 	SDL_UnlockMutex(mutex);
@@ -125,11 +127,12 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 		memcpy(envio, this->paqueteEnviar, MAX_PACK);
 		SDL_UnlockMutex(this->mutex);
 		int enviados = cliente->getSocket()->enviar(envio, MAX_PACK);
+
 		if(enviados == 0){
 			printf("Actualizar paquete \n");
-			this->actualizarPaquete("nahueeeeee\n");//todo
+			//this->actualizarPaquete("nahueeeeee\n");//todo
 		}
-		else if(enviados == -1){
+		if(enviados == -1){
 			printf("Error del servidor al enviar al cliente\n");
 			break;
 		}
