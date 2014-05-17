@@ -224,6 +224,8 @@ Escalador* Cargador::loadEscalador(Node nodo){
 	datos->alto_unidades = altoUn;
 	datos->ancho_ventana = (int) anchoPx;
 	datos->alto_ventana = (int) altoPx;
+	datos->ancho_escenario = ancho_esc;
+	datos->alto_escenario = alto_esc;
 
 	return escalador; //ver delete todo
 

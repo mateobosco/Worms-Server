@@ -36,7 +36,7 @@ public:
 	int getCantidadMaxConexiones();
 	int getCantidadClientes();
 
-	void actualizarPaquete(char paquete[MAX_PACK]);
+	void actualizarPaquete(void* paquete);
 	void* desencolarPaquete();
 	int escucharConexiones();
 	int aceptarConexiones();
@@ -52,7 +52,7 @@ public:
 
 
 private:
-	char paqueteEnviar[MAX_PACK];
+	char* paqueteEnviar;
 	queue<void*> paquetesRecibir;
 	int cantidadMaxConexiones;
 	int cantClientes;
