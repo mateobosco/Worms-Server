@@ -123,7 +123,8 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 		if (enviar == false){
 			continue;
 		}
-		SDL_Delay(500);
+		SDL_Delay(25);
+		//SDL_Delay(500);
 		char envio[MAX_PACK];
 		//SDL_LockMutex(this->mutex);
 		memcpy(envio, this->paqueteEnviar, MAX_PACK);
@@ -156,6 +157,7 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 
 int Servidor::runRecibirInfo(void* cliente){
 	while(true){
+		SDL_Delay(25);
 		SDL_LockMutex(this->mutex);
 		Cliente* client = (Cliente*) cliente;
 		char paquete[MAX_PACK];
@@ -176,7 +178,7 @@ int Servidor::runRecibirInfo(void* cliente){
 			printf("Error al recibir información del cliente\n");
 			break;
 		}
-		SDL_Delay(5000); // todo
+		//SDL_Delay(5000); // todo
 		SDL_UnlockMutex(this->mutex);
 	}
 	return EXIT_SUCCESS;

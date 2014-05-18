@@ -72,7 +72,7 @@ int Cliente::conectar(){
 int Cliente::runEnviarInfo(){
 	while(true){
 		//se bloquea mutex
-		SDL_Delay(2000);
+		//SDL_Delay(2000);
 		char buffer[MAX_PACK];
 		SDL_LockMutex(this->mutex);
 		memcpy(buffer, this->paquete_enviar, MAX_PACK);
@@ -103,7 +103,7 @@ int Cliente::runRecibirInfo(){
 		int recibidos = this->socket_cl->recibir(buffer, MAX_PACK);
 		printf("recibi %d bytes", recibidos);
 		if (recibidos > 0){
-			SDL_Delay(2000);
+			//SDL_Delay(2000);
 			SDL_LockMutex(this->mutex);
 			memcpy(this->paquete_recibir, buffer, MAX_PACK); //todo ver como determinar el tamaño del paquete
 			structInicial* buffer2 = (structInicial*) buffer;
