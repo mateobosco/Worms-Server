@@ -11,8 +11,8 @@ escenario:
     cielo:         "TPTaller/imagenes/cieloN.png"
     obj:
         - tipo:       circulo #1
-          x:        49
-          y:        -50
+          x:        5
+          y:        0
           escala:   5
           color:    "#0000ff" 
           rotacion: 35
@@ -27,8 +27,8 @@ escenario:
           masa:     1
           estatico: no
         - tipo:     rectangulo
-          x:        5
-          y:        10
+          x:        20
+          y:        20
           ancho:    4
           alto:     3
           color:    "#00FF00"

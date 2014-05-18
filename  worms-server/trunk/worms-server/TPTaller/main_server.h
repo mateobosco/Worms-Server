@@ -67,8 +67,12 @@ int main_server(int argc,char* argv[]){
 		structPaquete* paqueteCiclo = crearPaqueteCiclo(juego->getMundo());
 		printf(" Voy a enviar un paquete con %d figuras \n", paqueteCiclo->cantidad_figuras);
 		printf(" Voy a enviar un paquete con %d personajes \n", paqueteCiclo->cantidad_personajes);
+		structFigura* vector = paqueteCiclo->vector_figuras;
+		structFigura paqueteFigura = vector[0];
+		b2Vec2 posicion = paqueteFigura.vector_vertices[2];
+		printf(" Envia estas posiciones: (%f, %f) \n ", posicion.x,posicion.y);
 		servidor->actualizarPaquete((char*)paqueteCiclo);
-		SDL_Delay(500);
+		SDL_Delay(1500);
 		//destruirPaqueteCiclo(paqueteCiclo);
 
 /*		structEventos* evento;
