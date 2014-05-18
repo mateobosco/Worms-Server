@@ -85,9 +85,6 @@ void Juego::cargar() {
 	Node *nodo_escenario = this->cargaInicial(cargador);
 	this->cargaPrincipal(cargador, *nodo_escenario);
 	inicial = cargador->getPaqueteInicial();
-	printf("path tierra %s \n",inicial->tierra);
-	printf("path agua JUAN MANUEL HIJO DE UNA GRAN PUTA %s \n",inicial->agua);
-	printf("path cielo %s \n",inicial->cielo);
 	delete cargador;
 }
 
@@ -214,7 +211,6 @@ void Juego::cargaPrincipal(Cargador *cargador, Node nodo_escenario){
 }
 
 structInicial* Juego::getPaqueteInicial(){
-	printf("path tierra en getPaqueteInicial de juego %s \n",this->inicial->tierra);
 	return this->inicial;
 }
 

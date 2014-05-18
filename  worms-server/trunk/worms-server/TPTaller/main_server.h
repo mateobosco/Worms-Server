@@ -26,7 +26,6 @@ int main_server(int argc,char* argv[]){
 	ManejadorPersonajes* manejador_personajes = new ManejadorPersonajes();
 	structInicial* paqueteInicial = juego->getPaqueteInicial();
 
-	printf("en el main path de tierra es %s \n",paqueteInicial->tierra);
 
 	servidor->actualizarPaquete((char*) paqueteInicial);
 
@@ -35,21 +34,28 @@ int main_server(int argc,char* argv[]){
 
 	int thread = 0;
 	int thread_2 = 0;
-	SDL_WaitThread(listener, &thread);
-	SDL_WaitThread(aceptar, &thread_2);
+	//SDL_WaitThread(listener, &thread);
+	//SDL_WaitThread(aceptar, &thread_2);
 	if(listener == NULL){
 		//ver que hacer
 		//log error todo
 	}
+	int jugadores = servidor->getCantidadClientes();
+	printf("CANTIDAD DE JUGADORES: %d \n",jugadores);
+	while (jugadores<=0){
+		jugadores = servidor->getCantidadClientes();
+		printf("CANTIDAD DE JUGADORES: %d \n",jugadores);
+		SDL_Delay(2000);
+	}
 
-/*
+	printf("-----------------------------------------EL SERVIDOR INICIA EL JUEGO-------------------------------------\n");
 
 	while(true){
 		int* clientes = servidor->getVectorClientes();
 		for (int i=0 ; i < MAXJUG ; i++){
 			if (clientes[i] != 0 && juego->getJugadores()[i] != NULL){
 				manejador_personajes->AgregarJugador(juego->getMundo(), clientes[i]);
-				//Cliente* cliente_actual = clientes[i];
+				//clientes[i] = ID_CLIENTE TODO
 			}
 		}
 
@@ -57,35 +63,19 @@ int main_server(int argc,char* argv[]){
 		juego->getMundo()->setFiguras(juego->getFiguras(), juego->getCantidadFiguras());
 
 		structPaquete* paqueteCiclo = crearPaqueteCiclo(juego->getMundo());
-		for (int i = 0; i < MAXJUG ; i++){
-			if (clientes[i] != 0 && juego->getJugadores()[i] != NULL){
-				//Cliente* cliente_actual = clientes[i];
-				//servidor->actualizarPaquete(paquteCiclo);
-				//servidor->enviarInformacion(cliente_actual->getSocket(), paqueteCiclo, sizeof(structPaquete));
-			}
-		}
-		destruirPaqueteCiclo(paqueteCiclo);
-		structEventos* evento;
+		servidor->actualizarPaquete((char*)paqueteCiclo);
+		SDL_Delay(500);
+		//destruirPaqueteCiclo(paqueteCiclo);
+
+/*		structEventos* evento;
 	    evento = (structEventos*) servidor->desencolarPaquete();
-	    juego->aplicarPaquete(evento, manejador_personajes);
-
-
-
-
-
-
-
-
-
-
+	    juego->aplicarPaquete(evento, manejador_personajes);*/
+		juego->getMundo()->step(0.1,100,100);
 	}
 
 
-
-
-
 	logFile.close();
-	delete juego; */
+	delete juego;
 	delete servidor;
 	return retorno;
 

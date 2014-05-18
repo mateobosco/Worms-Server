@@ -111,13 +111,6 @@ void loguear(){
 	delete[] hora;
 }
 
-void close(){
-	SDL_DestroyRenderer(gRenderer);
-	SDL_DestroyWindow(gWindow);
-	gRenderer = NULL;
-	gWindow = NULL;
-	SDL_Quit();
-}
 
 void keyboard(SDL_Event event , int* posicion_mouse_movimiento, int* posicion_mouse_click, int* posicion_mouse_wheel) {
 	int numero;

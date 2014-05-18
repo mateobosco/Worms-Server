@@ -6,19 +6,20 @@ structFigura* crearPaqueteFigura(Figura* figura){
 	structFigura* paquete = new structFigura;
 	int tipo = figura->tipo;
 	paquete->color= figura->getColor();
-	b2Vec2* vector1;
+	//b2Vec2* vector1;
 
 	if (tipo == 0){ //ES UN CIRCULO
-		vector1 = new b2Vec2[2];
 		Circulo* circulo = (Circulo*) figura;
-		vector1[0] = circulo->obtenerPosicion();
-		vector1[1].x = circulo->getRadio();
-		vector1[1].y = circulo->getRadio();
+		paquete->vector_vertices[0] = circulo->obtenerPosicion();
+		paquete->vector_vertices[1].x = circulo->getRadio();
+		paquete->vector_vertices[1].y = circulo->getRadio();
 		paquete->cantidad = 2;
 	}
 	if (tipo == 1){ //ES UN RECTANGULO
 		Rectangulo* rectangulo = (Rectangulo*) figura;
-		vector1 = rectangulo->getVertices();
+		for (int i = 0 ; i<4; i++){
+			paquete->vector_vertices[i] = rectangulo->getVertices()[i];
+		}
 		paquete->cantidad = 4;
 
 	}
@@ -26,9 +27,10 @@ structFigura* crearPaqueteFigura(Figura* figura){
 		Poligono* poligono = (Poligono*) figura;
 		int lados = poligono->getCantVertices();
 		paquete->cantidad = lados;
-		vector1 = poligono->getVertices();
+		for (int i = 0 ; i<lados; i++){
+			paquete->vector_vertices[i] = poligono->getVertices()[i];
+		}
 	}
-	paquete->vector_vertices = vector1;
 	return paquete;
 }
 
@@ -52,8 +54,6 @@ structPersonaje* crearPaquetePersonaje(Personaje* personaje){
 
 
 void destruirPaqueteFigura(structFigura* paquete){
-	b2Vec2* vector1 = paquete->vector_vertices;
-	delete[] vector1;
 	delete paquete;
 }
 
@@ -94,31 +94,35 @@ structPaquete* crearPaqueteCiclo(Mundo* mundo){
 
 	Personaje** vector_personajes = mundo->getPersonajes();
 	int cantidad_personajes = mundo->getCantidadPersonajes();
-	structPersonaje** personajesEmpaquetados = (structPersonaje**) malloc(sizeof(structPersonaje*)*cantidad_personajes);
+	//structPersonaje** personajesEmpaquetados = (structPersonaje**) malloc(sizeof(structPersonaje*)*cantidad_personajes);
 	for (int i=0 ; i<cantidad_personajes; i++){
-		personajesEmpaquetados[i] = crearPaquetePersonaje(vector_personajes[i]);
+		structPersonaje* paquetito = crearPaquetePersonaje(vector_personajes[i]);
+		memcpy(&paquete->vector_personajes[i], paquetito, sizeof(structPersonaje));
+		destruirPaquetePersonaje(paquetito);
 	}
 	Figura** vector_figuras = mundo->getFiguras();
 	int cantidad_figuras = mundo->getCantidadFiguras();
-	structFigura** figurasEmpaquetadas = (structFigura**) malloc(sizeof(structFigura*)*cantidad_figuras);
+	//structFigura** figurasEmpaquetadas = (structFigura**) malloc(sizeof(structFigura*)*cantidad_figuras);
 	for (int i=0 ; i<cantidad_figuras; i++){
-		figurasEmpaquetadas[i] = crearPaqueteFigura(vector_figuras[i]);
+		structFigura* paquetito = crearPaqueteFigura(vector_figuras[i]);
+		memcpy(&paquete->vector_figuras[i],paquetito,sizeof(structFigura));
+		destruirPaqueteFigura(paquetito);
 	}
 	paquete->cantidad_figuras = cantidad_figuras;
 	paquete->cantidad_personajes = cantidad_personajes;
-	paquete->vector_figuras = figurasEmpaquetadas;
-	paquete->vector_personajes = personajesEmpaquetados;
+//	paquete->vector_figuras = figurasEmpaquetadas;
+//	paquete->vector_personajes = personajesEmpaquetados;
 
 
 	return paquete;
 }
 
-void destruirPaqueteCiclo(structPaquete* paquete){
-	for (int i=0 ; i < paquete->cantidad_figuras; i++){
-		destruirPaqueteFigura(paquete->vector_figuras[i]);
-	}
-	for (int i=0 ; i < paquete->cantidad_personajes; i++){
-		destruirPaquetePersonaje(paquete->vector_personajes[i]);
-	}
-	free(paquete);
-}
+//void destruirPaqueteCiclo(structPaquete* paquete){
+//	for (int i=0 ; i < paquete->cantidad_figuras; i++){
+//		destruirPaqueteFigura(paquete->vector_figuras[i]);
+//	}
+//	for (int i=0 ; i < paquete->cantidad_personajes; i++){
+//		destruirPaquetePersonaje(paquete->vector_personajes[i]);
+//	}
+//	free(paquete);
+//}
