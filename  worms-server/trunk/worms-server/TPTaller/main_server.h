@@ -58,9 +58,6 @@ int main_server(int argc,char* argv[]){
 	}
 
 	while(true){
-
-
-
 		juego->getMundo()->setVectorPersonajes(manejador_personajes->getPersonajes(), manejador_personajes->getCantidadPersonajes(), manejador_personajes->getCantidadJugadores());
 		juego->getMundo()->setFiguras(juego->getFiguras(), juego->getCantidadFiguras());
 
@@ -72,7 +69,7 @@ int main_server(int argc,char* argv[]){
 		b2Vec2 posicion = paqueteFigura.vector_vertices[2];
 		printf(" Envia estas posiciones: (%f, %f) \n ", posicion.x,posicion.y);
 		servidor->actualizarPaquete((char*)paqueteCiclo);
-		SDL_Delay(1500);
+		SDL_Delay(1000);
 		//destruirPaqueteCiclo(paqueteCiclo);
 
 /*		structEventos* evento;
