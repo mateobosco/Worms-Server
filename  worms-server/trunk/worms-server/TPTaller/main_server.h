@@ -69,7 +69,7 @@ int main_server(int argc,char* argv[]){
 		b2Vec2 posicion = paqueteFigura.vector_vertices[2];
 		printf(" Envia estas posiciones: (%f, %f) \n ", posicion.x,posicion.y);
 		servidor->actualizarPaquete((char*)paqueteCiclo);
-		SDL_Delay(1000);
+		SDL_Delay(500);
 		//destruirPaqueteCiclo(paqueteCiclo);
 
 /*		structEventos* evento;
