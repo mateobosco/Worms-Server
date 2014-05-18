@@ -57,6 +57,27 @@ int main_server(int argc,char* argv[]){
 		}
 	}
 
+
+	//TODO LO QUE HAY ABAJO LO PUSE PARA QUE PUEDA DIBUJAR Y QUE ESPERE UN RATO
+	//ANTES DE INICIAR LA CAIDA DE LOS OBJETOS, PARA PODER VERLO EN EL
+	//CLIENTE
+	juego->getMundo()->setVectorPersonajes(manejador_personajes->getPersonajes(), manejador_personajes->getCantidadPersonajes(), manejador_personajes->getCantidadJugadores());
+	juego->getMundo()->setFiguras(juego->getFiguras(), juego->getCantidadFiguras());
+
+	structPaquete* paqueteCiclo = crearPaqueteCiclo(juego->getMundo());
+	printf(" Voy a enviar un paquete con %d figuras \n", paqueteCiclo->cantidad_figuras);
+	printf(" Voy a enviar un paquete con %d personajes \n", paqueteCiclo->cantidad_personajes);
+	structFigura* vector = paqueteCiclo->vector_figuras;
+	structFigura paqueteFigura = vector[0];
+	b2Vec2 posicion = paqueteFigura.vector_vertices[2];
+	printf(" Envia estas posiciones: (%f, %f) \n ", posicion.x,posicion.y);
+	servidor->actualizarPaquete((char*)paqueteCiclo);
+	juego->getMundo()->step(0.1,1,1);
+
+	SDL_Delay(12000);
+	//TODO ACA ES DONDE TERMINA EL CODIGO INNECESARIO.
+
+
 	while(true){
 		juego->getMundo()->setVectorPersonajes(manejador_personajes->getPersonajes(), manejador_personajes->getCantidadPersonajes(), manejador_personajes->getCantidadJugadores());
 		juego->getMundo()->setFiguras(juego->getFiguras(), juego->getCantidadFiguras());
@@ -69,7 +90,7 @@ int main_server(int argc,char* argv[]){
 		b2Vec2 posicion = paqueteFigura.vector_vertices[2];
 		printf(" Envia estas posiciones: (%f, %f) \n ", posicion.x,posicion.y);
 		servidor->actualizarPaquete((char*)paqueteCiclo);
-		SDL_Delay(500);
+		SDL_Delay(25);
 		//destruirPaqueteCiclo(paqueteCiclo);
 
 /*		structEventos* evento;
