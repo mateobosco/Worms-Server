@@ -266,16 +266,16 @@ void Dibujador::dibujarFondo(Agua* agua){
 
 
 
-int Dibujador::dibujarPaqueteFigura(structFigura* figura){
-	int cantidad = figura->cantidad;
-	SDL_Color color = figura->color;
+int Dibujador::dibujarPaqueteFigura(structFigura figura){
+	int cantidad = figura.cantidad;
+	SDL_Color color = figura.color;
 	int retorno;
 
 	if ( cantidad == 2){
-		float32 radio = figura->vector_vertices[1].x;
+		float32 radio = figura.vector_vertices[1].x;
 		Uint16 rad_pix_x = (Uint16) escalador->aplicarZoomX(radio);
 		Uint16 rad_pix_y = (Uint16) escalador->aplicarZoomY(radio);
-		b2Vec2 posicion = figura->vector_vertices[0];
+		b2Vec2 posicion = figura.vector_vertices[0];
 		b2Vec2* posicionVentanada = this->escalador->aplicarZoomPosicion(posicion);
 		retorno = filledEllipseRGBA( renderizador, posicionVentanada->x, posicionVentanada->y,
 										rad_pix_x, rad_pix_y, color.r, color.g, color.b, CIRC_OPACIDAD);
@@ -286,8 +286,8 @@ int Dibujador::dibujarPaqueteFigura(structFigura* figura){
 		float32* vecX = new float32[cantidad];
 		float32* vecY = new float32[cantidad];
 		for (int i=0; i < cantidad_lados; i++){
-			vecX[i] = figura->vector_vertices[i].x;
-			vecY[i] = figura->vector_vertices[i].y;
+			vecX[i] = figura.vector_vertices[i].x;
+			vecY[i] = figura.vector_vertices[i].y;
 		}
 
 		Sint16* vecXventanado = this->escalador->aplicarZoomXVector(vecX, cantidad_lados);
@@ -302,15 +302,15 @@ int Dibujador::dibujarPaqueteFigura(structFigura* figura){
 	return retorno;
 }
 
-int Dibujador::dibujarPaquetePersonaje(structPersonaje* paquete){
+int Dibujador::dibujarPaquetePersonaje(structPersonaje paquete){
 	char* path = "TPTaller/imagenes/gusanitoderecha.png";
-	int dir = paquete->direccion;
+	int dir = paquete.direccion;
 	if (dir == 0) path = "TPTaller/imagenes/gusanitoderecha.png";
 	if (dir == 1) path = "TPTaller/imagenes/gusanitoizquierda.png";
-	b2Vec2 tam = paquete->tamano;
+	b2Vec2 tam = paquete.tamano;
 
 	SDL_Texture *gusanito = loadTexture(path, this->renderizador);
-	b2Vec2 posicion = paquete->posicion;
+	b2Vec2 posicion = paquete.posicion;
 	b2Vec2* posicionVentanada = escalador->aplicarZoomPosicion(posicion);
 	int anchoPX = escalador->aplicarZoomX( tam.x);
 	int altoPX = escalador->aplicarZoomY(tam.y);

@@ -8,7 +8,7 @@
 #include "rectangulo.h"
 
 typedef struct structFigura {
-	b2Vec2* vector_vertices ;
+	b2Vec2 vector_vertices[6] ;
 	int cantidad;
 	SDL_Color color;
 }structFigura;
@@ -22,9 +22,9 @@ typedef struct structPersonaje {
 
 typedef struct structPaquete{
 	int tipo;
-	structFigura** vector_figuras;
+	structFigura vector_figuras[10];
 	int cantidad_figuras;
-	structPersonaje** vector_personajes;
+	structPersonaje vector_personajes[20];
 	int cantidad_personajes;
 }structPaquete;
 

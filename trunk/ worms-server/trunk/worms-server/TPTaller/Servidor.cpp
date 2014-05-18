@@ -14,8 +14,6 @@ Servidor::Servidor(int maxCon){
 	this->mutex = SDL_CreateMutex();
 	this->enviar=true;
 
-
-
 	for (int i=0; i < MAXJUG; i++){
 		vector_clientes[i]=0;
 	}
@@ -33,11 +31,9 @@ Socket* Servidor::getSocket(){
 
 void Servidor::actualizarPaquete(char paquete[MAX_PACK]){
 	this->enviar=true;
-	SDL_LockMutex(mutex);
+	//SDL_LockMutex(mutex);
 	memcpy(this->paqueteEnviar, paquete, MAX_PACK);
-	structInicial* paquetito = (structInicial*) this->paqueteEnviar;
-	printf("path tierra en actualizarPaquete es  %s \n",paquetito->tierra);
-	SDL_UnlockMutex(mutex);
+	//SDL_UnlockMutex(mutex);
 }
 
 void* Servidor::desencolarPaquete(){
@@ -113,7 +109,7 @@ int Servidor::aceptarConexiones(){
 //		SDL_WaitThread(recibir, &thread_2);
 		this->clientes[this->cantClientes] = cliente;
 		this->cantClientes++;
-//		this->vector_clientes[cantClientes-1] = 1; // TODO ponerle un nombre / id de jugador
+		this->vector_clientes[cantClientes-1] = 1; // TODO ponerle un nombre / id de jugador
 		printf("Cantidad de clientes aceptados: %d\n",this->cantClientes);
 		return EXIT_SUCCESS;
 	}else{
@@ -127,7 +123,7 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 		if (enviar == false){
 			continue;
 		}
-		SDL_Delay(2000);
+		SDL_Delay(500);
 		char envio[MAX_PACK];
 		//SDL_LockMutex(this->mutex);
 		memcpy(envio, this->paqueteEnviar, MAX_PACK);
@@ -135,7 +131,6 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 		int enviados = cliente->getSocket()->enviar(envio, MAX_PACK);
 		printf("envie %d bytes al cliente \n", enviados);
 		structInicial* inicial = (structInicial*) envio;
-		printf("path tierra %s \n",inicial->tierra);
 		if (enviados > 0){
 			this->enviar = false;
 		}
