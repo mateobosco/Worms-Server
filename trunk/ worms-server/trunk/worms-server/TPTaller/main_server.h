@@ -50,12 +50,8 @@ int main_server(int argc,char* argv[]){
 
 	printf("-----------------------------------------EL SERVIDOR INICIA EL JUEGO-------------------------------------\n");
 	int* clientes = servidor->getVectorClientes();
-	for (int i=0 ; i < servidor->getCantidadClientes() ; i++){
-		if (clientes[i] != 0 && juego->getJugadores()[i] != NULL){
-			manejador_personajes->AgregarJugador(juego->getMundo(), clientes[i]);
-			//clientes[i] = ID_CLIENTE TODO
-		}
-	}
+
+	manejador_personajes->AgregarJugador(juego->getMundo(), 1); // esto deberia ir adentro del while que cuando se conecta un jugador le agregue los personajes
 
 
 	//TODO LO QUE HAY ABAJO LO PUSE PARA QUE PUEDA DIBUJAR Y QUE ESPERE UN RATO
