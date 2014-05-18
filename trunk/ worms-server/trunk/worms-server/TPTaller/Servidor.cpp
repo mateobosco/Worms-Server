@@ -130,7 +130,18 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 		//SDL_UnlockMutex(this->mutex);
 		int enviados = cliente->getSocket()->enviar(envio, MAX_PACK);
 		printf("envie %d bytes al cliente \n", enviados);
-		structInicial* inicial = (structInicial*) envio;
+		printf(" ------- DENTRO DEL ENVIAR DEL SERVIDOR ----------- \n");
+		structPaquete* paqueteCiclo = (structPaquete*) envio;
+		printf(" Voy a enviar un paquete con %d figuras \n", paqueteCiclo->cantidad_figuras);
+		printf(" Voy a enviar un paquete con %d personajes \n", paqueteCiclo->cantidad_personajes);
+		structFigura* vector = paqueteCiclo->vector_figuras;
+		structFigura paqueteFigura = vector[0];
+		b2Vec2 posicion = paqueteFigura.vector_vertices[2];
+		printf(" Envia estas posiciones: (%f, %f) \n ", posicion.x,posicion.y);
+		printf(" ------- SALGO DEL ENVIAR DEL SERVIDOR ----------- \n");
+
+
+		//structInicial* inicial = (structInicial*) envio;
 		if (enviados > 0){
 			this->enviar = false;
 		}
@@ -138,7 +149,7 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 			printf("no se envio el paquete \n");
 			//this->actualizarPaquete("nahueeeeee\n");//todo
 		}
-		SDL_Delay(2000); // todo
+		//SDL_Delay(2000); // todo
 	}
 	return EXIT_SUCCESS;
 }
