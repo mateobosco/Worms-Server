@@ -49,20 +49,24 @@ int main_server(int argc,char* argv[]){
 	}
 
 	printf("-----------------------------------------EL SERVIDOR INICIA EL JUEGO-------------------------------------\n");
+	int* clientes = servidor->getVectorClientes();
+	for (int i=0 ; i < servidor->getCantidadClientes() ; i++){
+		if (clientes[i] != 0 && juego->getJugadores()[i] != NULL){
+			manejador_personajes->AgregarJugador(juego->getMundo(), clientes[i]);
+			//clientes[i] = ID_CLIENTE TODO
+		}
+	}
 
 	while(true){
-		int* clientes = servidor->getVectorClientes();
-		for (int i=0 ; i < MAXJUG ; i++){
-			if (clientes[i] != 0 && juego->getJugadores()[i] != NULL){
-				manejador_personajes->AgregarJugador(juego->getMundo(), clientes[i]);
-				//clientes[i] = ID_CLIENTE TODO
-			}
-		}
+
+
 
 		juego->getMundo()->setVectorPersonajes(manejador_personajes->getPersonajes(), manejador_personajes->getCantidadPersonajes(), manejador_personajes->getCantidadJugadores());
 		juego->getMundo()->setFiguras(juego->getFiguras(), juego->getCantidadFiguras());
 
 		structPaquete* paqueteCiclo = crearPaqueteCiclo(juego->getMundo());
+		printf(" Voy a enviar un paquete con %d figuras \n", paqueteCiclo->cantidad_figuras);
+		printf(" Voy a enviar un paquete con %d personajes \n", paqueteCiclo->cantidad_personajes);
 		servidor->actualizarPaquete((char*)paqueteCiclo);
 		SDL_Delay(500);
 		//destruirPaqueteCiclo(paqueteCiclo);
@@ -74,6 +78,7 @@ int main_server(int argc,char* argv[]){
 	}
 
 
+	//
 	logFile.close();
 	delete juego;
 	delete servidor;
