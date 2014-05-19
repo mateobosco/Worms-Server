@@ -46,6 +46,7 @@ void ManejadorPersonajes::seleccionarPersonaje(b2Vec2 posicion, int id_jugador){
 				personaje_aux->setSeleccionado(false, id_jugador);
 			}
 			personaje->setSeleccionado(resultado, id_jugador);
+			//printf("selecciono un personaje \n");
 		}
 
 	}

@@ -47,7 +47,7 @@ typedef struct structEvento{
 	b2Vec2 click_mouse; // posicion escalada del mouse
 	int direccion; // -1 izquierda, 0 arriba, 1 derecha
 	int nro_jugador; //Identificador del cliente
-}structEventos;
+}structEvento;
 
 
 structFigura* crearPaqueteFigura(Figura* figura);

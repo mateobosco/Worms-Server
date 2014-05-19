@@ -155,7 +155,7 @@ float32* Personaje::getVecY(){
 //}
 
 void Personaje::leermovimiento(int direccion, int id_jugador){
-	if (this->nro_jugador == id_jugador && seleccionado[id_jugador-1]){
+	if (this->nro_jugador == id_jugador && seleccionado[id_jugador]){
 		if (direccion == 1 && body->GetLinearVelocity().x == 0){ // para la derecha
 			dir_imagen = "TPTaller/imagenes/gusanitoderecha.png";
 			this->mover(b2Vec2(10,0));

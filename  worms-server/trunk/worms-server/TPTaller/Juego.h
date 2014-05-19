@@ -51,7 +51,7 @@ class Juego{
 		uint8 getCantidadFiguras();
 		int run();
 		structInicial* getPaqueteInicial();
-		void aplicarPaquete(structEventos* evento, ManejadorPersonajes* manejador_personajes);
+		void aplicarPaquete(structEvento* evento, ManejadorPersonajes* manejador_personajes);
 
 
 };

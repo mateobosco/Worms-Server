@@ -135,16 +135,16 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 		memcpy(envio, this->paqueteEnviar, MAX_PACK);
 		//SDL_UnlockMutex(this->mutex);
 		int enviados = cliente->getSocket()->enviar(envio, MAX_PACK);
-		printf("envie %d bytes al cliente \n", enviados);
-		printf(" ------- DENTRO DEL ENVIAR DEL SERVIDOR ----------- \n");
+		//printf("envie %d bytes al cliente \n", enviados);
+		//printf(" ------- DENTRO DEL ENVIAR DEL SERVIDOR ----------- \n");
 		structPaquete* paqueteCiclo = (structPaquete*) envio;
-		printf(" Voy a enviar un paquete con %d figuras \n", paqueteCiclo->cantidad_figuras);
-		printf(" Voy a enviar un paquete con %d personajes \n", paqueteCiclo->cantidad_personajes);
+		//printf(" Voy a enviar un paquete con %d figuras \n", paqueteCiclo->cantidad_figuras);
+		//printf(" Voy a enviar un paquete con %d personajes \n", paqueteCiclo->cantidad_personajes);
 		structFigura* vector = paqueteCiclo->vector_figuras;
 		structFigura paqueteFigura = vector[0];
 		b2Vec2 posicion = paqueteFigura.vector_vertices[2];
-		printf(" Envia estas posiciones: (%f, %f) \n ", posicion.x,posicion.y);
-		printf(" ------- SALGO DEL ENVIAR DEL SERVIDOR ----------- \n");
+		//printf(" Envia estas posiciones: (%f, %f) \n ", posicion.x,posicion.y);
+		//printf(" ------- SALGO DEL ENVIAR DEL SERVIDOR ----------- \n");
 
 
 		//structInicial* inicial = (structInicial*) envio;
@@ -153,6 +153,7 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 		}
 		if(enviados == -1){ // no se pudo enviar
 			printf("no se envio el paquete \n");
+
 			//this->actualizarPaquete("nahueeeeee\n");//todo
 		}
 		//SDL_Delay(2000); // todo
@@ -169,15 +170,15 @@ int Servidor::runEnviarInfoInicial(Cliente* cliente){
 	//SDL_UnlockMutex(this->mutex);
 	int enviados = cliente->getSocket()->enviar(envio, MAX_PACK);
 	printf("envie %d bytes al cliente \n", enviados);
-	printf(" ------- DENTRO DEL ENVIAR DEL SERVIDOR ----------- \n");
+	//printf(" ------- DENTRO DEL ENVIAR DEL SERVIDOR ----------- \n");
 	structPaquete* paqueteCiclo = (structPaquete*) envio;
-	printf(" Voy a enviar un paquete con %d figuras \n", paqueteCiclo->cantidad_figuras);
-	printf(" Voy a enviar un paquete con %d personajes \n", paqueteCiclo->cantidad_personajes);
+	//printf(" Voy a enviar un paquete con %d figuras \n", paqueteCiclo->cantidad_figuras);
+	//printf(" Voy a enviar un paquete con %d personajes \n", paqueteCiclo->cantidad_personajes);
 	structFigura* vector = paqueteCiclo->vector_figuras;
 	structFigura paqueteFigura = vector[0];
 	b2Vec2 posicion = paqueteFigura.vector_vertices[2];
-	printf(" Envia estas posiciones: (%f, %f) \n ", posicion.x,posicion.y);
-	printf(" ------- SALGO DEL ENVIAR DEL SERVIDOR ----------- \n");
+	//printf(" Envia estas posiciones: (%f, %f) \n ", posicion.x,posicion.y);
+	//printf(" ------- SALGO DEL ENVIAR DEL SERVIDOR ----------- \n");
 
 
 	//structInicial* inicial = (structInicial*) envio;
@@ -200,10 +201,11 @@ int Servidor::runRecibirInfo(void* cliente){
 		int cantidad = client->getSocket()->recibir(paquete, MAX_PACK); //todo ver tamanio
 
 		if(cantidad >0){
-			void* novedad = malloc (sizeof (structEventos));
-			memcpy(novedad, paquete, sizeof (structEventos)); //todo ver como determinar el tamaño del paquete
+			structEvento* evento = (structEvento*) paquete;
+			void* novedad = malloc (sizeof (structEvento));
+			memcpy(novedad, paquete, sizeof (structEvento)); //todo ver como determinar el tamaño del paquete
 			this->paquetesRecibir.push(novedad);
-			printf("Recibí: %s del cliente \n",paquete);
+			//printf("Recibi del cliente la posicion del mouse %f, %f \n", evento->click_mouse.x, evento->click_mouse.y);
 		}
 		else if(cantidad ==0){
 			printf("Cliente desconectado\n");

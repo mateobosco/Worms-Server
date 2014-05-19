@@ -56,7 +56,7 @@ int main_server(int argc,char* argv[]){
 	//		//clientes[i] = ID_CLIENTE TODO
 	//	}
 	//}
-	manejador_personajes->AgregarJugador(juego->getMundo(), clientes[0]);
+	manejador_personajes->AgregarJugador(juego->getMundo(), 0);
 
 
 	//manejador_personajes->AgregarJugador(juego->getMundo(), 1); // esto deberia ir adentro del while que cuando se conecta un jugador le agregue los personajes
@@ -69,16 +69,16 @@ int main_server(int argc,char* argv[]){
 	juego->getMundo()->setFiguras(juego->getFiguras(), juego->getCantidadFiguras());
 
 	structPaquete* paqueteCiclo = crearPaqueteCiclo(juego->getMundo());
-	printf(" Voy a enviar un paquete con %d figuras \n", paqueteCiclo->cantidad_figuras);
-	printf(" Voy a enviar un paquete con %d personajes \n", paqueteCiclo->cantidad_personajes);
+	//printf(" Voy a enviar un paquete con %d figuras \n", paqueteCiclo->cantidad_figuras);
+	//printf(" Voy a enviar un paquete con %d personajes \n", paqueteCiclo->cantidad_personajes);
 	structFigura* vector = paqueteCiclo->vector_figuras;
 	structFigura paqueteFigura = vector[0];
 	b2Vec2 posicion = paqueteFigura.vector_vertices[2];
-	printf(" Envia estas posiciones: (%f, %f) \n ", posicion.x,posicion.y);
+	//printf(" Envia estas posiciones: (%f, %f) \n ", posicion.x,posicion.y);
 	servidor->actualizarPaquete((char*)paqueteCiclo);
 	juego->getMundo()->step(0.1,1,1);
 
-	SDL_Delay(12000);
+	SDL_Delay(5000);
 	//TODO ACA ES DONDE TERMINA EL CODIGO INNECESARIO.
 
 
@@ -87,19 +87,20 @@ int main_server(int argc,char* argv[]){
 		juego->getMundo()->setFiguras(juego->getFiguras(), juego->getCantidadFiguras());
 
 		structPaquete* paqueteCiclo = crearPaqueteCiclo(juego->getMundo());
-		printf(" Voy a enviar un paquete con %d figuras \n", paqueteCiclo->cantidad_figuras);
-		printf(" Voy a enviar un paquete con %d personajes \n", paqueteCiclo->cantidad_personajes);
+		//printf(" Voy a enviar un paquete con %d figuras \n", paqueteCiclo->cantidad_figuras);
+		//printf(" Voy a enviar un paquete con %d personajes \n", paqueteCiclo->cantidad_personajes);
 		structFigura* vector = paqueteCiclo->vector_figuras;
 		structFigura paqueteFigura = vector[0];
 		b2Vec2 posicion = paqueteFigura.vector_vertices[2];
-		printf(" Envia estas posiciones: (%f, %f) \n ", posicion.x,posicion.y);
+		//printf(" Envia estas posiciones: (%f, %f) \n ", posicion.x,posicion.y);
 		servidor->actualizarPaquete((char*)paqueteCiclo);
 		SDL_Delay(25);
 		//destruirPaqueteCiclo(paqueteCiclo);
 
-/*		structEventos* evento;
-	    evento = (structEventos*) servidor->desencolarPaquete();
-	    juego->aplicarPaquete(evento, manejador_personajes);*/
+		structEvento* evento;
+	    evento = (structEvento*) servidor->desencolarPaquete();
+//	    printf (" RECIBE EL ID DEL PIBITO : %d \n", evento->nro_jugador);
+	    juego->aplicarPaquete(evento, manejador_personajes);
 
 		juego->getMundo()->step(0.05,100,100);
 		juego->getMundo()->comprobar_nivel_agua();
