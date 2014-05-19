@@ -25,9 +25,9 @@ int main_server(int argc,char* argv[]){
 	Juego *juego = new Juego();
 	ManejadorPersonajes* manejador_personajes = new ManejadorPersonajes();
 	structInicial* paqueteInicial = juego->getPaqueteInicial();
-
-
-	servidor->actualizarPaquete((char*) paqueteInicial);
+	servidor->setPaqueteInicial((char*) paqueteInicial);
+	//enviarPaqueteInicial(servidor, paqueteInicial);
+	//servidor->actualizarPaquete((char*) paqueteInicial);
 
 	SDL_Thread* listener =  SDL_CreateThread(runServidor,"listener",(void*)servidor);
 	SDL_Thread* aceptar = SDL_CreateThread(aceptarConex,"aceptar",(void*)servidor);

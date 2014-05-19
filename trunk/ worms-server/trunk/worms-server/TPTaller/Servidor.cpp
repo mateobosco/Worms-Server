@@ -29,6 +29,10 @@ Socket* Servidor::getSocket(){
 	return listener;
 }
 
+void Servidor::setPaqueteInicial(char paquete[MAX_PACK]){
+	memcpy(this->paqueteInicial, paquete, MAX_PACK);
+}
+
 void Servidor::actualizarPaquete(char paquete[MAX_PACK]){
 	this->enviar=true;
 	//SDL_LockMutex(mutex);
@@ -91,6 +95,7 @@ int Servidor::aceptarConexiones(){
 			printf("ASigno mismo fd : %d\n",sockCliente);
 		}
 		Cliente* cliente = new Cliente(sockCliente);
+		this->runEnviarInfoInicial(cliente);
 		printf("fd del socket creado desde accept: %d\n",sockCliente);
 		conexion_t par;
 		par.cliente = cliente;
@@ -151,6 +156,36 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 			//this->actualizarPaquete("nahueeeeee\n");//todo
 		}
 		//SDL_Delay(2000); // todo
+	}
+	return EXIT_SUCCESS;
+}
+
+int Servidor::runEnviarInfoInicial(Cliente* cliente){
+	SDL_Delay(25);
+	//SDL_Delay(500);
+	char envio[MAX_PACK];
+	//SDL_LockMutex(this->mutex);
+	memcpy(envio, this->paqueteInicial, MAX_PACK);
+	//SDL_UnlockMutex(this->mutex);
+	int enviados = cliente->getSocket()->enviar(envio, MAX_PACK);
+	printf("envie %d bytes al cliente \n", enviados);
+	printf(" ------- DENTRO DEL ENVIAR DEL SERVIDOR ----------- \n");
+	structPaquete* paqueteCiclo = (structPaquete*) envio;
+	printf(" Voy a enviar un paquete con %d figuras \n", paqueteCiclo->cantidad_figuras);
+	printf(" Voy a enviar un paquete con %d personajes \n", paqueteCiclo->cantidad_personajes);
+	structFigura* vector = paqueteCiclo->vector_figuras;
+	structFigura paqueteFigura = vector[0];
+	b2Vec2 posicion = paqueteFigura.vector_vertices[2];
+	printf(" Envia estas posiciones: (%f, %f) \n ", posicion.x,posicion.y);
+	printf(" ------- SALGO DEL ENVIAR DEL SERVIDOR ----------- \n");
+
+
+	//structInicial* inicial = (structInicial*) envio;
+	if (enviados > 0){
+		this->enviar = false;
+	}
+	if(enviados == -1){ // no se pudo enviar
+		printf("no se envio el paquete \n");
 	}
 	return EXIT_SUCCESS;
 }
