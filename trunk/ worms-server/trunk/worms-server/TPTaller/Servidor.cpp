@@ -204,8 +204,13 @@ int Servidor::runRecibirInfo(void* cliente){
 			structEvento* evento = (structEvento*) paquete;
 			void* novedad = malloc (sizeof (structEvento));
 			memcpy(novedad, paquete, sizeof (structEvento)); //todo ver como determinar el tamaño del paquete
-			this->paquetesRecibir.push(novedad);
-			//printf("Recibi del cliente la posicion del mouse %f, %f \n", evento->click_mouse.x, evento->click_mouse.y);
+
+			if (this->paquetesRecibir.empty()) this->paquetesRecibir.push(novedad);
+			structEvento* anterior = (structEvento*) this->paquetesRecibir.front();
+			if (anterior->aleatorio != evento->aleatorio){
+				this->paquetesRecibir.push(novedad);
+			}
+			SDL_Delay(25);
 		}
 		else if(cantidad ==0){
 			printf("Cliente desconectado\n");

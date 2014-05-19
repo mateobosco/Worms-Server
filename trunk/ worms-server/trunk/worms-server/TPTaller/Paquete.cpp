@@ -49,10 +49,7 @@ structPersonaje* crearPaquetePersonaje(Personaje* personaje){
 	paquete->posicion = pos;
 	paquete->tamano.x = personaje->getAncho();
 	paquete->tamano.y = personaje->getAlto();
-	paquete->conectado = 1;
-	//if (paquete->conectado == 1){
-	//	printf(" LE PONE CONECTADO AL PERSONAJE ======================================== \n");
-	//}
+	paquete->conectado = personaje->getConectado();
 	return paquete;
 }
 
@@ -65,6 +62,8 @@ void destruirPaquetePersonaje(structPersonaje* paquete){
 	delete paquete;
 }
 
+
+
 structEvento* crearPaqueteClick(int* click, Escalador* escalador, int cliente){
 	structEvento* paquete = new structEvento;
 	b2Vec2 posicion(click[0],click[1]);
@@ -72,6 +71,7 @@ structEvento* crearPaqueteClick(int* click, Escalador* escalador, int cliente){
 	paquete->click_mouse = posicionEscalada;
 	paquete->direccion = -9; //DIRECION NO VALIDA
 	paquete->nro_jugador = cliente;
+	paquete->aleatorio = random();
 
 	return paquete;
 }
@@ -89,7 +89,35 @@ structEvento* crearPaqueteMovimiento(bool* KEYS, int id_jugador){
 	}
 	paquete->nro_jugador = id_jugador;
 	paquete->click_mouse = b2Vec2( -1, -1 );
+	paquete->aleatorio = random();
 	return paquete;
+}
+
+structEvento* crearPaqueteVacio(){
+	structEvento* paquete = new structEvento;
+	paquete->click_mouse = b2Vec2 (-1,-1);
+	paquete->direccion = -9;
+	paquete->nro_jugador = 0;
+	paquete->aleatorio = random();
+	return paquete;
+}
+
+structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, int cliente){
+	structEvento* paquete;
+	if ( KEYS[100] || KEYS[101] || KEYS[102] || KEYS[SDLK_SPACE]){ // no es un click, es un movimiento
+		printf (" CREO UN PAQUETE MOVIMIENTO ------------------------ \n");
+		paquete = crearPaqueteMovimiento(KEYS, cliente);
+
+	}
+	else if (click[0] != -1){
+		paquete = crearPaqueteClick(click, escalador, cliente);
+		printf (" CREO UN PAQUETE CLICK ------------------------ \n");
+	}
+	else {
+		paquete = crearPaqueteVacio();
+	}
+	return paquete;
+
 }
 
 structPaquete* crearPaqueteCiclo(Mundo* mundo){

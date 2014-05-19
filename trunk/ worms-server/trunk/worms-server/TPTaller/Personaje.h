@@ -39,6 +39,7 @@ public:
 	bool getMuerto();
 	void setConectado(int estado);
 	int getConectado();
+	int getOrientacion();
 
 	float32 getAlto();
 	float32 getAncho();
@@ -62,6 +63,7 @@ private:
 	float32 alto;
 	bool muerto;
 	int conectado;
+	int orientacion;
 
 };
 

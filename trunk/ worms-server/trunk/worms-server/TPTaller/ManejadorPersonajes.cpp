@@ -29,7 +29,6 @@ ManejadorPersonajes::~ManejadorPersonajes() {
 }
 
 void ManejadorPersonajes::seleccionarPersonaje(b2Vec2 posicion, int id_jugador){
-
 	b2CircleShape* shapeMouse = new b2CircleShape();
 	shapeMouse->m_radius = RADIOMOUSE;
 	b2Transform transformMouse = b2Transform(posicion, b2Rot(0) );
@@ -46,7 +45,7 @@ void ManejadorPersonajes::seleccionarPersonaje(b2Vec2 posicion, int id_jugador){
 				personaje_aux->setSeleccionado(false, id_jugador);
 			}
 			personaje->setSeleccionado(resultado, id_jugador);
-			//printf("selecciono un personaje \n");
+			printf("selecciono un personaje \n");
 		}
 
 	}

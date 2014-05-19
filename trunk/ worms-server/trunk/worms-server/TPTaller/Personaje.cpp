@@ -66,6 +66,7 @@ Personaje::Personaje(Mundo* mundo, Uint8 numero_jugador) {
 	for (int i = 0 ; i<4; i++){
 		seleccionado[i] = false;
 	}
+	orientacion = 1;
 
 }
 
@@ -78,6 +79,8 @@ Personaje::~Personaje() {
 void Personaje::mover(b2Vec2 direccion){
 	float32 modulo = 1;
 	b2Vec2 fuerza = b2Vec2(modulo * direccion.x, modulo* direccion.y ); // TODO ver cuanto aplicarle
+	if (direccion.x > 0) orientacion = 1;
+	if (direccion.x < 0) orientacion = -1;
 	body->ApplyForceToCenter(fuerza, true );
 }
 
@@ -156,16 +159,20 @@ float32* Personaje::getVecY(){
 
 void Personaje::leermovimiento(int direccion, int id_jugador){
 	if (this->nro_jugador == id_jugador && seleccionado[id_jugador]){
+
 		if (direccion == 1 && body->GetLinearVelocity().x == 0){ // para la derecha
 			dir_imagen = "TPTaller/imagenes/gusanitoderecha.png";
+			printf("MUEVE EL PERSONAJE \n");
 			this->mover(b2Vec2(10,0));
 		}
 		if (direccion == -1 && body->GetLinearVelocity().x == 0 ){ // para la izquierda
 			dir_imagen = "TPTaller/imagenes/gusanitoizquierda.png";
 			this->mover(b2Vec2(-10,0));
+			printf("MUEVE EL PERSONAJE \n");
 		}
 		if (direccion == 0  && body->GetLinearVelocity().y == 0){ // para arriba
 			this->mover(b2Vec2(0,-15)); //15
+			printf("MUEVE EL PERSONAJE \n");
 		}
 	}
 }
@@ -221,5 +228,7 @@ int Personaje::getConectado(){
 void Personaje::setConectado(int estado){
 	conectado = estado;
 }
-
+int Personaje::getOrientacion(){
+	return orientacion;
+}
 
