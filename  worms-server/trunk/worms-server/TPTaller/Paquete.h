@@ -47,12 +47,14 @@ typedef struct structEvento{
 	b2Vec2 click_mouse; // posicion escalada del mouse
 	int direccion; // -1 izquierda, 0 arriba, 1 derecha
 	int nro_jugador; //Identificador del cliente
+	int aleatorio;
 }structEvento;
 
 
 structFigura* crearPaqueteFigura(Figura* figura);
 structPersonaje* crearPaquetePersonaje(Personaje* personaje);
 structPaquete* crearPaqueteCiclo(Mundo* mundo);
+structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, int cliente);
 
 void destruirPaqueteFigura(structFigura* paquete);
 void destruirPaquetePersonaje(structPersonaje* paquete);
