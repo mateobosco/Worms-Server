@@ -15,6 +15,7 @@ typedef struct structFigura {
 
 
 typedef struct structPersonaje {
+	int conectado;
 	b2Vec2 posicion;
 	b2Vec2 tamano;
 	int direccion; // 0 derecha, 1 izquierda

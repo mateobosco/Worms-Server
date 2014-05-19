@@ -15,6 +15,7 @@ int random( int n ) // TODO
 }
 
 Personaje::Personaje(Mundo* mundo, Uint8 numero_jugador) {
+	conectado = 1;
 	muerto = false;
 	dir_imagen = "TPTaller/imagenes/gusanitoderecha.png";
 	nro_jugador = numero_jugador;
@@ -213,6 +214,12 @@ bool Personaje::getMuerto(){
 	return muerto;
 }
 
+int Personaje::getConectado(){
+	return conectado;
+}
 
+void Personaje::setConectado(int estado){
+	conectado = estado;
+}
 
 
