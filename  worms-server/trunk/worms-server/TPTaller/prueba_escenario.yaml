@@ -5,7 +5,7 @@ escenario:
     ancho-un:      80
     alto-esc:      1000
     ancho-esc:     1200
-    agua:          52
+    agua:          45
 
     tierra:        "TPTaller/imagenes/final.png"
     cielo:         "TPTaller/imagenes/cieloN.png"

@@ -37,6 +37,8 @@ public:
 	char* getDirImagen();
 	void setMuerto();
 	bool getMuerto();
+	void setConectado(int estado);
+	int getConectado();
 
 	float32 getAlto();
 	float32 getAncho();
@@ -59,6 +61,7 @@ private:
 	float32 ancho;
 	float32 alto;
 	bool muerto;
+	int conectado;
 
 };
 

@@ -50,8 +50,16 @@ int main_server(int argc,char* argv[]){
 
 	printf("-----------------------------------------EL SERVIDOR INICIA EL JUEGO-------------------------------------\n");
 	int* clientes = servidor->getVectorClientes();
+	//for (int i=0 ; i < servidor->getCantidadClientes() ; i++){
+	//	if (clientes[i] != 0 && juego->getJugadores()[i] != NULL){
+	//
+	//		//clientes[i] = ID_CLIENTE TODO
+	//	}
+	//}
+	manejador_personajes->AgregarJugador(juego->getMundo(), clientes[0]);
 
-	manejador_personajes->AgregarJugador(juego->getMundo(), 1); // esto deberia ir adentro del while que cuando se conecta un jugador le agregue los personajes
+
+	//manejador_personajes->AgregarJugador(juego->getMundo(), 1); // esto deberia ir adentro del while que cuando se conecta un jugador le agregue los personajes
 
 
 	//TODO LO QUE HAY ABAJO LO PUSE PARA QUE PUEDA DIBUJAR Y QUE ESPERE UN RATO
@@ -92,7 +100,9 @@ int main_server(int argc,char* argv[]){
 /*		structEventos* evento;
 	    evento = (structEventos*) servidor->desencolarPaquete();
 	    juego->aplicarPaquete(evento, manejador_personajes);*/
+
 		juego->getMundo()->step(0.05,100,100);
+		juego->getMundo()->comprobar_nivel_agua();
 	}
 
 
