@@ -36,12 +36,15 @@ public:
 	int getCantidadMaxConexiones();
 	int getCantidadClientes();
 
+	void setPaqueteInicial(char paquete[MAX_PACK]);
 	void actualizarPaquete(char paquete[MAX_PACK]);
 	void* desencolarPaquete();
 	int escucharConexiones();
 	int aceptarConexiones();
 
 	int runEnviarInfo(Cliente* cliente);
+
+	int runEnviarInfoInicial(Cliente* cliente);
 
 	int runRecibirInfo(void* paquete);
 
@@ -53,6 +56,7 @@ public:
 
 private:
 	char paqueteEnviar[MAX_PACK];
+	char paqueteInicial[MAX_PACK];
 	queue<void*> paquetesRecibir;
 	int cantidadMaxConexiones;
 	int cantClientes;
