@@ -215,11 +215,12 @@ structInicial* Juego::getPaqueteInicial(){
 }
 
 
-void Juego::aplicarPaquete(structEventos* evento, ManejadorPersonajes* manejador_personajes){
+void Juego::aplicarPaquete(structEvento* evento, ManejadorPersonajes* manejador_personajes){
 	if (evento->click_mouse.x != -1){ // recibio un click
 		manejador_personajes->seleccionarPersonaje(evento->click_mouse, evento->nro_jugador);
 	}
 	if (evento->direccion != -9){ // recibio un click
+		printf (" APLICO UN PAQUETE DE MOVER PERSONAJE EN LA DIRECC %d \n", evento->direccion);
 		manejador_personajes->moverPersonaje(evento->direccion , evento->nro_jugador);
 	}
 }

@@ -50,7 +50,6 @@ structPersonaje* crearPaquetePersonaje(Personaje* personaje){
 	paquete->tamano.x = personaje->getAncho();
 	paquete->tamano.y = personaje->getAlto();
 	paquete->conectado = 1;
-	printf ( " ****************************************************************************\n");
 	//if (paquete->conectado == 1){
 	//	printf(" LE PONE CONECTADO AL PERSONAJE ======================================== \n");
 	//}
