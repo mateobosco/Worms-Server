@@ -54,6 +54,9 @@ public:
 	int validarSocket(int sock);
 	int validarCliente(Cliente* cliente);
 
+	void recibirNombre(Cliente *client);
+	bool checkNuevoCliente(Cliente *client);
+
 
 private:
 	char paqueteEnviar[MAX_PACK];
