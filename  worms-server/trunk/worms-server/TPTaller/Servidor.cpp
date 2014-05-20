@@ -212,7 +212,6 @@ int Servidor::runEnviarInfoInicial(Cliente* cliente){
 int Servidor::runRecibirInfo(void* cliente){
 	while(true){
 		SDL_Delay(25);
-		SDL_LockMutex(this->mutex);
 		Cliente* client = (Cliente*) cliente;
 		char paquete[MAX_PACK];
 		memset(paquete, 0, MAX_PACK);
@@ -222,6 +221,7 @@ int Servidor::runRecibirInfo(void* cliente){
 
 			structEvento* evento = (structEvento*) paquete;
 			void* novedad = malloc (sizeof (structEvento));
+			SDL_LockMutex(this->mutex);
 			memcpy(novedad, paquete, sizeof (structEvento)); //todo ver como determinar el tamaño del paquete
 
 			if (this->paquetesRecibir.empty()) this->paquetesRecibir.push(novedad);
@@ -229,7 +229,8 @@ int Servidor::runRecibirInfo(void* cliente){
 			if (anterior->aleatorio != evento->aleatorio){
 				this->paquetesRecibir.push(novedad);
 			}
-			SDL_Delay(25);
+			SDL_UnlockMutex(this->mutex);
+			//SDL_Delay(25);
 
 
 		}
@@ -250,7 +251,6 @@ int Servidor::runRecibirInfo(void* cliente){
 			printf("Error al recibir información del cliente\n");
 			break;
 		}
-		SDL_UnlockMutex(this->mutex);
 	}
 	return EXIT_SUCCESS;
 }
