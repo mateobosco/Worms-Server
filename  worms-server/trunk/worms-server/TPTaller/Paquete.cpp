@@ -39,11 +39,11 @@ structPersonaje* crearPaquetePersonaje(Personaje* personaje){
 	b2Vec2 pos = personaje->getPosition();
 	int dir;
 	b2Body* body = personaje->getBody();
-	if (body->GetLinearVelocity().x > 0 ){
-		dir = 0;
+	if (body->GetLinearVelocity().x > 0.5 ){
+		dir = 1;
 	}
 	else{
-		dir = 1;
+		dir = -1;
 	}
 	paquete->direccion = dir;
 	paquete->posicion = pos;
