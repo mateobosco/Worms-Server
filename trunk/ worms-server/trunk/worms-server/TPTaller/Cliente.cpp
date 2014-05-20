@@ -4,7 +4,6 @@ int Cliente::cant_clientes = 0;
 
 Cliente::Cliente(int fd){
 	this->enviarpaquete = true;
-	this->name_client = NULL;
 	this->socket_cl = new Socket(PUERTO,fd);
 	memset(paquete_enviar, 0, MAX_PACK);
 	memset(paquete_recibir, 0, MAX_PACK);
@@ -13,11 +12,12 @@ Cliente::Cliente(int fd){
 	Cliente::cant_clientes++;
 	this->paqueteInicial = NULL;
 	this->conectado = false;
+	this->activo = false;
 //	this->id = 1;// VER COMO GENERAR EL ID
 }
 
 Cliente::Cliente(const char *name, const char *ip_sv, const char *puerto){
-	this->name_client = name;
+	strncpy(this->name_client, name, MAX_NAME_USER - 1);
 	this->socket_cl = new Socket(ip_sv, puerto);
 	memset(paquete_enviar, 0, MAX_PACK);
 	memset(paquete_recibir, 0, MAX_PACK);
@@ -26,6 +26,7 @@ Cliente::Cliente(const char *name, const char *ip_sv, const char *puerto){
 	Cliente::cant_clientes++;
 	this->paqueteInicial = NULL;
 	this->conectado = false;
+	this->activo = false;
 }
 
 Cliente::~Cliente(){
@@ -48,10 +49,6 @@ char* Cliente::getPaquete(){
 	memcpy(buffer, this->paquete_recibir, MAX_PACK);
 	SDL_UnlockMutex(this->mutex);
 	return buffer;
-}
-
-const char* Cliente::getNombre(){
-	return this->name_client;
 }
 
 structInicial* Cliente::getPaqueteInicial(){
@@ -185,4 +182,28 @@ void Cliente::actualizarPaquete(structEvento* evento){
 	memcpy( this->paquete_enviar, evento, sizeof(structEvento));
 }
 
+char* Cliente::getNombre(){
+	return this->name_client;
+}
 
+void Cliente::setNombre(char *name){
+	SDL_LockMutex(this->mutex);
+	strncpy(this->name_client, name, MAX_NAME_USER-1);
+	SDL_UnlockMutex(this->mutex);
+}
+
+void Cliente::enviarNombre(){
+	this->socket_cl->enviar(this->name_client, MAX_NAME_USER);
+}
+
+void Cliente::setActivo(){
+	this->activo = true;
+}
+
+void Cliente::resetActivo(){
+	this->activo = false;
+}
+
+bool Cliente::getActivo(){
+	return this->activo;
+}

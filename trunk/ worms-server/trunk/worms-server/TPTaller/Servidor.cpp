@@ -294,3 +294,32 @@ int Servidor::getCantidadClientes(){
 int* Servidor::getVectorClientes(){
 	return vector_clientes;
 }
+
+void Servidor::recibirNombre(Cliente *client){
+	char buffer[MAX_NAME_USER];
+	client->getSocket()->recibir(buffer, MAX_NAME_USER);
+	client->setNombre(buffer);
+}
+
+// Retorna true si:
+//		- Es nuevo y hay espacio para crearlo.
+//		- Está creado e inactivo.
+// Retorna false si:
+//		- Está creado y activo.
+// 		- No hay más espacio para crearlo.
+bool Servidor::checkNuevoCliente(Cliente *client){
+	while (!client->getNombre());
+	int indice = 0;
+	Cliente *cliente_recorrido = this->clientes[indice];
+	while(cliente_recorrido != NULL ){
+		if(!(strcmp(cliente_recorrido->getNombre(), client->getNombre()))){
+			if(cliente_recorrido->getActivo()) return false;
+			else return true;
+		}
+		indice++;
+		if (indice == MAX_CANT_JUGADORES) break;
+		cliente_recorrido = this->clientes[indice];
+	}
+	if(this->cantClientes >= MAX_CANT_JUGADORES) return false;
+	return true;
+}
