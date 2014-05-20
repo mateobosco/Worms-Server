@@ -88,13 +88,14 @@ int main_server(int argc,char* argv[]){
 
 		structPaquete* paqueteCiclo = crearPaqueteCiclo(juego->getMundo());
 		servidor->actualizarPaquete((char*)paqueteCiclo);
-		SDL_Delay(25);
+
 		//destruirPaqueteCiclo(paqueteCiclo);
 
 		structEvento* evento;
 	    evento = (structEvento*) servidor->desencolarPaquete();
 //	    printf (" RECIBE EL ID DEL PIBITO : %d \n", evento->nro_jugador);
 	    juego->aplicarPaquete(evento, manejador_personajes);
+	    SDL_Delay(25);
 
 		juego->getMundo()->step(0.05,100,100);
 		juego->getMundo()->comprobar_nivel_agua();

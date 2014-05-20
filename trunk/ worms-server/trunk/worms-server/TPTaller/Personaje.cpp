@@ -206,7 +206,7 @@ char* Personaje::getDirImagen(){
 }
 
 bool Personaje::getSeleccionado(){
-	return seleccionado;
+	return seleccionado[this->nro_jugador];
 }
 
 int Personaje::getNrojugador(){
