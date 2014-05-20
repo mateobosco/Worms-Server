@@ -52,6 +52,7 @@ public:
 	int runEscucharConexiones();
 	int* getVectorClientes();
 	int validarSocket(int sock);
+	int validarCliente(Cliente* cliente);
 
 
 private:
@@ -62,6 +63,7 @@ private:
 	int cantClientes;
 	Socket* listener;
 	Cliente* clientes[MAXJUG];
+	Cliente* clientesDesconectados[MAXJUG]; //ver tamanio todo
 	SDL_mutex *mutex;
 	int maxFD;
 	const char* puerto;
