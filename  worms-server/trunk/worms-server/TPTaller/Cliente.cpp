@@ -82,10 +82,10 @@ int runRecvInfoCliente(void* cliente){
 
 int Cliente::conectar(){
 	if ( this->socket_cl->conectar() != EXIT_SUCCESS) {
-		//loguear error todo
+		loguear();
+		logFile << "Cliente: " <<this->name_client << " \t No se pudo conectar con servidor" << endl;
 		return EXIT_FAILURE;
 	}
-
 	bool envio_nombre = false;
 	while (!envio_nombre){
 		int bytes = this->enviarNombre();
@@ -101,14 +101,14 @@ int Cliente::conectar(){
 		printf("Conecte cliente %s con servidor. num de fd es: %d\n", this->name_client,this->socket_cl->getFD());
 		hilos.recibir = SDL_CreateThread(runRecvInfoCliente, "recibirServidor",(void*)this);
 		if(hilos.recibir == NULL){
-			//ver que hacer
-			//loguear error todo
+			loguear();
+			logFile << "No se puede crear hilo para recibir información del servidor" << endl;
 			return EXIT_FAILURE;
 		}
 		hilos.enviar = SDL_CreateThread(runSendInfoCliente,"enviarServidor",(void*)this);
 		if(hilos.enviar == NULL){
-			//ver que hacer
-			//loguear error todo
+			loguear();
+			logFile << "No se puede crear hilo para enviar información al servidor" << endl;
 			return EXIT_FAILURE;
 		}
 		return EXIT_SUCCESS;
@@ -127,10 +127,11 @@ int Cliente::runEnviarInfo(){
 		memcpy(buffer, this->paquete_enviar, MAX_PACK);
 		int enviados = this->enviar(buffer, MAX_PACK); //todo
 		if (enviados >= 0){
-			enviarpaquete = false; /*printf("Voy a enviar: %s al servidor\n",buffer)*/;
+			enviarpaquete = false;
 		}
 		else if(enviados == -1){
-			printf("Error al enviar info cliente a servidor\n");
+			loguear();
+			logFile << "Error al enviar información del cliente "<< this->name_client <<" al servidor \n" << endl;
 			//break;
 		}
 		//Se desbloquea
@@ -191,7 +192,8 @@ int Cliente::runRecibirInfo(){
 //			}
 		}
 		else if(recibidos ==0){
-			printf("Servidor desconectado \n");
+			loguear();
+			logFile << "Error \t Servidor desconectado, no se puede recibir información " << endl;
 			break; //corta xq si se desconecta no tiene que recibir mas
 			//VER QUE HACER SI SE DESCONECTA EL SERVIDOR todo
 		}
@@ -204,8 +206,10 @@ int Cliente::runRecibirInfo(){
 
 
 void Cliente::actualizarPaquete(structEvento* evento){
-	this->enviarpaquete=true;
-	memcpy( this->paquete_enviar, evento, sizeof(structEvento));
+	if(evento != NULL){
+		this->enviarpaquete=true;
+		memcpy( this->paquete_enviar, evento, sizeof(structEvento));
+	}
 }
 
 char* Cliente::getNombre(){

@@ -73,7 +73,7 @@ void destruirPaquetePersonaje(structPersonaje* paquete){
 
 
 structEvento* crearPaqueteClick(int* click, Escalador* escalador, int cliente){
-	structEvento* paquete = new structEvento;
+	structEvento* paquete = new structEvento; //todo
 	b2Vec2 posicion(click[0],click[1]);
 	b2Vec2 posicionEscalada = escalador->escalarPosicion(posicion);
 	paquete->click_mouse = posicionEscalada;

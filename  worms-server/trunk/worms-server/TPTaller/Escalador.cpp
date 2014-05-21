@@ -59,20 +59,22 @@ b2Vec2 Escalador::escalarPosicion(b2Vec2 posicionPixel){
 b2Vec2* Escalador::pixelarPosicion(b2Vec2 posicionEscalar){
 	int pixelX = posicionEscalar.x / (this->escalaX/this->pixelesX);
 	int pixelY = posicionEscalar.y / (this->escalaY/this->pixelesY);
-	b2Vec2* pixelado = new b2Vec2(pixelX,pixelY); //ver delete todo
+	b2Vec2* pixelado = new b2Vec2(pixelX,pixelY);
 	return pixelado;
 }
 
+//NO SE USA TODO
 b2Vec2* Escalador::ventanarPosicion(b2Vec2 posicionEscalar){
 	int ventanadoX = ventanarEnX(posicionEscalar.x);
 	int ventanadoY = ventanarEnY(posicionEscalar.y);
-	b2Vec2* pixelado = new b2Vec2(ventanadoX,ventanadoY); //ver delete todo
+	b2Vec2* pixelado = new b2Vec2(ventanadoX,ventanadoY);
 	return pixelado;
 }
 
+//No se usa todo
 Sint16* Escalador::pixelarVectorX(float32* vec, int cantidad){
 	int i;
-	Sint16* pixelado = new Sint16[cantidad]; //ver delete todo
+	Sint16* pixelado = new Sint16[cantidad];
 	for (i = 0 ; i < cantidad ; i++){
 		float32 numero = vec[i];
 		pixelado[i] = numero * (this->pixelesX / this->escalaX);
@@ -80,9 +82,10 @@ Sint16* Escalador::pixelarVectorX(float32* vec, int cantidad){
 	return pixelado;
 }
 
+//NO SE USA TODO
 Sint16* Escalador::pixelarVectorY(float32* vec, int cantidad){
 	int i;
-	Sint16* pixelado = new Sint16[cantidad]; //ver delete todo
+	Sint16* pixelado = new Sint16[cantidad];
 	for (i = 0 ; i < cantidad ; i++){
 		float32 numero = vec[i];
 		pixelado[i] =  numero * (this->pixelesY / this->escalaY);
@@ -105,9 +108,10 @@ int Escalador::ventanarEnY(float32 y){
 	return valor;
 }
 
+//NO SE USA TODO
 Sint16* Escalador::ventanarVectorX(float32* vec, int cantidad){
 	int i;
-	Sint16* ventanado = new Sint16[cantidad]; //ver delete todo
+	Sint16* ventanado = new Sint16[cantidad];
 	for (i = 0 ; i < cantidad ; i++){
 		float32 numero = vec[i];
 		ventanado[i] = ventanarEnX(numero);
@@ -115,9 +119,10 @@ Sint16* Escalador::ventanarVectorX(float32* vec, int cantidad){
 	return ventanado;
 }
 
+//NO SE USA TODO
 Sint16* Escalador::ventanarVectorY(float32* vec, int cantidad){
 	int i;
-	Sint16* ventanado = new Sint16[cantidad]; //ver delete todo
+	Sint16* ventanado = new Sint16[cantidad];
 	for (i = 0 ; i < cantidad ; i++){
 		float32 numero = vec[i];
 		ventanado[i] = ventanarEnY(numero);
@@ -127,7 +132,7 @@ Sint16* Escalador::ventanarVectorY(float32* vec, int cantidad){
 
 Sint16* Escalador::aplicarZoomXVector(float32* vec, int cantidad){
 	int i;
-	Sint16* ventanado = new Sint16[cantidad]; //ver delete todo
+	Sint16* ventanado = new Sint16[cantidad];
 	for (i = 0 ; i < cantidad ; i++){
 		float32 numero = vec[i];
 		ventanado[i] = aplicarZoomXaEscala(numero);
@@ -137,7 +142,7 @@ Sint16* Escalador::aplicarZoomXVector(float32* vec, int cantidad){
 
 Sint16* Escalador::aplicarZoomYVector(float32* vec, int cantidad){
 	int i;
-	Sint16* ventanado = new Sint16[cantidad]; //ver delete todo
+	Sint16* ventanado = new Sint16[cantidad];
 	for (i = 0 ; i < cantidad ; i++){
 		float32 numero = vec[i];
 		ventanado[i] = aplicarZoomYaEscala(numero);
@@ -180,6 +185,7 @@ int Escalador::aplicarZoomYaPix(int valor){
 	return n;
 }
 
+//NO SE USA TODO
 b2Vec2* Escalador::aplicarZoomPixel(b2Vec2 posicionEscalar){
 	int ventanadoX = aplicarZoomXaPix(posicionEscalar.x);
 	int ventanadoY = aplicarZoomYaPix(posicionEscalar.y);
@@ -190,7 +196,7 @@ b2Vec2* Escalador::aplicarZoomPixel(b2Vec2 posicionEscalar){
 b2Vec2* Escalador::aplicarZoomPosicion(b2Vec2 posicionEscalar){
 	int ventanadoX = aplicarZoomXaEscala(posicionEscalar.x);
 	int ventanadoY = aplicarZoomYaEscala(posicionEscalar.y);
-	b2Vec2* pixelado = new b2Vec2(ventanadoX,ventanadoY); //ver delete todo
+	b2Vec2* pixelado = new b2Vec2(ventanadoX,ventanadoY);
 	return pixelado;
 }
 
@@ -307,13 +313,4 @@ void Escalador::moverVentana(int* posicion_mouse){
 		this->moverArriba(2);
 	}
 
-/*	int ceroX = (int) ((((offsetX+centroX)*(float)zoom/100))-centroX);
-	int ceroY = (int)((((offsetY+centroY)*(float)zoom/100))-centroY);
-	int limiteX =(int) (((((offsetX + ventanaX-centroX)*(float)100/zoom))+centroX));
-	int limiteY =(int) (((((offsetY + ventanaY-centroY)*(float)100/zoom))+centroY));
-
-	printf(" (%d , %d) (%d , %d) \n", ceroX,ceroY,ceroX,limiteY);
-	printf(" (%d , %d) (%d , %d) \n", ceroX,limiteY,limiteX,limiteY);
-	printf( "Centros %d , %d \n", centroX, centroY);
-	printf("------------------- \n");*/
 }

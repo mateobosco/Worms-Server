@@ -16,14 +16,10 @@ ManejadorPersonajes::ManejadorPersonajes() {
 	this->personajesMax = MAX_CANT_PERSONAJES;
 	this->cantidad_actual_personajes = 0;
 	this->cantidad_jugadores = 0;
-	this->vector_personajes = new Personaje*[MAX_CANT_JUGADORES * this->personajesMax]; //ver delete todo
+	this->vector_personajes = new Personaje*[MAX_CANT_JUGADORES * this->personajesMax];
 }
 
 ManejadorPersonajes::~ManejadorPersonajes() {
-//	for(int i = 0; i<cantidad_actual_personajes; i++){
-//		Personaje* personaje = vector_personajes[i];
-//		delete personaje;
-//	}
 	//Es responsabilidad de cada Jugador borrar sus personajes
 	delete[] this->vector_personajes;
 }

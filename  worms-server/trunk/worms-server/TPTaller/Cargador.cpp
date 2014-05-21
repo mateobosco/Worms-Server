@@ -36,7 +36,7 @@ Cargador::~Cargador(){
 		logFile << "    Warning" << "\t El archivo de escenario no se pudo cerrar." << endl;
 	}
 	this->nodo_inicial = NULL;
-	//delete this->datos;
+	//delete this->datos; todo
 }
 
 Node Cargador::getNodo(){
@@ -119,8 +119,7 @@ Agua* Cargador::loadAgua(Node nodo,string pathAgua ){
 		logFile <<"    Warning " <<"\t No se pudo cargar el nivel de agua. Por defecto seteamos nivel = 40 " << endl;
 		nivelAgua = 40;
 	}
-	Agua* agua = new Agua(nivelAgua,pathAgua); //ver delete todo
-	//datos->agua = pathAgua.c_str();
+	Agua* agua = new Agua(nivelAgua,pathAgua);
 	strcpy(datos->agua,pathAgua.c_str());
 	datos->nivel_agua = nivelAgua;
 	return agua;
@@ -228,7 +227,7 @@ Escalador* Cargador::loadEscalador(Node nodo){
 	datos->ancho_escenario = (int) ancho_esc;
 	datos->alto_escenario = (int) alto_esc;
 
-	return escalador; //ver delete todo
+	return escalador;
 
 }
 
@@ -239,11 +238,8 @@ bool Cargador::loadPath(Node nodo,const char* clave,string &resultado){
 		resultado = path;
 		if(strcmp(clave, "tierra") == 0){
 			strcpy(datos->tierra,path.c_str());
-			printf("COPIA EL PATH DE LA TIERRA \n");
-			//datos->tierra = path.c_str();
 		} else{
 			strcpy(datos->cielo,path.c_str());
-			//datos->cielo = path.c_str();
 		}
 		return true;
 	}catch(Exception &e){
@@ -261,7 +257,7 @@ Rectangulo* Cargador::loadRectangulo(Node nodo, Mundo* mundo, Escalador *escalad
 	float32 rotacion = obtenerRotacion(nodo,i);
 	Rectangulo* rect = new Rectangulo(mundo, posicion,ancho,alto,estatico,color,masa,rotacion);
 	if (mundo->checkOverlap(rect, escalador,i)){
-		return rect; //ver delete todo
+		return rect;
 	} else{
 		delete rect;
 		return NULL;
@@ -277,7 +273,7 @@ Circulo* Cargador::loadCirculo (Node nodo, Mundo* mundo, Escalador *escalador,si
 	float32 escala = obtenerEscala(nodo,i);
 	Circulo* circulo = new Circulo(mundo, posicion,(int)escala, estatico, color, masa, rotacion);
 	if (mundo->checkOverlap(circulo, escalador,i)){
-		return circulo; //ver delete todo
+		return circulo;
 	} else{
 		delete circulo;
 		return NULL;
@@ -294,7 +290,7 @@ Poligono* Cargador::loadPoligono (Node nodo, Mundo* mundo, Escalador *escalador,
 	float32 rotacion = obtenerRotacion(nodo,i);
 	Poligono* poligono = new Poligono(mundo, posicion, escala, cantLados,estatico,color, masa,rotacion);
 	if (mundo->checkOverlap(poligono, escalador,i)){
-		return poligono; //ver delete todo
+		return poligono;
 	} else{
 		delete poligono;
 		return NULL;
