@@ -71,7 +71,8 @@ int runRecvInfo(void* par){
 	conexion_t* cliente_servidor = (conexion_t*) par;
 	Cliente* cliente = cliente_servidor->cliente;
 	Servidor* servidor = cliente_servidor->servidor;
-	return servidor->runRecibirInfo(cliente);
+	servidor->runRecibirInfo(cliente);
+	return 0;
 }
 
 

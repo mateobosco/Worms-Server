@@ -111,10 +111,14 @@ int main_server(int argc,char* argv[]){
 
 		//destruirPaqueteCiclo(paqueteCiclo);
 
-		structEvento* evento;
-	    evento = (structEvento*) servidor->desencolarPaquete();
+		structEvento* evento =NULL;
+	    while(evento == NULL){
+	    	evento = (structEvento*) servidor->desencolarPaquete();
+	    }
+
 //	    printf (" RECIBE EL ID DEL PIBITO : %d \n", evento->nro_jugador);
-	    juego->aplicarPaquete(evento);
+
+	    if(evento!=NULL) juego->aplicarPaquete(evento);
 	    SDL_Delay(25);
 
 		juego->getMundo()->step(0.05,100,100);

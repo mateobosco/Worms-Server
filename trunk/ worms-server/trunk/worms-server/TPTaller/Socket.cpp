@@ -1,10 +1,3 @@
-/*
- * Socket.cpp
- *
- *  Created on: 06/05/2014
- *      Author: sami
- */
-
 #include "Socket.h"
 
 // Para Servidor debe pasarse el IP como NULL, Que luego se cargará la ip propia del servidor,

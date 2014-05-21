@@ -64,7 +64,6 @@ b2Vec2* LectorMascara::LeerMascara(Escalador* escalador){
 	Uint32 negro = 0 ;
 	Uint32 transparente = 0;
 	if (pixels[0] == transparente){
-		//printf(" ENTRAAAAAAAAAAAAAAAAA CACACACACACA \n");
 	}
 	if ( this->superficie->format->BytesPerPixel == 3){
 		negro = 0;
@@ -85,13 +84,6 @@ b2Vec2* LectorMascara::LeerMascara(Escalador* escalador){
 				tierra_escalada[i].x = i * (escalador->getEscalaX() / this->PIXEL_ANCHO) ;
 				tierra_escalada[i].y = j * (escalador->getEscalaY() / this->PIXEL_ALTO ) ;
 			}
-
-//			if(tierra[i] < 32000 && ((getpixel(superficie, i, j )) == transparente)  ){
-//				loguear();
-//				logFile << "    Error   " <<"\t La tierra '"<<this->path << "' esta corrupta. x = "<< j<< ", y = "<< i << endl;
-//				return NULL;
-//			}
-
 		}
 	}
 	for (i = 0; i < this->PIXEL_ANCHO; i++){

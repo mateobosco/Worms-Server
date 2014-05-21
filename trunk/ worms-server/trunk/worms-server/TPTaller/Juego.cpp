@@ -20,18 +20,19 @@ Juego::Juego(){
 }
 
 Juego::~Juego(){
-		for(size_t i= 0; i < cantidad_figuras ; i++){
-			if (figuras != NULL){
-				if(figuras[i] != NULL){
-					delete figuras[i];
-				}
+	for(size_t i= 0; i < cantidad_figuras ; i++){
+		if (figuras != NULL){
+			if(figuras[i] != NULL){
+				delete figuras[i];
 			}
 		}
-		delete[] figuras;
-		delete agua;
-		delete lector;
-		delete mundo;
-		delete manejador;
+	}
+	delete[] figuras;
+	delete agua;
+	delete lector;
+	delete mundo;
+	delete manejador;
+	delete escalador; //todo
 	for(Uint8 i = 0; i < cantidad_jugadores; i++){
 		if(jugadores[i] != NULL){
 			delete jugadores[i];
@@ -86,6 +87,7 @@ void Juego::cargar() {
 	Node *nodo_escenario = this->cargaInicial(cargador);
 	this->cargaPrincipal(cargador, *nodo_escenario);
 	inicial = cargador->getPaqueteInicial();
+	delete nodo_escenario; //todo
 	delete cargador;
 }
 
@@ -113,10 +115,10 @@ Node* Juego::cargaInicial(Cargador* cargador){
 		loguear();
 		logFile << "    Error   " << "\t No se encuentra el escenario. Se carga escenario por defecto."<<endl;
 		delete cargador;
-		cargador = new Cargador(pathDefEs.c_str()); //ver delete todo
+		cargador = new Cargador(pathDefEs.c_str());
 		(*nodo_escenario) = cargador->getNodo()["escenario"];
 	}
-	return nodo_escenario; //ver delete todo<
+	return nodo_escenario;
 }
 
 void Juego::cargarEscalador(Cargador *cargador, Node nodo_escenario){
@@ -134,7 +136,6 @@ void Juego::cargarAgua(Cargador *cargador, Node nodo_escenario){
 		loguear();
 		logFile << "    Error   " << "\t  No se pudo crear el agua. "<< endl;
 	}
-	//inicial->agua = imagen_agua;
 }
 
 void Juego::cargarMundo(){
@@ -153,7 +154,6 @@ string Juego::cargarTierra(Cargador *cargador, Node nodo_escenario){
 		logFile << "    Error  " <<"\t No se pudo cargar el path correspondiente a la clave buscada. " << endl;
 		tierra = pathDefMas;
 	}
-	//inicial->tierra = tierra;
 	return tierra;
 }
 
@@ -164,11 +164,10 @@ void Juego::cargarCielo(Cargador *cargador, Node nodo_escenario){
 		logFile << "    Error  " <<"\t No se pudo cargar el path correspondiente a la clave buscada. " << endl;
 		cielo = pathDefCielo;
 	}
-	//inicial->cielo = cielo;
 }
 
 void Juego::cargarLector(string tierra){
-	this->lector = new LectorMascara(tierra); //ver delete todo
+	this->lector = new LectorMascara(tierra);
 	if(!this->lector){
 		loguear();
 		logFile << "    Error   " << "\t  No se pudo crear el Lector de Máscara. " <<  SDL_GetError()<< endl;
