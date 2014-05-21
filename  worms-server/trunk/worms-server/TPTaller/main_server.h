@@ -57,7 +57,17 @@ int main_server(int argc,char* argv[]){
 	//		//clientes[i] = ID_CLIENTE TODO
 	//	}
 	//}
-	manejador_personajes->AgregarJugador(juego->getMundo(), 0);
+
+	for (int i=0 ; i < servidor->getCantidadClientes() ; i++){
+		int* clientes = servidor->getVectorClientes();
+		if (clientes[i] != -1 && juego->getJugadores()[i] == NULL){
+		//printf("AGREGO UN JUGADOR \n");
+			juego->agregarJugador(i);
+			//manejador_personajes->AgregarJugador(juego->getMundo(), i);
+			//clientes[i] = i;
+		}
+	}
+	//manejador_personajes->AgregarJugador(juego->getMundo(), 0);
 
 
 	//manejador_personajes->AgregarJugador(juego->getMundo(), 1); // esto deberia ir adentro del while que cuando se conecta un jugador le agregue los personajes
