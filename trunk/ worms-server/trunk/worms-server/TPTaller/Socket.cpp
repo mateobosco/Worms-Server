@@ -30,7 +30,7 @@ Socket::Socket(const char* puerto, int sockfd) {
 }
 
 Socket::~Socket() {
-	freeaddrinfo(this->info);
+//	if(this->info)freeaddrinfo(this->info);
 	close(this->sockFD);
 }
 
@@ -74,7 +74,6 @@ int Socket::aceptar(){
 
 	//Se acepta la conexión y se el asigna un fd
 	nuevoFD = accept(this->sockFD,(struct sockaddr *)&infoCliente,&len);
-	printf("Acepta y fd es: %d\n",nuevoFD);
 	if (nuevoFD == -1) {
 		//loguear error todo
 		close(nuevoFD);
