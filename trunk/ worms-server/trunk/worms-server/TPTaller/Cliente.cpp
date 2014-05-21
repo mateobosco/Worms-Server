@@ -97,7 +97,6 @@ int Cliente::conectar(){
 		if(!this->paqueteInicial->cliente_aceptado) return EXIT_FAILURE;
 		this->activar();
 
-//		this->conectado = true; //todo
 		printf("Conecte cliente %s con servidor. num de fd es: %d\n", this->name_client,this->socket_cl->getFD());
 		hilos.recibir = SDL_CreateThread(runRecvInfoCliente, "recibirServidor",(void*)this);
 		if(hilos.recibir == NULL){
@@ -126,6 +125,7 @@ int Cliente::runEnviarInfo(){
 		SDL_LockMutex(this->mutex);
 		memcpy(buffer, this->paquete_enviar, MAX_PACK);
 		int enviados = this->enviar(buffer, MAX_PACK); //todo
+		SDL_UnlockMutex(this->mutex);
 		if (enviados >= 0){
 			enviarpaquete = false;
 		}
@@ -134,8 +134,11 @@ int Cliente::runEnviarInfo(){
 			logFile << "Error al enviar información del cliente "<< this->name_client <<" al servidor \n" << endl;
 			//break;
 		}
+		if(enviados == 0) {
+			printf("Servidor desconectado \n");
+			this->desactivar();
+		}
 		//Se desbloquea
-		SDL_UnlockMutex(this->mutex);
 	}
 	return EXIT_SUCCESS;
 }
@@ -194,7 +197,7 @@ int Cliente::runRecibirInfo(){
 		else if(recibidos ==0){
 			loguear();
 			logFile << "Error \t Servidor desconectado, no se puede recibir información " << endl;
-			break; //corta xq si se desconecta no tiene que recibir mas
+			this->desactivar();
 			//VER QUE HACER SI SE DESCONECTA EL SERVIDOR todo
 		}
 		else if (recibidos == -1){
