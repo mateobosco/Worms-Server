@@ -170,7 +170,7 @@ int Servidor::validarCliente(Cliente* cliente){
 
 int Servidor::runEnviarInfo(Cliente* cliente){
 	while(!cliente->getNombre());
-	while(true){
+	while(cliente->getActivo()){
 		if (this->enviar == false){
 			continue;
 		}
