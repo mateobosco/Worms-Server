@@ -53,7 +53,7 @@ class Juego{
 		int run();
 		structInicial* getPaqueteInicial();
 		void aplicarPaquete(structEvento* evento);
-		void agregarJugador(int id);
+		Jugador* agregarJugador(int id);
 		ManejadorPersonajes* getManejadorPersonajes();
 
 

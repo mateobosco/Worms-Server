@@ -18,6 +18,7 @@ Cliente::Cliente(int fd){
 	this->hilos.enviar = NULL;
 	this->hilos.recibir = NULL;
 //	this->id = 1;// VER COMO GENERAR EL ID
+	jugador=NULL;
 }
 
 Cliente::Cliente(const char *name, const char *ip_sv, const char *puerto){
@@ -45,6 +46,7 @@ Cliente::~Cliente(){
 	SDL_WaitThread(this->hilos.recibir, 0);
 	delete this->socket_cl;
 	SDL_DestroyMutex(mutex);
+	Cliente::cant_clientes--;
 }
 
 Socket* Cliente::getSocket(){
@@ -243,6 +245,7 @@ void Cliente::activar(){
 
 void Cliente::desactivar(){
 	this->activo = false;
+	jugador->desconectar();
 }
 
 bool Cliente::getActivo(){
@@ -268,3 +271,9 @@ int Cliente::recibirConfiguracion(){
 SDL_mutex* Cliente::getMutex(){
 	return this->mutex;
 }
+
+void Cliente::setJugador(Jugador* jug){
+	this->jugador=jug;
+}
+
+

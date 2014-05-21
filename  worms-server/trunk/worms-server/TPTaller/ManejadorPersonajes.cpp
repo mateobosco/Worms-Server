@@ -28,6 +28,7 @@ void ManejadorPersonajes::seleccionarPersonaje(b2Vec2 posicion, int id_jugador){
 	b2CircleShape* shapeMouse = new b2CircleShape();
 	shapeMouse->m_radius = RADIOMOUSE;
 	b2Transform transformMouse = b2Transform(posicion, b2Rot(0) );
+
 	for (int i = 0; i < this->personajesMax * this->cantidad_jugadores ; i++){
 		Personaje* personaje = this->vector_personajes[i];
 		b2Body* body_actual = personaje->getBody();
@@ -42,6 +43,8 @@ void ManejadorPersonajes::seleccionarPersonaje(b2Vec2 posicion, int id_jugador){
 			}
 			personaje->setSeleccionado(resultado, id_jugador);
 			printf("selecciono un personaje \n");
+			int dueno = personaje->getNrojugador();
+			if (id_jugador == dueno) printf ("SELECCIONO UN PERSONAJE PROPIO _____________-----------------_________________ \n");
 		}
 
 	}
@@ -87,7 +90,7 @@ void ManejadorPersonajes::moverPersonaje(int direccion,int id_jugador){
 void ManejadorPersonajes::agregarPersonaje(Personaje *personaje, uint8 numero_jugador){
 	this->vector_personajes[this->cantidad_actual_personajes] = personaje;
 	this->cantidad_actual_personajes++;
-	this->cantidad_jugadores = numero_jugador;
+	//this->cantidad_jugadores = numero_jugador;
 }
 
 

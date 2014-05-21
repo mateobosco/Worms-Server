@@ -210,6 +210,9 @@ char* Personaje::getDirImagen(){
 bool Personaje::getSeleccionado(){
 	return seleccionado[this->nro_jugador];
 }
+bool* Personaje::getSeleccion(){
+	return seleccionado;
+}
 
 int Personaje::getNrojugador(){
 	return nro_jugador;
@@ -232,5 +235,9 @@ void Personaje::setConectado(int estado){
 }
 int Personaje::getOrientacion(){
 	return orientacion;
+}
+
+void Personaje::desconectar(){
+	this->conectado=0;
 }
 

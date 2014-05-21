@@ -22,6 +22,7 @@ class Jugador{
 		Personaje* getPersonaje(Uint8 numero_pj);
 		Uint8 getNumero();
 		SDL_Color getColor();
+		void desconectar();
 };
 
 //Uint8 Jugador::cantidad_jugadores = 1;

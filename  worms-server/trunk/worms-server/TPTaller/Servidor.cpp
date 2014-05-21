@@ -185,13 +185,18 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 		}
 		SDL_Delay(25);
 		char envio[MAX_PACK];
+		char envio2[MAX_PACK];
+
+
 		//SDL_LockMutex(this->mutex);
 		memcpy(envio, this->paqueteEnviar, MAX_PACK);
 		//SDL_UnlockMutex(this->mutex);
-		int enviados = cliente->getSocket()->enviar(envio, MAX_PACK);
+		structPaquete* paqueteCiclo = (structPaquete*) envio;
+		paqueteCiclo->id=cliente->getID();
+		memcpy(envio2, paqueteCiclo, MAX_PACK);
+		int enviados = cliente->getSocket()->enviar(envio2, MAX_PACK);
 		//printf("envie %d bytes al cliente \n", enviados);
 		//printf(" ------- DENTRO DEL ENVIAR DEL SERVIDOR ----------- \n");
-		structPaquete* paqueteCiclo = (structPaquete*) envio;
 
 		//printf(" Voy a enviar un paquete con %d figuras \n", paqueteCiclo->cantidad_figuras);
 		//printf(" Voy a enviar un paquete con %d personajes \n", paqueteCiclo->cantidad_personajes);
@@ -214,8 +219,14 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 			//this->actualizarPaquete("nahueeeeee\n");//todo
 		}
 		if(enviados == 0){
+<<<<<<< .mine
+				printf("Cliente desconectado\n");
+				cliente->desactivar();
+					//this->clientesActivos--;
+=======
 			printf("Cliente desconectado\n");
 			cliente->desactivar();
+>>>>>>> .r52
 		}
 	}
 		return EXIT_SUCCESS;
@@ -394,6 +405,11 @@ void Servidor::setThreadAceptar(SDL_Thread *accept){
 void Servidor::setAceptado(bool aceptar){
 	((structInicial* )this->paqueteInicial)->cliente_aceptado = aceptar; //Todo check
 }
+<<<<<<< .mine
+Cliente** Servidor::getClientes(){
+	return this->clientes;
+}
+=======
 
 int Servidor::getCantidadClientesActivos(){
 	int activos = 0;
@@ -408,3 +424,4 @@ int Servidor::getCantidadClientesActivos(){
 void Servidor::setFinalizar(bool condicion){
 	this->finalizar = condicion;
 }
+>>>>>>> .r52

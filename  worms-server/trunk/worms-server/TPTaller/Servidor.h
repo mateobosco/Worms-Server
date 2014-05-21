@@ -60,6 +60,7 @@ public:
 	void setThreadAceptar(SDL_Thread *accept);
 
 	void setAceptado(bool aceptar);
+	Cliente** getClientes();
 	int getCantidadClientesActivos();
 	void setFinalizar(bool condicion);
 

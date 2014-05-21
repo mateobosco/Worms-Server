@@ -225,17 +225,17 @@ void Juego::aplicarPaquete(structEvento* evento){
 		manejador->seleccionarPersonaje(evento->click_mouse, evento->nro_jugador);
 	}
 	if (evento->direccion != -9){ // recibio un click
-		printf (" APLICO UN PAQUETE DE MOVER PERSONAJE EN LA DIRECC %d \n", evento->direccion);
 		manejador->moverPersonaje(evento->direccion , evento->nro_jugador);
 	}
 	else return;
 }
 
-void Juego::agregarJugador(int id){
+Jugador* Juego::agregarJugador(int id){
 
 	this->jugadores[id] = new Jugador(mundo,id,manejador);
 	Personaje** pers = this->jugadores[id]->getPersonajes();
 	this->manejador->AgregarJugador(mundo,id, pers);
+	return this->jugadores[id];
 }
 
 ManejadorPersonajes* Juego::getManejadorPersonajes(){
