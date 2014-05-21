@@ -53,9 +53,9 @@ void ManejadorPersonajes::seleccionarPersonaje(b2Vec2 posicion, int id_jugador){
 }
 
 //TODO hay que borrarlo
-void ManejadorPersonajes::AgregarJugador(Mundo* mundo, int id_jugador){
+void ManejadorPersonajes::AgregarJugador(Mundo* mundo, int id_jugador, Personaje** vectorPersonajes){
 	for(int i=0 ; i <this->personajesMax; i++){
-		this->vector_personajes[i+this->cantidad_actual_personajes] = new Personaje(mundo, id_jugador);
+		this->vector_personajes[i+this->cantidad_actual_personajes] = vectorPersonajes[i];
 	}
 	this->cantidad_actual_personajes += this->personajesMax;
 	this->cantidad_jugadores+=1;

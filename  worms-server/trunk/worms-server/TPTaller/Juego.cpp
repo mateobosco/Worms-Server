@@ -4,7 +4,7 @@ Juego::Juego(){
 	mundo = NULL;
 
 	cantidad_jugadores = 0;
-	manejador = NULL;
+
 	escalador = NULL;
 	lector = NULL;
 
@@ -16,6 +16,7 @@ Juego::Juego(){
 	inicial = NULL;
 
 	this->cargar();
+	manejador = new ManejadorPersonajes();
 }
 
 Juego::~Juego(){
@@ -215,15 +216,25 @@ structInicial* Juego::getPaqueteInicial(){
 }
 
 
-void Juego::aplicarPaquete(structEvento* evento, ManejadorPersonajes* manejador_personajes){
+void Juego::aplicarPaquete(structEvento* evento){
 	if (evento == NULL) return;
 	if (evento->click_mouse.x != -1){ // recibio un click
-		manejador_personajes->seleccionarPersonaje(evento->click_mouse, evento->nro_jugador);
+		manejador->seleccionarPersonaje(evento->click_mouse, evento->nro_jugador);
 	}
 	if (evento->direccion != -9){ // recibio un click
 		printf (" APLICO UN PAQUETE DE MOVER PERSONAJE EN LA DIRECC %d \n", evento->direccion);
-		manejador_personajes->moverPersonaje(evento->direccion , evento->nro_jugador);
+		manejador->moverPersonaje(evento->direccion , evento->nro_jugador);
 	}
 	else return;
 }
 
+void Juego::agregarJugador(int id){
+
+	this->jugadores[id] = new Jugador(mundo,id,manejador);
+	Personaje** pers = this->jugadores[id]->getPersonajes();
+	this->manejador->AgregarJugador(mundo,id, pers);
+}
+
+ManejadorPersonajes* Juego::getManejadorPersonajes(){
+	return this->manejador;
+}
