@@ -32,6 +32,7 @@ class Juego{
 		void cargaPrincipal(Cargador *cargador, Node nodo_escenario);
 
 
+
 		void cargar();
 		structInicial* inicial;
 
@@ -51,7 +52,9 @@ class Juego{
 		uint8 getCantidadFiguras();
 		int run();
 		structInicial* getPaqueteInicial();
-		void aplicarPaquete(structEvento* evento, ManejadorPersonajes* manejador_personajes);
+		void aplicarPaquete(structEvento* evento);
+		void agregarJugador(int id);
+		ManejadorPersonajes* getManejadorPersonajes();
 
 
 };

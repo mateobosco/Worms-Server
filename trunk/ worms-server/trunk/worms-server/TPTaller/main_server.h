@@ -23,7 +23,7 @@ int main_server(int argc,char* argv[]){
 	printf("Servidor corriendo\n");
 
 	Juego *juego = new Juego();
-	ManejadorPersonajes* manejador_personajes = new ManejadorPersonajes();
+	ManejadorPersonajes* manejador_personajes = juego->getManejadorPersonajes();
 	structInicial* paqueteInicial = juego->getPaqueteInicial();
 	servidor->setPaqueteInicial((char*) paqueteInicial);
 	//enviarPaqueteInicial(servidor, paqueteInicial);
@@ -49,17 +49,6 @@ int main_server(int argc,char* argv[]){
 	}
 
 	printf("-----------------------------------------EL SERVIDOR INICIA EL JUEGO-------------------------------------\n");
-	int* clientes = servidor->getVectorClientes();
-	//for (int i=0 ; i < servidor->getCantidadClientes() ; i++){
-	//	if (clientes[i] != 0 && juego->getJugadores()[i] != NULL){
-	//
-	//		//clientes[i] = ID_CLIENTE TODO
-	//	}
-	//}
-	manejador_personajes->AgregarJugador(juego->getMundo(), 0);
-
-
-	//manejador_personajes->AgregarJugador(juego->getMundo(), 1); // esto deberia ir adentro del while que cuando se conecta un jugador le agregue los personajes
 
 
 	//TODO LO QUE HAY ABAJO LO PUSE PARA QUE PUEDA DIBUJAR Y QUE ESPERE UN RATO
@@ -83,6 +72,16 @@ int main_server(int argc,char* argv[]){
 
 
 	while(true){
+
+		for (int i=0 ; i < servidor->getCantidadClientes() ; i++){
+			int* clientes = servidor->getVectorClientes();
+			if (clientes[i] != -1 && juego->getJugadores()[i] == NULL){
+//				printf("AGREGO UN JUGADOR \n");
+				juego->agregarJugador(i);
+				//manejador_personajes->AgregarJugador(juego->getMundo(), i);
+				//clientes[i] = i;
+			}
+		}
 		juego->getMundo()->setVectorPersonajes(manejador_personajes->getPersonajes(), manejador_personajes->getCantidadPersonajes(), manejador_personajes->getCantidadJugadores());
 		juego->getMundo()->setFiguras(juego->getFiguras(), juego->getCantidadFiguras());
 
@@ -94,7 +93,7 @@ int main_server(int argc,char* argv[]){
 		structEvento* evento;
 	    evento = (structEvento*) servidor->desencolarPaquete();
 //	    printf (" RECIBE EL ID DEL PIBITO : %d \n", evento->nro_jugador);
-	    juego->aplicarPaquete(evento, manejador_personajes);
+	    juego->aplicarPaquete(evento);
 	    SDL_Delay(25);
 
 		juego->getMundo()->step(0.05,100,100);

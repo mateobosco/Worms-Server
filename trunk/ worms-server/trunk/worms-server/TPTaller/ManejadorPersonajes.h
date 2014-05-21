@@ -14,7 +14,7 @@ class ManejadorPersonajes {
 public:
 	ManejadorPersonajes();
 	void seleccionarPersonaje(b2Vec2 posicion, int id_jugador);
-	void AgregarJugador(Mundo* mundo, int id_jugador); //TODO hay que borrarlo
+	void AgregarJugador(Mundo* mundo, int id_jugador, Personaje** pers); //TODO hay que borrarlo
 	Personaje** getPersonajes();
 	int getCantidadPersonajes();
 	void moverPersonaje(int direccion,int id_jugador);

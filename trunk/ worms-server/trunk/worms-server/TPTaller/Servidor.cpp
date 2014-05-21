@@ -15,7 +15,7 @@ Servidor::Servidor(int maxCon){
 	this->enviar=true;
 
 	for (int i=0; i < MAXJUG; i++){
-		vector_clientes[i]=0;
+		vector_clientes[i]=-1;
 	}
 }
 
@@ -111,8 +111,8 @@ int Servidor::aceptarConexiones(){
 			//log errror todo
 		}
 		this->clientes[this->cantClientes] = cliente;
+		this->vector_clientes[cantClientes] = cantClientes; // TODO ponerle un nombre / id de jugador
 		this->cantClientes++;
-		this->vector_clientes[cantClientes-1] = 1; // TODO ponerle un nombre / id de jugador
 		printf("Cantidad de clientes aceptados: %d\n",this->cantClientes);
 		return EXIT_SUCCESS;
 	}else{
@@ -182,7 +182,7 @@ int Servidor::runEnviarInfoInicial(Cliente* cliente){
 	//SDL_UnlockMutex(this->mutex);
 	int enviados = cliente->getSocket()->enviar(envio, MAX_PACK);
 
-	printf("envie %d bytes al cliente \n", enviados);
+	//printf("envie %d bytes al cliente \n", enviados);
 	//printf(" ------- DENTRO DEL ENVIAR DEL SERVIDOR ----------- \n");
 
 	structPaquete* paqueteCiclo = (structPaquete*) envio;
