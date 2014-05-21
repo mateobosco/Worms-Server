@@ -109,7 +109,7 @@ int Servidor::aceptarConexiones(){
 //		}
 
 		bool recibio_nombre = false;
-		SDL_LockMutex(this->mutex);
+		//SDL_LockMutex(this->mutex);
 		while (!recibio_nombre){
 			int bytes = this->recibirNombre(cliente);
 			if(bytes > 0 ) recibio_nombre = true;
@@ -155,7 +155,7 @@ int Servidor::aceptarConexiones(){
 				delete cliente;
 				return EXIT_FAILURE;
 			}
-			SDL_UnlockMutex(this->mutex);
+			//SDL_UnlockMutex(this->mutex);
 		}else {
 			delete cliente;
 			return EXIT_FAILURE;
@@ -270,14 +270,17 @@ int Servidor::runRecibirInfo(void* cliente){
 		if(cantidad >0){
 			structEvento* evento = (structEvento*) paquete;
 			void* novedad = malloc (sizeof (structEvento));
-			SDL_LockMutex(client->getMutex());
+			//SDL_Lock(client->getMutex());
 			memcpy(novedad, paquete, sizeof (structEvento)); //todo ver como determinar el tamaño del paquete
 			if (this->paquetesRecibir.empty()) this->paquetesRecibir.push(novedad);
 			structEvento* anterior = (structEvento*) this->paquetesRecibir.front();
+			if (evento == NULL) continue;
 			if (anterior->aleatorio != evento->aleatorio){
 				this->paquetesRecibir.push(novedad);
 			}
-			SDL_UnlockMutex(client->getMutex());
+			int cantidad = (int) this->paquetesRecibir.size();
+			//printf("CANTIDAD DE PAQUETES EN LA COLA ES %d \n" ,cantidad);
+			//SDL_UnlockMutex(client->getMutex());
 		}
 		else if(cantidad == 0){
 			printf("Cliente desconectado\n");
