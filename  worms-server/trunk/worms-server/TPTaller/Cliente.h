@@ -50,6 +50,7 @@ class Cliente{
 		int runEnviarInfo();
 		Socket* getSocket();
 		int getID();
+		void setID(int un_id);
 		char* getPaquete();
 		structInicial* getPaqueteInicial();
 		void setConexion(bool estado);

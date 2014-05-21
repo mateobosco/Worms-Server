@@ -102,7 +102,7 @@ void Mundo::comprobar_nivel_agua(){
 		}
 	}
 
-	for (int i = 0; i < cantidad_personajes * cantidad_jugadores; i++){
+	for (int i = 0; i < cantidad_personajes; i++){
 		Personaje* personaje_actual = vector_personajes[i];
 		b2Body* body_actual = personaje_actual->getBody();
 		b2Vec2 posicion = body_actual->GetPosition();

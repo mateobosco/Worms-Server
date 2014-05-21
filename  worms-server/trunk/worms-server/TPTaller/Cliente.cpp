@@ -52,6 +52,10 @@ int Cliente::getID(){
 	return this->id;
 }
 
+void Cliente::setID(int un_id){
+	this->id = un_id;
+}
+
 char* Cliente::getPaquete(){
 	SDL_LockMutex(this->mutex);
 	char* buffer = new char[MAX_PACK];
