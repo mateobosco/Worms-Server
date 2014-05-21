@@ -97,7 +97,7 @@ int main_server(int argc,char* argv[]){
 		//printf(" LA CANTIDAD DE CLIENTES ES %d \n", servidor->getCantidadClientes());
 		for (int i=0 ; i < servidor->getCantidadClientes() ; i++){
 			int* clientes = servidor->getVectorClientes();
-			printf(" EL CLIENTES[%i] es %d \n", clientes[i]);
+			printf(" EL CLIENTES[%i] es %d \n", i,clientes[i]);
 
 			if (clientes[i] != -1 && juego->getJugadores()[i] == NULL){
 				printf("AGREGO UN JUGADOR \n");

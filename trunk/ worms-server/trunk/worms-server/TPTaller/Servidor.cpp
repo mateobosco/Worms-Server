@@ -17,6 +17,7 @@ Servidor::Servidor(int maxCon){
 	this->clientesActivos = 0;
 	for (int i=0; i < MAX_CANT_JUGADORES; i++){
 		vector_clientes[i]=0;
+		clientes[i] = NULL;
 	}
 }
 
@@ -118,7 +119,10 @@ int Servidor::aceptarConexiones(){
 			int posicion = this->checkNuevoCliente(cliente);
 			if(posicion != -1){
 				Cliente *cliente_viejo = this->clientes[posicion];
-				if (cliente_viejo != NULL) delete cliente_viejo;
+				if (cliente_viejo != NULL){
+					cliente->setID(cliente_viejo->getID());
+					delete cliente_viejo;
+				}
 				else this->cantClientes++;
 				this->setAceptado(true);
 				cliente->activar(); //TODO hay que arreglar esto
@@ -141,7 +145,7 @@ int Servidor::aceptarConexiones(){
 
 				this->clientes[posicion] = cliente;
 				this->clientesActivos++;
-				this->vector_clientes[posicion] = 1; // TODO ponerle un nombre / id de jugador
+				this->vector_clientes[posicion] = cliente->getID(); // TODO ponerle un nombre / id de jugador
 				printf("Cantidad de clientes aceptados: %d\n",this->cantClientes);
 				return EXIT_SUCCESS;
 			}else {
