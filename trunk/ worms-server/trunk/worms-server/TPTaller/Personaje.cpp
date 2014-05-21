@@ -162,11 +162,13 @@ void Personaje::leermovimiento(int direccion, int id_jugador){
 
 		if (direccion == 1 && body->GetLinearVelocity().x == 0){ // para la derecha
 			dir_imagen = "TPTaller/imagenes/gusanitoderecha.png";
+			orientacion=1;
 			printf("MUEVE EL PERSONAJE \n");
 			this->mover(b2Vec2(10,0));
 		}
 		if (direccion == -1 && body->GetLinearVelocity().x == 0 ){ // para la izquierda
 			dir_imagen = "TPTaller/imagenes/gusanitoizquierda.png";
+			orientacion=-1;
 			this->mover(b2Vec2(-10,0));
 			printf("MUEVE EL PERSONAJE \n");
 		}

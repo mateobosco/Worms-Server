@@ -45,11 +45,12 @@ structPersonaje* crearPaquetePersonaje(Personaje* personaje){
 	else{
 		dir = -1;
 	}
-	paquete->direccion = dir;
+	paquete->direccion = personaje->getOrientacion();
 	paquete->posicion = pos;
 	paquete->tamano.x = personaje->getAncho();
 	paquete->tamano.y = personaje->getAlto();
 	paquete->conectado = 1;
+	paquete->id_jugador = personaje->getNrojugador();
 	if (personaje->getSeleccionado()){
 		paquete->seleccionado = 1;
 	}
