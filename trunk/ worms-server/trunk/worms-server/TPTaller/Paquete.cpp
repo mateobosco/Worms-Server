@@ -157,12 +157,6 @@ structPaquete* crearPaqueteCiclo(Mundo* mundo){
 	return paquete;
 }
 
-//void destruirPaqueteCiclo(structPaquete* paquete){
-//	for (int i=0 ; i < paquete->cantidad_figuras; i++){
-//		destruirPaqueteFigura(paquete->vector_figuras[i]);
-//	}
-//	for (int i=0 ; i < paquete->cantidad_personajes; i++){
-//		destruirPaquetePersonaje(paquete->vector_personajes[i]);
-//	}
-//	free(paquete);
-//}
+void destruirPaqueteCiclo(structPaquete* paquete){
+	free(paquete);
+}
