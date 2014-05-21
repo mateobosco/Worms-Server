@@ -3,9 +3,9 @@ escenario:
     ancho-px:      800
     alto-un:       60
     ancho-un:      80
-    alto-esc:      1000
-    ancho-esc:     1200
-    agua:          45
+    alto-esc:      600
+    ancho-esc:     800
+    agua:          75
 
     tierra:        "TPTaller/imagenes/final.png"
     cielo:         "TPTaller/imagenes/cieloN.png"

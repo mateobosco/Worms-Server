@@ -15,12 +15,12 @@ typedef struct structFigura {
 
 
 typedef struct structPersonaje {
-	int id_jugador = 0;
-	int seleccionado = 0;
-	int conectado = 0;
-	b2Vec2 posicion ;
-	b2Vec2 tamano ;
-	int direccion = 0; // 0 derecha, 1 izquierda
+	int id_jugador;
+	int seleccionado[4];
+	int conectado;
+	b2Vec2 posicion;
+	b2Vec2 tamano;
+	int direccion; // 0 derecha, 1 izquierda
 }structPersonaje;
 
 typedef struct structPaquete{
@@ -29,6 +29,7 @@ typedef struct structPaquete{
 	int cantidad_figuras = 0;
 	structPersonaje vector_personajes[20];
 	int cantidad_personajes = 0;
+	int id;
 }structPaquete;
 
 typedef struct structInicial {

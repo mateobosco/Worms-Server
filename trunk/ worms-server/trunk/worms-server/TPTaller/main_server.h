@@ -65,7 +65,7 @@ int main_server(int argc,char* argv[]){
 			//clientes[i] = i;
 	//	}
 	//}
-	//manejador_personajes->AgregarJugador(juego->getMundo(), 0);
+	//juego->agregarJugador(3);
 
 
 	//manejador_personajes->AgregarJugador(juego->getMundo(), 1); // esto deberia ir adentro del while que cuando se conecta un jugador le agregue los personajes
@@ -99,8 +99,10 @@ int main_server(int argc,char* argv[]){
 			//printf(" EL CLIENTES[%i] es %d \n", i,clientes[i]);
 
 			if (clientes[i] != -1 && juego->getJugadores()[i] == NULL){
-				printf("AGREGO UN JUGADOR \n");
-				juego->agregarJugador(i);
+				printf("AGREGO UN JUGADORRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR con el id %d \n",i);
+				Jugador* jug = juego->agregarJugador(i);
+				Cliente* clienteActual = servidor->getClientes()[i];
+				clienteActual->setJugador(jug);
 				//manejador_personajes->AgregarJugador(juego->getMundo(), i);
 				//clientes[i] = i;
 			}
