@@ -15,6 +15,7 @@ typedef struct structFigura {
 
 
 typedef struct structPersonaje {
+	int id_jugador;
 	int seleccionado;
 	int conectado;
 	b2Vec2 posicion;
