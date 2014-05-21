@@ -9,17 +9,19 @@ int runServidor(void* serv){
 }
 
 int aceptarConex(void* servidor){
-	Servidor* serv = (Servidor*) servidor;
-	while(serv->getCantidadClientes() < serv->getCantidadMaxConexiones()){
-		int accept = serv->aceptarConexiones();
-		if (accept != EXIT_SUCCESS) printf("Error al aceptar\n");
+	Servidor* server = (Servidor*) servidor;
+	while(!server->getFinalizar()){
+		while(server->getCantidadClientes() < server->getCantidadMaxConexiones()){
+			int accept = server->aceptarConexiones();
+			if (accept != EXIT_SUCCESS) printf("Error al aceptar\n");
+		}
 	}
 	return 0;
 }
 
 int main_server(int argc,char* argv[]){
 	int retorno = 0;
-	Servidor *servidor = new Servidor(MAXJUG);
+	Servidor *servidor = new Servidor(MAX_CANT_JUGADORES);
 	printf("Servidor corriendo\n");
 
 	Juego *juego = new Juego();
@@ -32,10 +34,9 @@ int main_server(int argc,char* argv[]){
 	SDL_Thread* listener =  SDL_CreateThread(runServidor,"listener",(void*)servidor);
 	SDL_Thread* aceptar = SDL_CreateThread(aceptarConex,"aceptar",(void*)servidor);
 
-	int thread = 0;
-	int thread_2 = 0;
-	//SDL_WaitThread(listener, &thread);
-	//SDL_WaitThread(aceptar, &thread_2);
+	servidor->setThreadEscuchar(listener);
+	servidor->setThreadAceptar(aceptar);
+
 	if(listener == NULL){
 		//ver que hacer
 		//log error todo
@@ -49,6 +50,17 @@ int main_server(int argc,char* argv[]){
 	}
 
 	printf("-----------------------------------------EL SERVIDOR INICIA EL JUEGO-------------------------------------\n");
+	int* clientes = servidor->getVectorClientes();
+	//for (int i=0 ; i < servidor->getCantidadClientes() ; i++){
+	//	if (clientes[i] != 0 && juego->getJugadores()[i] != NULL){
+	//
+	//		//clientes[i] = ID_CLIENTE TODO
+	//	}
+	//}
+	manejador_personajes->AgregarJugador(juego->getMundo(), 0);
+
+
+	//manejador_personajes->AgregarJugador(juego->getMundo(), 1); // esto deberia ir adentro del while que cuando se conecta un jugador le agregue los personajes
 
 
 	//TODO LO QUE HAY ABAJO LO PUSE PARA QUE PUEDA DIBUJAR Y QUE ESPERE UN RATO
@@ -72,7 +84,6 @@ int main_server(int argc,char* argv[]){
 
 
 	while(true){
-
 		for (int i=0 ; i < servidor->getCantidadClientes() ; i++){
 			int* clientes = servidor->getVectorClientes();
 			if (clientes[i] != -1 && juego->getJugadores()[i] == NULL){

@@ -19,6 +19,11 @@
 
 #define MAX_DATOS 100 // max number of bytes we can get at once
 
+typedef struct communicatedThreads{
+	SDL_Thread *enviar;
+	SDL_Thread *recibir;
+}comThreads;
+
 class Cliente{
 	private:
 		char name_client[MAX_NAME_USER];
@@ -32,6 +37,7 @@ class Cliente{
 		bool conectado;
 		bool enviarpaquete;
 		bool activo;
+		comThreads hilos;
 
 	public:
 		Cliente(const char *name, const char *ip_sv, const char* puerto);
@@ -51,10 +57,16 @@ class Cliente{
 
 		char* getNombre();
 		void setNombre(char *name);
-		void enviarNombre();
-		void setActivo();
-		void resetActivo();
+		int enviarNombre();
+		void activar();
+		void desactivar();
 		bool getActivo();
+
+		void setHilos(comThreads hilos_server);
+		comThreads getHilos();
+		int recibirConfiguracion();
+
+		SDL_mutex* getMutex();
 };
 
 

@@ -55,7 +55,7 @@ const string pathDefCielo = "TPTaller/imagenes/cieloN.jpg";
 #define ALTO_ESC 800
 
 // Posicion en el arreglo ARGV.
-#define MAX_NAME_USER 10
+#define MAX_NAME_USER 32
 #define MAX_IP 16
 #define MAX_PORT 6
 #define POS_NAME_USER 1

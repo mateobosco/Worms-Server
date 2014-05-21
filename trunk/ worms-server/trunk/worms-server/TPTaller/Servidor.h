@@ -21,8 +21,6 @@ using namespace std;
 #include "Paquete.h"
 
 
-#define MAXJUG 4
-
 #ifndef SERVIDOR_H_
 #define SERVIDOR_H_
 
@@ -54,9 +52,14 @@ public:
 	int validarSocket(int sock);
 	int validarCliente(Cliente* cliente);
 
-	void recibirNombre(Cliente *client);
-	bool checkNuevoCliente(Cliente *client);
+	int recibirNombre(Cliente *client);
+	int checkNuevoCliente(Cliente *client);
 
+	bool getFinalizar();
+	void setThreadEscuchar(SDL_Thread *listen);
+	void setThreadAceptar(SDL_Thread *accept);
+
+	void setAceptado(bool aceptar);
 
 private:
 	char paqueteEnviar[MAX_PACK];
@@ -64,14 +67,18 @@ private:
 	queue<void*> paquetesRecibir;
 	int cantidadMaxConexiones;
 	int cantClientes;
+	int clientesActivos;
 	Socket* listener;
-	Cliente* clientes[MAXJUG];
-	Cliente* clientesDesconectados[MAXJUG]; //ver tamanio todo
+	Cliente* clientes[MAX_CANT_JUGADORES];
+	Cliente* clientesDesconectados[MAX_CANT_JUGADORES]; //ver tamanio todo [Nahue: si no se usa-> ELIMINAR]
 	SDL_mutex *mutex;
 	int maxFD;
 	const char* puerto;
 	int vector_clientes[4];
 	bool enviar;
+	bool finalizar;
+	SDL_Thread *escuchar;
+	SDL_Thread *aceptar;
 
 };
 

@@ -3,6 +3,7 @@
 int Cliente::cant_clientes = 0;
 
 Cliente::Cliente(int fd){
+	memset(name_client, 0, MAX_NAME_USER);
 	this->enviarpaquete = true;
 	this->socket_cl = new Socket(PUERTO,fd);
 	memset(paquete_enviar, 0, MAX_PACK);
@@ -10,9 +11,11 @@ Cliente::Cliente(int fd){
 	this->mutex = SDL_CreateMutex();
 	this->id = Cliente::cant_clientes;
 	Cliente::cant_clientes++;
-	this->paqueteInicial = NULL;
+	this->paqueteInicial = new structInicial();
 	this->conectado = false;
 	this->activo = false;
+	this->hilos.enviar = NULL;
+	this->hilos.recibir = NULL;
 //	this->id = 1;// VER COMO GENERAR EL ID
 }
 
@@ -24,12 +27,18 @@ Cliente::Cliente(const char *name, const char *ip_sv, const char *puerto){
 	this->mutex = SDL_CreateMutex();
 	this->id = Cliente::cant_clientes;
 	Cliente::cant_clientes++;
-	this->paqueteInicial = NULL;
+	this->paqueteInicial = new structInicial();
 	this->conectado = false;
 	this->activo = false;
+	this->hilos.enviar = NULL;
+	this->hilos.recibir = NULL;
 }
 
 Cliente::~Cliente(){
+	delete paqueteInicial;
+	this->activo = false;
+	SDL_WaitThread(this->hilos.enviar, 0);
+	SDL_WaitThread(this->hilos.recibir, 0);
 	delete this->socket_cl;
 	SDL_DestroyMutex(mutex);
 }
@@ -76,25 +85,38 @@ int Cliente::conectar(){
 		//loguear error todo
 		return EXIT_FAILURE;
 	}
-	this->conectado = true;
-	printf("Conecte cliente %s con servidor. num de fd es: %d\n", this->name_client,this->socket_cl->getFD());
-	SDL_Thread* recibirDelServidor = SDL_CreateThread(runRecvInfoCliente, "recibirServidor",(void*)this);
-	if(recibirDelServidor == NULL){
-		//ver que hacer
-		//loguear error todo
-		return EXIT_FAILURE;
+
+	bool envio_nombre = false;
+	while (!envio_nombre){
+		int bytes = this->enviarNombre();
+		if(bytes > 0 ) envio_nombre = true;
+		if(bytes == 0) break;// TODO Verificar qué pasa si la # de Bytes es -1 o 0;
 	}
-	SDL_Thread* enviarAlServidor = SDL_CreateThread(runSendInfoCliente,"enviarServidor",(void*)this);
-	if(enviarAlServidor == NULL){
-		//ver que hacer
-		//loguear error todo
-		return EXIT_FAILURE;
+	if(this->recibirConfiguracion() <= 0) return EXIT_FAILURE;
+	else{
+		if(!this->paqueteInicial->cliente_aceptado) return EXIT_FAILURE;
+		this->activar();
+
+//		this->conectado = true; //todo
+		printf("Conecte cliente %s con servidor. num de fd es: %d\n", this->name_client,this->socket_cl->getFD());
+		hilos.recibir = SDL_CreateThread(runRecvInfoCliente, "recibirServidor",(void*)this);
+		if(hilos.recibir == NULL){
+			//ver que hacer
+			//loguear error todo
+			return EXIT_FAILURE;
+		}
+		hilos.enviar = SDL_CreateThread(runSendInfoCliente,"enviarServidor",(void*)this);
+		if(hilos.enviar == NULL){
+			//ver que hacer
+			//loguear error todo
+			return EXIT_FAILURE;
+		}
+		return EXIT_SUCCESS;
 	}
-	return EXIT_SUCCESS;
 }
 
 int Cliente::runEnviarInfo(){
-	while(true){
+	while(this->activo){
 		//se bloquea mutex
 		if ( enviarpaquete == false){
 			continue;
@@ -126,7 +148,7 @@ int Cliente::enviar(char* mensaje, size_t longData){
 
 int Cliente::runRecibirInfo(){
 	int contador = 0;
-	while(true){
+	while(this->activo){
 		SDL_Delay(25);
 		char buffer[MAX_PACK];
 		//char* buffer = (char*) malloc(sizeof(char) * MAX_PACK);
@@ -157,12 +179,16 @@ int Cliente::runRecibirInfo(){
 
 			}
 			//SDL_UnlockMutex(this->mutex);
-			if (contador == 1){
-				structInicial* buffer2 = (structInicial*) buffer;
-				this->paqueteInicial  = buffer2;
-				printf("nivel del agua en recibir info es %f \n", buffer2->nivel_agua);
-				printf("path de paquetito %s  \n", buffer2->cielo);
-			}
+
+			// TODO COMENTO ESTA FUNCION PARA REALIZAR EL RECIBIMIENTO DEL PAQUETE INICIAL
+			// AL MOMENTO DE CHECKEAR LA ACEPTACION AL SERVER [Nahue]
+
+//			if (contador == 1){
+//				structInicial* buffer2 = (structInicial*) buffer;
+//				this->paqueteInicial  = buffer2;
+//				printf("nivel del agua en recibir info es %f \n", buffer2->nivel_agua);
+//				printf("path de paquetito %s  \n", buffer2->cielo);
+//			}
 		}
 		else if(recibidos ==0){
 			printf("Servidor desconectado \n");
@@ -192,18 +218,38 @@ void Cliente::setNombre(char *name){
 	SDL_UnlockMutex(this->mutex);
 }
 
-void Cliente::enviarNombre(){
-	this->socket_cl->enviar(this->name_client, MAX_NAME_USER);
+int Cliente::enviarNombre(){
+	return this->socket_cl->enviar(this->name_client, MAX_NAME_USER);
 }
 
-void Cliente::setActivo(){
+void Cliente::activar(){
 	this->activo = true;
 }
 
-void Cliente::resetActivo(){
+void Cliente::desactivar(){
 	this->activo = false;
 }
 
 bool Cliente::getActivo(){
 	return this->activo;
+}
+
+void Cliente::setHilos(comThreads hilos_server){
+	this->hilos.enviar = hilos_server.enviar;
+	this->hilos.recibir = hilos_server.recibir;
+}
+
+comThreads Cliente::getHilos(){
+	return this->hilos;
+}
+
+int Cliente::recibirConfiguracion(){
+	char buffer[MAX_PACK];
+	int bytes_recibidos = this->socket_cl->recibir(buffer, MAX_PACK);
+	memcpy(this->paqueteInicial, buffer, sizeof(structInicial));
+	return bytes_recibidos;
+}
+
+SDL_mutex* Cliente::getMutex(){
+	return this->mutex;
 }
