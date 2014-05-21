@@ -17,6 +17,10 @@ Juego::Juego(){
 
 	this->cargar();
 	manejador = new ManejadorPersonajes();
+
+	for (int i =0; i< 4; i++){
+		jugadores[i]=NULL;
+	}
 }
 
 Juego::~Juego(){
