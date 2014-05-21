@@ -141,11 +141,12 @@ int Servidor::aceptarConexiones(){
 
 				this->clientes[posicion] = cliente;
 				this->clientesActivos++;
-				this->vector_clientes[cantClientes-1] = 1; // TODO ponerle un nombre / id de jugador
+				this->vector_clientes[posicion] = 1; // TODO ponerle un nombre / id de jugador
 				printf("Cantidad de clientes aceptados: %d\n",this->cantClientes);
 				return EXIT_SUCCESS;
 			}else {
 				this->setAceptado(false);
+				printf("Cliente Rechazado");
 				this->runEnviarInfoInicial(cliente);
 				delete cliente;
 				return EXIT_FAILURE;
@@ -202,8 +203,12 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 		}
 		else if(enviados == -1){ // no se pudo enviar
 			printf("no se envio el paquete \n");
-
 			//this->actualizarPaquete("nahueeeeee\n");//todo
+		}
+		if(enviados == 0){
+					printf("Cliente desconectado\n");
+					cliente->desactivar();
+					this->clientesActivos--;
 		}
 	}
 		return EXIT_SUCCESS;
@@ -239,6 +244,11 @@ int Servidor::runEnviarInfoInicial(Cliente* cliente){
 	if (enviados > 0){
 		this->enviar = false;
 	}
+	if(enviados == 0){
+				printf("Cliente desconectado\n");
+				cliente->desactivar();
+				this->clientesActivos--;
+	}
 	if(enviados == -1){ // no se pudo enviar
 		printf("no se envio el paquete \n");
 	}
@@ -265,18 +275,20 @@ int Servidor::runRecibirInfo(void* cliente){
 			}
 			SDL_UnlockMutex(client->getMutex());
 		}
-		else if(cantidad ==0){
+		else if(cantidad == 0){
 			printf("Cliente desconectado\n");
-			client->setConexion(false);
-			int i;
-			for(i=0;i<this->cantClientes; i++){
-				if((this->clientes[i]->getID() == client->getID()) && (strcmp(this->clientes[i]->getNombre(),client->getNombre())==0)){
-					this->clientes[i]->setConexion(false); //ver si es necesario
-				}
-			}
-			//ver si this->cantClientes--;
-			//todo desconexion cliente
-			break;
+			client->desactivar();
+			this->clientesActivos--;
+//			client->setConexion(false);
+//			int i;
+//			for(i=0;i<this->cantClientes; i++){
+//				if((this->clientes[i]->getID() == client->getID()) && (strcmp(this->clientes[i]->getNombre(),client->getNombre())==0)){
+//					this->clientes[i]->setConexion(false); //ver si es necesario
+//				}
+//			}
+//			ver si this->cantClientes--;
+//			todo desconexion cliente
+//			break;
 		}
 		else if(cantidad ==-1){
 			printf("Error al recibir información del cliente\n");
