@@ -9,48 +9,48 @@
 
 typedef struct structFigura {
 	b2Vec2 vector_vertices[6] ;
-	int cantidad;
+	int cantidad = 0;
 	SDL_Color color;
 }structFigura;
 
 
 typedef struct structPersonaje {
-	int id_jugador;
-	int seleccionado;
-	int conectado;
-	b2Vec2 posicion;
-	b2Vec2 tamano;
-	int direccion; // 0 derecha, 1 izquierda
+	int id_jugador = 0;
+	int seleccionado = 0;
+	int conectado = 0;
+	b2Vec2 posicion ;
+	b2Vec2 tamano ;
+	int direccion = 0; // 0 derecha, 1 izquierda
 }structPersonaje;
 
 typedef struct structPaquete{
-	int tipo;
+	int tipo = 0;
 	structFigura vector_figuras[10];
-	int cantidad_figuras;
+	int cantidad_figuras = 0;
 	structPersonaje vector_personajes[20];
-	int cantidad_personajes;
+	int cantidad_personajes = 0;
 }structPaquete;
 
 typedef struct structInicial {
-	bool cliente_aceptado;
-	int tipo;
+	bool cliente_aceptado = false;
+	int tipo = 0;
 	char tierra[50];
 	char cielo[50];
 	char agua[50];
-	int ancho_ventana;
-	int alto_ventana;
-	float32 nivel_agua;
-	int ancho_unidades;
-	int alto_unidades;
-	float32 ancho_escenario;
-	float32 alto_escenario;
+	int ancho_ventana = 0;
+	int alto_ventana = 0;
+	float32 nivel_agua = 0.0;
+	int ancho_unidades = 0;
+	int alto_unidades = 0;
+	float32 ancho_escenario = 0.0;
+	float32 alto_escenario = 0.0;
 }structInicial;
 
 typedef struct structEvento{
 	b2Vec2 click_mouse; // posicion escalada del mouse
-	int direccion; // -1 izquierda, 0 arriba, 1 derecha
-	int nro_jugador; //Identificador del cliente
-	int aleatorio;
+	int direccion= 0; // -1 izquierda, 0 arriba, 1 derecha //todo
+	int nro_jugador = 0; //Identificador del cliente
+	int aleatorio = 0;
 }structEvento;
 
 

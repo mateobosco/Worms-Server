@@ -98,6 +98,7 @@ int Socket::enviar(const void* dato, size_t longDato){
 	int bytesRestantes = longDato;
 	int n;
 	char buffer[longDato];
+	memset(buffer,0,longDato);
 	memcpy(buffer, (char*) dato, longDato);
 	while(bytesRestantes > 0) {
 		n = send(this->sockFD, buffer + bytesTotal, bytesRestantes, 0);

@@ -222,6 +222,7 @@ int Servidor::runEnviarInfoInicial(Cliente* cliente){
 	SDL_Delay(25);
 	//SDL_Delay(500);
 	char envio[MAX_PACK];
+	memset(envio,0,MAX_PACK);
 	//SDL_LockMutex(this->mutex);
 	memcpy(envio, this->paqueteInicial, MAX_PACK);
 	//SDL_UnlockMutex(this->mutex);
@@ -270,7 +271,7 @@ int Servidor::runRecibirInfo(void* cliente){
 		if(cantidad >0){
 			structEvento* evento = (structEvento*) paquete;
 			void* novedad = malloc (sizeof (structEvento));
-			//SDL_Lock(client->getMutex());
+			//SDL_LockMutex(client->getMutex());
 			memcpy(novedad, paquete, sizeof (structEvento)); //todo ver como determinar el tamaño del paquete
 			if (this->paquetesRecibir.empty()) this->paquetesRecibir.push(novedad);
 			structEvento* anterior = (structEvento*) this->paquetesRecibir.front();
@@ -278,6 +279,7 @@ int Servidor::runRecibirInfo(void* cliente){
 			if (anterior->aleatorio != evento->aleatorio){
 				this->paquetesRecibir.push(novedad);
 			}
+			//SDL_UnlockMutex(client->getMutex());
 			int cantidad = (int) this->paquetesRecibir.size();
 			//printf("CANTIDAD DE PAQUETES EN LA COLA ES %d \n" ,cantidad);
 			//SDL_UnlockMutex(client->getMutex());
@@ -346,6 +348,7 @@ int* Servidor::getVectorClientes(){
 
 int Servidor::recibirNombre(Cliente *client){
 	char buffer[MAX_NAME_USER];
+	memset(buffer,0,MAX_NAME_USER);
 	int bytes_recibidos = client->getSocket()->recibir(buffer, MAX_NAME_USER);
 	client->setNombre(buffer);
 	return bytes_recibidos;

@@ -18,6 +18,7 @@ Agua::Agua(float32 nivel_agua, string &origen){
 }
 
 Agua::~Agua(){
+	free(this->surface);
 }
 
 float32 Agua::GetNivel(){

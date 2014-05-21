@@ -26,7 +26,7 @@ typedef struct communicatedThreads{
 
 class Cliente{
 	private:
-		char name_client[MAX_NAME_USER];
+		char* name_client;
 		Socket* socket_cl;
 		SDL_mutex *mutex;
 		char paquete_recibir[MAX_PACK];
