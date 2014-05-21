@@ -3,7 +3,7 @@
 
 Circulo::Circulo(Mundo *mundo,  b2Vec2 posicion, float32 escala,  bool estatico, SDL_Color color, float32 masa, float32 rot) : Figura(color,rot){
 
-	tipo = 1;
+	tipo = 0;
 	posicion_inicial = posicion;
 	b2World* world = mundo->devolver_world();
 
