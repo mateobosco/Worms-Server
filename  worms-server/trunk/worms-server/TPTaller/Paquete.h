@@ -31,6 +31,7 @@ typedef struct structPaquete{
 }structPaquete;
 
 typedef struct structInicial {
+	bool cliente_aceptado;
 	int tipo;
 	char tierra[50];
 	char cielo[50];
