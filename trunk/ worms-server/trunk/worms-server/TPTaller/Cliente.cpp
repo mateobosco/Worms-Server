@@ -3,7 +3,8 @@
 int Cliente::cant_clientes = 0;
 
 Cliente::Cliente(int fd){
-	memset(name_client, 0, MAX_NAME_USER);
+	this->name_client = new char[MAX_NAME_USER];
+	memset(this->name_client,0,MAX_NAME_USER);
 	this->enviarpaquete = true;
 	this->socket_cl = new Socket(PUERTO,fd);
 	memset(paquete_enviar, 0, MAX_PACK);
@@ -20,6 +21,8 @@ Cliente::Cliente(int fd){
 }
 
 Cliente::Cliente(const char *name, const char *ip_sv, const char *puerto){
+	this->name_client = new char[MAX_NAME_USER];
+	memset(this->name_client,0,MAX_NAME_USER);
 	strncpy(this->name_client, name, MAX_NAME_USER - 1);
 	this->socket_cl = new Socket(ip_sv, puerto);
 	memset(paquete_enviar, 0, MAX_PACK);
@@ -32,6 +35,7 @@ Cliente::Cliente(const char *name, const char *ip_sv, const char *puerto){
 	this->activo = false;
 	this->hilos.enviar = NULL;
 	this->hilos.recibir = NULL;
+	this->enviarpaquete = true;
 }
 
 Cliente::~Cliente(){
@@ -57,10 +61,10 @@ void Cliente::setID(int un_id){
 }
 
 char* Cliente::getPaquete(){
-	SDL_LockMutex(this->mutex);
+	//SDL_LockMutex(this->mutex);
 	char* buffer = new char[MAX_PACK];
 	memcpy(buffer, this->paquete_recibir, MAX_PACK);
-	SDL_UnlockMutex(this->mutex);
+	//SDL_UnlockMutex(this->mutex);
 	return buffer;
 }
 
@@ -101,6 +105,7 @@ int Cliente::conectar(){
 		if(!this->paqueteInicial->cliente_aceptado) return EXIT_FAILURE;
 		this->activar();
 
+//		this->conectado = true; //todo
 		printf("Conecte cliente %s con servidor. num de fd es: %d\n", this->name_client,this->socket_cl->getFD());
 		hilos.recibir = SDL_CreateThread(runRecvInfoCliente, "recibirServidor",(void*)this);
 		if(hilos.recibir == NULL){
@@ -126,11 +131,11 @@ int Cliente::runEnviarInfo(){
 		}
 		SDL_Delay(25);
 		char buffer[MAX_PACK];
-		SDL_LockMutex(this->mutex);
+		//SDL_LockMutex(this->mutex);
 		memcpy(buffer, this->paquete_enviar, MAX_PACK);
 		int enviados = this->enviar(buffer, MAX_PACK); //todo
-		SDL_UnlockMutex(this->mutex);
-		if (enviados >= 0){
+		//SDL_UnlockMutex(this->mutex);
+		if (enviados > 0){
 			enviarpaquete = false;
 		}
 		else if(enviados == -1){
@@ -202,7 +207,6 @@ int Cliente::runRecibirInfo(){
 			loguear();
 			logFile << "Error \t Servidor desconectado, no se puede recibir información " << endl;
 			this->desactivar();
-			//VER QUE HACER SI SE DESCONECTA EL SERVIDOR todo
 		}
 		else if (recibidos == -1){
 			printf("Error al recibir \n");
@@ -224,9 +228,9 @@ char* Cliente::getNombre(){
 }
 
 void Cliente::setNombre(char *name){
-	SDL_LockMutex(this->mutex);
+	//SDL_LockMutex(this->mutex);
 	strncpy(this->name_client, name, MAX_NAME_USER-1);
-	SDL_UnlockMutex(this->mutex);
+	//SDL_UnlockMutex(this->mutex);
 }
 
 int Cliente::enviarNombre(){

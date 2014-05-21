@@ -94,7 +94,6 @@ int main_server(int argc,char* argv[]){
 
 
 	while(true){
-		//printf(" LA CANTIDAD DE CLIENTES ES %d \n", servidor->getCantidadClientes());
 		for (int i=0 ; i < servidor->getCantidadClientes() ; i++){
 			int* clientes = servidor->getVectorClientes();
 			//printf(" EL CLIENTES[%i] es %d \n", i,clientes[i]);
