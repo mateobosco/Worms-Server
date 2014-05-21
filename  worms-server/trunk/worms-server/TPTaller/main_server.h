@@ -58,15 +58,15 @@ int main_server(int argc,char* argv[]){
 	//	}
 	//}
 
-	for (int i=0 ; i < servidor->getCantidadClientes() ; i++){
-		int* clientes = servidor->getVectorClientes();
-		if (clientes[i] != -1 && juego->getJugadores()[i] == NULL){
+	//for (int i=0 ; i < servidor->getCantidadClientes() ; i++){
+	//	int* clientes = servidor->getVectorClientes();
+	//	if (clientes[i] != -1 && juego->getJugadores()[i] == NULL){
 		//printf("AGREGO UN JUGADOR \n");
-			juego->agregarJugador(i);
+	//		juego->agregarJugador(i);
 			//manejador_personajes->AgregarJugador(juego->getMundo(), i);
 			//clientes[i] = i;
-		}
-	}
+	//	}
+	//}
 	//manejador_personajes->AgregarJugador(juego->getMundo(), 0);
 
 
@@ -97,7 +97,7 @@ int main_server(int argc,char* argv[]){
 		//printf(" LA CANTIDAD DE CLIENTES ES %d \n", servidor->getCantidadClientes());
 		for (int i=0 ; i < servidor->getCantidadClientes() ; i++){
 			int* clientes = servidor->getVectorClientes();
-			printf(" EL CLIENTES[%i] es %d \n", i,clientes[i]);
+			//printf(" EL CLIENTES[%i] es %d \n", i,clientes[i]);
 
 			if (clientes[i] != -1 && juego->getJugadores()[i] == NULL){
 				printf("AGREGO UN JUGADOR \n");
@@ -112,7 +112,7 @@ int main_server(int argc,char* argv[]){
 		structPaquete* paqueteCiclo = crearPaqueteCiclo(juego->getMundo());
 		servidor->actualizarPaquete((char*)paqueteCiclo);
 
-		//destruirPaqueteCiclo(paqueteCiclo);
+		destruirPaqueteCiclo(paqueteCiclo);
 
 		structEvento* evento =NULL;
 	    while(evento == NULL){
@@ -122,6 +122,7 @@ int main_server(int argc,char* argv[]){
 //	    printf (" RECIBE EL ID DEL PIBITO : %d \n", evento->nro_jugador);
 
 	    if(evento!=NULL) juego->aplicarPaquete(evento);
+	    free(evento);
 	    SDL_Delay(25);
 
 		juego->getMundo()->step(0.05,100,100);
