@@ -63,6 +63,7 @@ structPersonaje* crearPaquetePersonaje(Personaje* personaje){
 
 
 void destruirPaqueteFigura(structFigura* paquete){
+	//delete[] paquete->vector_vertices;
 	delete paquete;
 }
 

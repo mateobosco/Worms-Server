@@ -75,7 +75,7 @@ int ManejadorPersonajes::getCantidadPersonajes(){
 //}
 
 void ManejadorPersonajes::moverPersonaje(int direccion,int id_jugador){
-	for (int j = 0; j < this->personajesMax * this->cantidad_jugadores; j++){
+	for (int j = 0; j < this->personajesMax; j++){
 		Personaje* personaje_actual = this->vector_personajes[j];
 		if (! personaje_actual->getMuerto()){
 			personaje_actual->leermovimiento(direccion, id_jugador);

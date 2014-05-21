@@ -10,12 +10,10 @@ int runServidor(void* serv){
 
 int aceptarConex(void* servidor){
 	Servidor* server = (Servidor*) servidor;
-	while(!server->getFinalizar()){
-		while(server->getCantidadClientes() < server->getCantidadMaxConexiones()){
+		while(!server->getFinalizar() && server->getCantidadClientes() < server->getCantidadMaxConexiones()){
 			int accept = server->aceptarConexiones();
 			if (accept != EXIT_SUCCESS) printf("Error al aceptar\n");
 		}
-	}
 	return 0;
 }
 
@@ -92,8 +90,10 @@ int main_server(int argc,char* argv[]){
 	SDL_Delay(5000);
 	//TODO ACA ES DONDE TERMINA EL CODIGO INNECESARIO.
 
+	//while(servidor->getCantidadClientesActivos() == 0);
 
-	while(true){
+	while(!servidor->getFinalizar()){
+		//printf(" LA CANTIDAD DE CLIENTES ES %d \n", servidor->getCantidadClientes());
 		for (int i=0 ; i < servidor->getCantidadClientes() ; i++){
 			int* clientes = servidor->getVectorClientes();
 			//printf(" EL CLIENTES[%i] es %d \n", i,clientes[i]);
@@ -120,12 +120,22 @@ int main_server(int argc,char* argv[]){
 
 //	    printf (" RECIBE EL ID DEL PIBITO : %d \n", evento->nro_jugador);
 
-	    if(evento!=NULL) juego->aplicarPaquete(evento);
-	    free(evento);
+	    if(evento!=NULL) {
+	    	juego->aplicarPaquete(evento);
+	    	free(evento);
+	    }
 	    SDL_Delay(25);
 
 		juego->getMundo()->step(0.05,100,100);
 		juego->getMundo()->comprobar_nivel_agua();
+//		if(servidor->getCantidadClientesActivos() == 0){
+//			servidor->setFinalizar(true);
+//			printf("Se esperarán 15 segundos por si algún cliente se conecta.");
+//			SDL_Delay(15000);
+//			if(servidor->getCantidadClientesActivos() != 0){
+//				servidor->setFinalizar(false);
+//			}
+//		}
 	}
 
 
