@@ -21,6 +21,7 @@ class Jugador{
 		Personaje** getPersonajes();
 		Personaje* getPersonaje(Uint8 numero_pj);
 		Uint8 getNumero();
+		void conectar();
 		SDL_Color getColor();
 		void desconectar();
 };

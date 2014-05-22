@@ -65,6 +65,8 @@ class Cliente{
 		void desactivar();
 		bool getActivo();
 
+		Jugador* getJugador();
+
 		void setHilos(comThreads hilos_server);
 		comThreads getHilos();
 		int recibirConfiguracion();

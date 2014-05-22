@@ -123,6 +123,8 @@ int Servidor::aceptarConexiones(){
 			if(posicion != -1){
 				Cliente *cliente_viejo = this->clientes[posicion];
 				if (cliente_viejo != NULL){
+					cliente->setJugador(cliente_viejo->getJugador());
+					cliente->getJugador()->conectar();
 					cliente->setID(cliente_viejo->getID());
 					delete cliente_viejo;
 				} else{
@@ -219,14 +221,9 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 			//this->actualizarPaquete("nahueeeeee\n");//todo
 		}
 		if(enviados == 0){
-<<<<<<< .mine
 				printf("Cliente desconectado\n");
 				cliente->desactivar();
 					//this->clientesActivos--;
-=======
-			printf("Cliente desconectado\n");
-			cliente->desactivar();
->>>>>>> .r52
 		}
 	}
 		return EXIT_SUCCESS;
@@ -405,11 +402,10 @@ void Servidor::setThreadAceptar(SDL_Thread *accept){
 void Servidor::setAceptado(bool aceptar){
 	((structInicial* )this->paqueteInicial)->cliente_aceptado = aceptar; //Todo check
 }
-<<<<<<< .mine
 Cliente** Servidor::getClientes(){
 	return this->clientes;
 }
-=======
+
 
 int Servidor::getCantidadClientesActivos(){
 	int activos = 0;
@@ -424,4 +420,3 @@ int Servidor::getCantidadClientesActivos(){
 void Servidor::setFinalizar(bool condicion){
 	this->finalizar = condicion;
 }
->>>>>>> .r52
