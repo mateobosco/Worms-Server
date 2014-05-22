@@ -29,11 +29,15 @@ void ManejadorPersonajes::seleccionarPersonaje(b2Vec2 posicion, int id_jugador){
 	shapeMouse->m_radius = RADIOMOUSE;
 	b2Transform transformMouse = b2Transform(posicion, b2Rot(0) );
 
-	for (int i = 0; i < this->personajesMax * this->cantidad_jugadores ; i++){
+	//for (int i = 0; i < this->personajesMax * this->cantidad_jugadores ; i++){
+	for (int i = 0; i < this->cantidad_actual_personajes ; i++){
+		printf("CANTIDAD ACTUAL DE JUGADORES %d \n", this->cantidad_actual_personajes);
+
 		Personaje* personaje = this->vector_personajes[i];
 		b2Body* body_actual = personaje->getBody();
 		b2Transform transformada_actual = body_actual->GetTransform();
-		b2PolygonShape* shape_actual = personaje->getShape();
+		//b2PolygonShape* shape_actual = personaje->getShape();
+		b2CircleShape* shape_actual = personaje->getShape();
 
 		bool resultado = b2TestOverlap(shape_actual,0, shapeMouse , 0,  transformada_actual, transformMouse);
 		if (resultado){
@@ -44,9 +48,9 @@ void ManejadorPersonajes::seleccionarPersonaje(b2Vec2 posicion, int id_jugador){
 			personaje->setSeleccionado(resultado, id_jugador);
 			printf("selecciono un personaje \n");
 			int dueno = personaje->getNrojugador();
+			printf("SELECCIONO UN PERSONAJE DEL JUGADOR %d Y YO SOY EL JUGADOR %d--------------- \n",dueno,id_jugador);
 			if (id_jugador == dueno) printf ("SELECCIONO UN PERSONAJE PROPIO _____________-----------------_________________ \n");
 		}
-
 	}
 	delete shapeMouse; //todo
 }
@@ -56,7 +60,7 @@ void ManejadorPersonajes::AgregarJugador(Mundo* mundo, int id_jugador, Personaje
 	for(int i=0 ; i <this->personajesMax; i++){
 		this->vector_personajes[i+this->cantidad_actual_personajes] = vectorPersonajes[i];
 	}
-	this->cantidad_actual_personajes += this->personajesMax;
+	//this->cantidad_actual_personajes += this->personajesMax;
 	this->cantidad_jugadores+=1;
 }
 
@@ -78,7 +82,7 @@ int ManejadorPersonajes::getCantidadPersonajes(){
 //}
 
 void ManejadorPersonajes::moverPersonaje(int direccion,int id_jugador){
-	for (int j = 0; j < this->personajesMax; j++){
+	for (int j = 0; j < this->cantidad_actual_personajes; j++){
 		Personaje* personaje_actual = this->vector_personajes[j];
 		if (! personaje_actual->getMuerto()){
 			personaje_actual->leermovimiento(direccion, id_jugador);

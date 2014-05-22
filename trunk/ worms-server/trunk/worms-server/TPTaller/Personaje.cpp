@@ -49,20 +49,24 @@ Personaje::Personaje(Mundo* mundo, Uint8 numero_jugador, char* nombre_client) {
 	massData.I = RECT_INERCIA_ROT;
 	body->SetMassData(&massData);
 
-	b2PolygonShape* polygonShape = new b2PolygonShape(); // creo una shape
-	polygonShape->SetAsBox(ancho/2 , alto/2) ;
+//	b2PolygonShape* polygonShape = new b2PolygonShape(); // creo una shape
+//	polygonShape->SetAsBox(ancho/2 , alto/2) ;
+	shape2 = new b2CircleShape();
+	shape2->m_radius = ancho/2;
+
 
 	b2Filter filtro = b2Filter();
 	filtro.groupIndex = INDICE_GRUPO;
 
 	b2FixtureDef fd; // creo un fixture
 	fd.filter = filtro;
-	fd.restitution = 0;
-	fd.friction = 1;
+	fd.restitution = 0.2;
+	fd.friction = 0.2;
 	//fd.density = 100;
-	fd.shape = polygonShape; // le pongo el shape creado
+	fd.shape = shape2;
+//	fd.shape = polygonShape; // le pongo el shape creado
 	body->CreateFixture(&fd); // al body le pongo la fixture creada
-	shape = polygonShape;
+//	shape = polygonShape;
 	body->SetAwake(false);
 	//seleccionado = false;
 	for (int i = 0 ; i<4; i++){
@@ -160,7 +164,7 @@ float32* Personaje::getVecY(){
 //}
 
 void Personaje::leermovimiento(int direccion, int id_jugador){
-	if (this->nro_jugador == id_jugador && seleccionado[id_jugador]){
+	if (this->nro_jugador == id_jugador&& seleccionado[id_jugador]){
 
 		if (direccion == 1 && body->GetLinearVelocity().x == 0){ // para la derecha
 			dir_imagen = "TPTaller/imagenes/gusanitoderecha.png";
@@ -189,8 +193,8 @@ void Personaje::setSeleccionado(bool seleccion, int id_jugador){
 	this->seleccionado[id_jugador] = seleccion;
 }
 
-b2PolygonShape* Personaje::getShape(){
-	return this->shape;
+b2CircleShape* Personaje::getShape(){
+	return this->shape2;
 }
 
 b2Vec2 Personaje::getPosition(){

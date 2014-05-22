@@ -100,7 +100,7 @@ int main_server(int argc,char* argv[]){
 
 			if (clientes[i] != -1 && juego->getJugadores()[i] == NULL){
 				printf("AGREGO UN JUGADORRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR con el id %d \n",i);
-				//SDL_Delay(500);
+				SDL_Delay(500);
 
 				Cliente* clienteActual = servidor->getClientes()[i];
 				char* nombre = clienteActual->getNombre();
