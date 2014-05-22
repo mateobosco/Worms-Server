@@ -44,10 +44,10 @@ Juego::~Juego(){
 	}
 }
 
-uint8 Juego::crearJugador(){
-	jugadores[cantidad_jugadores] = new Jugador(mundo, cantidad_jugadores + 1, manejador); //ver delete todo
-	cantidad_jugadores++;
-}
+//uint8 Juego::crearJugador(){
+//	jugadores[cantidad_jugadores] = new Jugador(mundo, cantidad_jugadores + 1, manejador); //ver delete todo
+//	cantidad_jugadores++;
+//}
 
 Jugador** Juego::getJugadores(){
 	return jugadores;
@@ -230,9 +230,9 @@ void Juego::aplicarPaquete(structEvento* evento){
 	else return;
 }
 
-Jugador* Juego::agregarJugador(int id){
+Jugador* Juego::agregarJugador(int id, char* nombre_cliente){
 
-	this->jugadores[id] = new Jugador(mundo,id,manejador);
+	this->jugadores[id] = new Jugador(mundo,id,manejador, nombre_cliente);
 	Personaje** pers = this->jugadores[id]->getPersonajes();
 	this->manejador->AgregarJugador(mundo,id, pers);
 	return this->jugadores[id];

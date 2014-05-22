@@ -16,7 +16,7 @@ class Jugador{
 //		static Uint8 cantidad_jugadores;
 
 	public:
-		Jugador(Mundo *mundo, uint8 cantidad, ManejadorPersonajes *manejador);
+		Jugador(Mundo *mundo, uint8 cantidad, ManejadorPersonajes *manejador, char* nombre_cliente);
 		~Jugador();
 		Personaje** getPersonajes();
 		Personaje* getPersonaje(Uint8 numero_pj);

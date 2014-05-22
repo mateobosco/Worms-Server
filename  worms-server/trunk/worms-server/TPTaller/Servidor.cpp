@@ -286,11 +286,18 @@ int Servidor::runRecibirInfo(void* cliente){
 			if (this->paquetesRecibir.empty()) this->paquetesRecibir.push(novedad);
 			structEvento* anterior = (structEvento*) this->paquetesRecibir.front();
 			if (evento == NULL) continue;
+			printf(" ENTRA EN RECIBIR INFO \n");
 			if (anterior->aleatorio != evento->aleatorio){
-				this->paquetesRecibir.push(novedad);
+				if (evento->click_mouse.x == -1 && evento->direccion==-9 && evento->click_mouse.y == -1 ){
+					printf("NO ENCOLA \n");
+				}
+				//printf(" ENCOLAAAA ALGO \n");
+				else{
+					this->paquetesRecibir.push(novedad);
+				}
 			}
 			int cantidad = (int) this->paquetesRecibir.size();
-			//printf("CANTIDAD DE PAQUETES EN LA COLA ES %d \n" ,cantidad);
+			printf("CANTIDAD DE PAQUETES EN LA COLA ES %d \n" ,cantidad);
 			//SDL_UnlockMutex(client->getMutex());
 		}
 		else if(cantidad == 0){
