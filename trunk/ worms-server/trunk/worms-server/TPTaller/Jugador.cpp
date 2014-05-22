@@ -25,11 +25,11 @@ void Jugador::seleccionarColor(){
 	}
 }
 
-Jugador::Jugador(Mundo *mundo, uint8 cantidad, ManejadorPersonajes *manejador){
+Jugador::Jugador(Mundo *mundo, uint8 cantidad, ManejadorPersonajes *manejador, char* nombre_cliente){
 	this->numero = cantidad;
 	seleccionarColor();
 	for(Uint8 i = 0; i < MAX_CANT_PERSONAJES; i++){
-		this->personajes[i] = new Personaje(mundo, this->numero);
+		this->personajes[i] = new Personaje(mundo, this->numero, nombre_cliente);
 		manejador->agregarPersonaje(this->personajes[i], this->numero);
 	}
 //	Jugador::cantidad_jugadores++;

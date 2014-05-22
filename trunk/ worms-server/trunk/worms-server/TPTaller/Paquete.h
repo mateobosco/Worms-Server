@@ -15,6 +15,7 @@ typedef struct structFigura {
 
 
 typedef struct structPersonaje {
+	char nombre_cliente[20];
 	int id_jugador;
 	int seleccionado[4];
 	int conectado;

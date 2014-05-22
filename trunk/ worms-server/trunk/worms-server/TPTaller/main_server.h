@@ -100,9 +100,15 @@ int main_server(int argc,char* argv[]){
 
 			if (clientes[i] != -1 && juego->getJugadores()[i] == NULL){
 				printf("AGREGO UN JUGADORRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR con el id %d \n",i);
-				SDL_Delay(500);
-				Jugador* jug = juego->agregarJugador(i);
+				//SDL_Delay(500);
+
 				Cliente* clienteActual = servidor->getClientes()[i];
+				char* nombre = clienteActual->getNombre();
+				//char nombre2[50];
+				//strcpy(nombre2, nombre);
+				printf(" NOMBREEEE 2 es %s\n", nombre);
+				Jugador* jug = juego->agregarJugador(i, nombre);
+
 				clienteActual->setJugador(jug);
 				//manejador_personajes->AgregarJugador(juego->getMundo(), i);
 				//clientes[i] = i;
@@ -122,6 +128,7 @@ int main_server(int argc,char* argv[]){
 	    }
 
 //	    printf (" RECIBE EL ID DEL PIBITO : %d \n", evento->nro_jugador);
+
 
 	    if(evento!=NULL) {
 	    	juego->aplicarPaquete(evento);

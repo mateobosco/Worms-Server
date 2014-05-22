@@ -26,7 +26,7 @@
 
 class Personaje {
 public:
-	Personaje(Mundo* mundo, Uint8 numero_jugador);
+	Personaje(Mundo* mundo, Uint8 numero_jugador, char* nombre_cliente);
 	void mover(b2Vec2 direccion);
 	void saltar(b2Vec2 direccion);
 	void dejar_quieto();
@@ -42,7 +42,7 @@ public:
 	int getOrientacion();
 	void desconectar();
 	void conectar();
-
+	char* getNombreCliente();
 	float32 getAlto();
 	float32 getAncho();
 	float32* getVecX();
@@ -58,6 +58,7 @@ public:
 
 private:
 	char* dir_imagen;
+	char* nombre_cliente;
 	b2Body* body;
 	b2PolygonShape* shape;
 	Uint8 nro_jugador;

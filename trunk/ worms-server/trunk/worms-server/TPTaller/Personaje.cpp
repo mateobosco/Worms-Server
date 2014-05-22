@@ -14,9 +14,11 @@ int random( int n ) // TODO
     return distribution(generator) ;
 }
 
-Personaje::Personaje(Mundo* mundo, Uint8 numero_jugador) {
+Personaje::Personaje(Mundo* mundo, Uint8 numero_jugador, char* nombre_client) {
 	conectado = 1;
+	nombre_cliente = nombre_client;
 	muerto = false;
+
 	dir_imagen = "TPTaller/imagenes/gusanitoderecha.png";
 	nro_jugador = numero_jugador;
 	b2Vec2 escalas = mundo->GetEscalas();
@@ -243,5 +245,9 @@ void Personaje::desconectar(){
 
 void Personaje::conectar(){
 	this->conectado = 1;
+}
+
+char* Personaje::getNombreCliente(){
+	return this->nombre_cliente;
 }
 

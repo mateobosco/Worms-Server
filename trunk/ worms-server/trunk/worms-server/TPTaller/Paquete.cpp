@@ -51,6 +51,8 @@ structPersonaje* crearPaquetePersonaje(Personaje* personaje){
 	paquete->tamano.y = personaje->getAlto();
 	paquete->conectado = personaje->getConectado();
 	paquete->id_jugador = personaje->getNrojugador();
+	strcpy(paquete->nombre_cliente, personaje->getNombreCliente());
+	//paquete->nombre_cliente = personaje->getNombreCliente();
 	bool* seleccion = personaje->getSeleccion();
 	for (int i = 0 ; i<4; i++){
 		if (seleccion[i]){

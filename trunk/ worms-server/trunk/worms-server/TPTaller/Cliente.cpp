@@ -236,7 +236,6 @@ void Cliente::setNombre(char *name){
 	strncpy(this->name_client, name, MAX_NAME_USER-1);
 	//SDL_UnlockMutex(this->mutex);
 }
-
 int Cliente::enviarNombre(){
 	return this->socket_cl->enviar(this->name_client, MAX_NAME_USER);
 }
