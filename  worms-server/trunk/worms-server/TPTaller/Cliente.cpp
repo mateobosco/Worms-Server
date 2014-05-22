@@ -21,6 +21,8 @@ Cliente::Cliente(int fd){
 	jugador=NULL;
 }
 
+
+
 Cliente::Cliente(const char *name, const char *ip_sv, const char *puerto){
 	this->name_client = new char[MAX_NAME_USER];
 	memset(this->name_client,0,MAX_NAME_USER);
@@ -274,6 +276,10 @@ SDL_mutex* Cliente::getMutex(){
 
 void Cliente::setJugador(Jugador* jug){
 	this->jugador=jug;
+}
+
+Jugador* Cliente::getJugador(){
+	return this->jugador;
 }
 
 

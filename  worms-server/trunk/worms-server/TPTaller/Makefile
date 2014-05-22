@@ -30,7 +30,7 @@ CFLAGS += -ggdb -DDEBUG -fno-inline
 CSTD = c99
 
 # Estandar de C++ a usar
-CXXSTD = c++98
+CXXSTD = c++11
 
 # Archivo log de Valgrind.
 VGLOGFILE = valgrind.out
@@ -55,8 +55,8 @@ else
 CXXFLAGS += -std=$(CXXSTD)
 #CXXFLAGS += -I/usr/local/include/SDL2 -I/usr/local/include/SDL2_image -I/usr/local/include/SDL2_gfx -I/usr/local/include/yaml-cpp -I/usr/local/include/Box2D -I/usr/local/include/libpng16 -I/usr/local/include/boost
 LD = $(CXX)
-#LDFLAGS += -L/usr/local/lib/
-LDLIBS += -lSDL2 -lSDL2_image -lSDL2_gfx -lSDL2main -lSDL2_test -lyaml-cpp -lBox2D -lpng -lpng16 -ljpeg
+LDFLAGS += -L/usr/local/lib/
+LDLIBS += -lSDL2 -lSDL2_image -lSDL2_gfx -lSDL2main -lSDL2_test -lyaml-cpp -lBox2D -lpng -lpng16 -ljpeg -lSDL2_ttf
 endif
 
 # Si no especifica archivos, tomo todos.
