@@ -49,7 +49,7 @@ public:
 	float32* getVecY();
 	b2Vec2* getVertices();
 	b2Body* getBody();
-	b2PolygonShape* getShape();
+	b2CircleShape* getShape();
 	bool getSeleccionado();
 	int getNrojugador();
 	virtual ~Personaje();
@@ -61,6 +61,7 @@ private:
 	char* nombre_cliente;
 	b2Body* body;
 	b2PolygonShape* shape;
+
 	Uint8 nro_jugador;
 	bool seleccionado[4];
 	float32 ancho;
@@ -68,6 +69,9 @@ private:
 	bool muerto;
 	int conectado;
 	int orientacion;
+
+	b2CircleShape* shape2;
+	float32 radio;
 
 };
 
