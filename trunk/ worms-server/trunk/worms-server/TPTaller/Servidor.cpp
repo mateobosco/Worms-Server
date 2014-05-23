@@ -116,7 +116,7 @@ int Servidor::aceptarConexiones(){
 		while (!recibio_nombre){
 			int bytes = this->recibirNombre(cliente);
 			if(bytes > 0 ) recibio_nombre = true;
-			if(bytes == 0) break;// TODO Verificar qué pasa si la # de Bytes es -1 o 0;
+			//if(bytes == 0) break;// TODO Verificar qué pasa si la # de Bytes es -1 o 0;
 		}
 		if(recibio_nombre){
 			int posicion = this->checkNuevoCliente(cliente);
@@ -277,12 +277,14 @@ int Servidor::runRecibirInfo(void* cliente){
 		SDL_Delay(25);
 		char paquete[MAX_PACK];
 		memset(paquete, 0, MAX_PACK);
+		SDL_LockMutex(this->mutex);
 		int cantidad = client->getSocket()->recibir(paquete, MAX_PACK);
 		if(cantidad >0){
 			structEvento* evento = (structEvento*) paquete;
-			void* novedad = malloc (sizeof (structEvento));
+			void* novedad = malloc (MAX_PACK);
 			//SDL_Lock(client->getMutex());
-			memcpy(novedad, paquete, sizeof (structEvento)); //todo ver como determinar el tamaño del paquete
+			memcpy(novedad, paquete, MAX_PACK); //todo ver como determinar el tamaño del paquete
+			SDL_UnlockMutex(this->mutex);
 			if (this->paquetesRecibir.empty()) this->paquetesRecibir.push(novedad);
 			structEvento* anterior = (structEvento*) this->paquetesRecibir.front();
 			if (evento == NULL) continue;

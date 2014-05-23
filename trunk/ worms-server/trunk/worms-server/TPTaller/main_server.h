@@ -91,7 +91,7 @@ int main_server(int argc,char* argv[]){
 	//TODO ACA ES DONDE TERMINA EL CODIGO INNECESARIO.
 
 	//while(servidor->getCantidadClientesActivos() == 0);
-
+	SDL_mutex *un_mutex = SDL_CreateMutex();
 	while(!servidor->getFinalizar()){
 		//printf(" LA CANTIDAD DE CLIENTES ES %d \n", servidor->getCantidadClientes());
 		for (int i=0 ; i < servidor->getCantidadClientes() ; i++){
@@ -127,7 +127,9 @@ int main_server(int argc,char* argv[]){
 
 		structEvento* evento =NULL;
 	    while(evento == NULL){
+	    	SDL_LockMutex(un_mutex);
 	    	evento = (structEvento*) servidor->desencolarPaquete();
+	    	SDL_UnlockMutex(un_mutex);
 	    }
 
 //	    printf (" RECIBE EL ID DEL PIBITO : %d \n", evento->nro_jugador);
@@ -157,6 +159,7 @@ int main_server(int argc,char* argv[]){
 	delete juego;
 	delete servidor;
 	return retorno;
+	SDL_DestroyMutex(un_mutex);
 
 }
 #endif /* MAIN_SERVER_H_ */
