@@ -63,9 +63,12 @@ public:
 	Cliente** getClientes();
 	int getCantidadClientesActivos();
 	void setFinalizar(bool condicion);
+	char* getMensajeMostrar();
+	void setMensajeMostrar(char* mensaje);
 
 private:
 	char paqueteEnviar[MAX_PACK];
+	char* mensaje_mostrar;
 	char paqueteInicial[MAX_PACK];
 	queue<void*> paquetesRecibir;
 	int cantidadMaxConexiones;

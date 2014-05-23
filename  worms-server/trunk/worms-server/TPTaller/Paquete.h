@@ -31,6 +31,7 @@ typedef struct structPaquete{
 	structPersonaje vector_personajes[20];
 	int cantidad_personajes = 0;
 	int id;
+	char mensaje_mostrar[20];
 }structPaquete;
 
 typedef struct structInicial {
@@ -50,7 +51,7 @@ typedef struct structInicial {
 
 typedef struct structEvento{
 	b2Vec2 click_mouse; // posicion escalada del mouse
-	int direccion= 0; // -1 izquierda, 0 arriba, 1 derecha //todo
+	int direccion; // -1 izquierda, 0 arriba, 1 derecha //todo
 	int nro_jugador = 0; //Identificador del cliente
 	int aleatorio = 0;
 }structEvento;
@@ -58,7 +59,7 @@ typedef struct structEvento{
 
 structFigura* crearPaqueteFigura(Figura* figura);
 structPersonaje* crearPaquetePersonaje(Personaje* personaje);
-structPaquete* crearPaqueteCiclo(Mundo* mundo);
+structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje);
 structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, int cliente);
 
 void destruirPaqueteFigura(structFigura* paquete);

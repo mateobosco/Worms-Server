@@ -153,15 +153,15 @@ void Personaje::leermovimiento(int direccion, int id_jugador){
 		if (direccion == 1 && body->GetLinearVelocity().x < 0.7){ // para la derecha
 			dir_imagen = "TPTaller/imagenes/gusanitoderecha.png";
 			orientacion=1;
-			this->mover(b2Vec2(1.5,0));
+			this->mover(b2Vec2(2,0));
 		}
 		if (direccion == -1 && body->GetLinearVelocity().x > -0.7 ){ // para la izquierda
 			dir_imagen = "TPTaller/imagenes/gusanitoizquierda.png";
 			orientacion=-1;
-			this->mover(b2Vec2(-1.5,0));
+			this->mover(b2Vec2(-2,0));
 		}
 		if (direccion == 0  && body->GetLinearVelocity().y == 0){ // para arriba
-			this->mover(b2Vec2(0,-3));
+			this->mover(b2Vec2(0,-5));
 		}
 	}
 }
