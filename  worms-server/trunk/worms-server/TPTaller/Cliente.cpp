@@ -233,7 +233,8 @@ char* Cliente::getNombre(){
 
 void Cliente::setNombre(char *name){
 	//SDL_LockMutex(this->mutex);
-	strncpy(this->name_client, name, MAX_NAME_USER-1);
+	memcpy(this->name_client, name, MAX_NAME_USER);
+	this->name_client[MAX_NAME_USER - 1] = '\0';
 	//SDL_UnlockMutex(this->mutex);
 }
 int Cliente::enviarNombre(){
