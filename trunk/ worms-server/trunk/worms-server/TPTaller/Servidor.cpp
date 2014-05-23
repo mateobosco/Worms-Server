@@ -15,6 +15,7 @@ Servidor::Servidor(int maxCon){
 	this->enviar=true;
 	this->finalizar = false;
 	this->clientesActivos = 0;
+	memset(this->mensaje_mostrar, 0, MAX_MENSAJE);
 	for (int i=0; i < MAX_CANT_JUGADORES; i++){
 		vector_clientes[i]=0;
 		clientes[i] = NULL;
@@ -121,8 +122,13 @@ int Servidor::aceptarConexiones(){
 		if(recibio_nombre){
 			int posicion = this->checkNuevoCliente(cliente);
 			if(posicion != -1){
+
 				Cliente *cliente_viejo = this->clientes[posicion];
 				if (cliente_viejo != NULL){
+					char mensaje[MAX_MENSAJE];
+					strcpy(mensaje, "Se ha reconectado el cliente: ");
+					strcat(mensaje, cliente_viejo->getNombre());
+					this->setMensajeMostrar(mensaje);
 					cliente->setJugador(cliente_viejo->getJugador());
 					cliente->getJugador()->conectar();
 					cliente->setID(cliente_viejo->getID());
@@ -277,18 +283,18 @@ int Servidor::runRecibirInfo(void* cliente){
 		SDL_Delay(25);
 		char paquete[MAX_PACK];
 		memset(paquete, 0, MAX_PACK);
-		SDL_LockMutex(this->mutex);
+		//SDL_LockMutex(this->mutex);
 		int cantidad = client->getSocket()->recibir(paquete, MAX_PACK);
 		if(cantidad >0){
 			structEvento* evento = (structEvento*) paquete;
 			void* novedad = malloc (MAX_PACK);
 			//SDL_Lock(client->getMutex());
 			memcpy(novedad, paquete, MAX_PACK); //todo ver como determinar el tamaño del paquete
-			SDL_UnlockMutex(this->mutex);
+			//SDL_UnlockMutex(this->mutex);
 			if (this->paquetesRecibir.empty()) this->paquetesRecibir.push(novedad);
 			structEvento* anterior = (structEvento*) this->paquetesRecibir.front();
 			if (evento == NULL) continue;
-			if (anterior == NULL) continue;
+			//if (anterior == NULL) continue;
 			//printf(" ENTRA EN RECIBIR INFO \n");
 			if (anterior->aleatorio != evento->aleatorio){
 				if (evento->click_mouse.x == -1 && evento->direccion==-9 && evento->click_mouse.y == -1 ){
@@ -306,7 +312,11 @@ int Servidor::runRecibirInfo(void* cliente){
 		else if(cantidad == 0){
 			printf("Cliente desconectado\n");
 			client->desactivar();
-			this->setMensajeMostrar(client->getNombre());
+			char mensaje[MAX_MENSAJE];
+			strcpy(mensaje, "Se ha desconectado el cliente: ");
+			strcat(mensaje, client->getNombre());
+			this->setMensajeMostrar(mensaje);
+
 //			client->setConexion(false);
 //			int i;
 //			for(i=0;i<this->cantClientes; i++){
@@ -437,7 +447,8 @@ char* Servidor::getMensajeMostrar(){
 }
 
 void Servidor::setMensajeMostrar(char* mensaje){
-	this->mensaje_mostrar = mensaje;
+	printf(" MODIFICA EL MENSAJE \n");
+	strncpy(this->mensaje_mostrar, mensaje, 50);
 
 }
 

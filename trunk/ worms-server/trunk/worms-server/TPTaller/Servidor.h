@@ -68,7 +68,6 @@ public:
 
 private:
 	char paqueteEnviar[MAX_PACK];
-	char* mensaje_mostrar;
 	char paqueteInicial[MAX_PACK];
 	queue<void*> paquetesRecibir;
 	int cantidadMaxConexiones;
@@ -85,6 +84,7 @@ private:
 	bool finalizar;
 	SDL_Thread *escuchar;
 	SDL_Thread *aceptar;
+	char mensaje_mostrar[MAX_MENSAJE];
 
 };
 
