@@ -303,6 +303,7 @@ int Servidor::runRecibirInfo(void* cliente){
 		else if(cantidad == 0){
 			printf("Cliente desconectado\n");
 			client->desactivar();
+			this->setMensajeMostrar(client->getNombre());
 //			client->setConexion(false);
 //			int i;
 //			for(i=0;i<this->cantClientes; i++){
@@ -427,3 +428,13 @@ int Servidor::getCantidadClientesActivos(){
 void Servidor::setFinalizar(bool condicion){
 	this->finalizar = condicion;
 }
+
+char* Servidor::getMensajeMostrar(){
+	return this->mensaje_mostrar;
+}
+
+void Servidor::setMensajeMostrar(char* mensaje){
+	this->mensaje_mostrar = mensaje;
+
+}
+
