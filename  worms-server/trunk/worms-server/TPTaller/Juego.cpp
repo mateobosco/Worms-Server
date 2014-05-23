@@ -221,6 +221,7 @@ structInicial* Juego::getPaqueteInicial(){
 
 void Juego::aplicarPaquete(structEvento* evento){
 	if (evento == NULL) return;
+	if(&(evento->click_mouse) == NULL) return;
 	if (evento->click_mouse.x != -1){ // recibio un click
 //		printf(" LLAMO A SELECCIONAR PERSONAJE CON NUMERO ESE NRO DE JUGADOR: %d", evento->nro_jugador);
 		manejador->seleccionarPersonaje(evento->click_mouse, evento->nro_jugador);

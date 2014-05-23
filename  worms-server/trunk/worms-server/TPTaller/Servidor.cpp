@@ -156,7 +156,7 @@ int Servidor::aceptarConexiones(){
 			}else {
 				this->setAceptado(false);
 				printf("Cliente Rechazado\n");
-				this->runEnviarInfoInicial(cliente);
+				//this->runEnviarInfoInicial(cliente);
 				delete cliente;
 				return EXIT_FAILURE;
 			}
@@ -286,6 +286,7 @@ int Servidor::runRecibirInfo(void* cliente){
 			if (this->paquetesRecibir.empty()) this->paquetesRecibir.push(novedad);
 			structEvento* anterior = (structEvento*) this->paquetesRecibir.front();
 			if (evento == NULL) continue;
+			if (anterior == NULL) continue;
 			//printf(" ENTRA EN RECIBIR INFO \n");
 			if (anterior->aleatorio != evento->aleatorio){
 				if (evento->click_mouse.x == -1 && evento->direccion==-9 && evento->click_mouse.y == -1 ){
@@ -392,7 +393,7 @@ int Servidor::checkNuevoCliente(Cliente *client){
 		if (indice == MAX_CANT_JUGADORES) break;
 		cliente_recorrido = this->clientes[indice];
 	}
-	if(this->cantClientes >= MAX_CANT_JUGADORES) return -1; //No hay más espacio para nuevos Clientes
+	if(this->cantClientes > MAX_CANT_JUGADORES) return -1; //No hay más espacio para nuevos Clientes
 	return indice; // Devuelve la posicion donde será guardado el nuevo Cliente
 }
 
