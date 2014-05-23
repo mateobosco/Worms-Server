@@ -156,7 +156,12 @@ structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje){
 	}
 	paquete->cantidad_figuras = cantidad_figuras;
 	paquete->cantidad_personajes = cantidad_personajes;
-	if (mensaje) strcpy(paquete->mensaje_mostrar, mensaje);
+	if (mensaje != NULL){
+		strcpy(paquete->mensaje_mostrar, mensaje);
+	}
+	else {
+		memset(paquete->mensaje_mostrar, 0, MAX_MENSAJE);
+	}
 	//paquete->mensaje_mostrar = mensaje;
 //	paquete->vector_figuras = figurasEmpaquetadas;
 //	paquete->vector_personajes = personajesEmpaquetados;

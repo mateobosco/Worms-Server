@@ -31,7 +31,7 @@ typedef struct structPaquete{
 	structPersonaje vector_personajes[20];
 	int cantidad_personajes = 0;
 	int id;
-	char mensaje_mostrar[20];
+	char mensaje_mostrar[MAX_MENSAJE];
 }structPaquete;
 
 typedef struct structInicial {

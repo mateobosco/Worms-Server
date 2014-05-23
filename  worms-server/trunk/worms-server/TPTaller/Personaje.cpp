@@ -150,17 +150,17 @@ float32* Personaje::getVecY(){
 void Personaje::leermovimiento(int direccion, int id_jugador){
 	if (this->nro_jugador == id_jugador&& seleccionado[id_jugador]){
 
-		if (direccion == 1 && body->GetLinearVelocity().x < 0.7){ // para la derecha
+		if (direccion == 3 && body->GetLinearVelocity().x < 0.7){ // para la derecha
 			dir_imagen = "TPTaller/imagenes/gusanitoderecha.png";
 			orientacion=1;
 			this->mover(b2Vec2(2,0));
 		}
-		if (direccion == -1 && body->GetLinearVelocity().x > -0.7 ){ // para la izquierda
+		if (direccion == 1 && body->GetLinearVelocity().x > -0.7 ){ // para la izquierda
 			dir_imagen = "TPTaller/imagenes/gusanitoizquierda.png";
 			orientacion=-1;
 			this->mover(b2Vec2(-2,0));
 		}
-		if (direccion == 0  && body->GetLinearVelocity().y == 0){ // para arriba
+		if (direccion == 2  && body->GetLinearVelocity().y == 0){ // para arriba
 			this->mover(b2Vec2(0,-5));
 		}
 	}
