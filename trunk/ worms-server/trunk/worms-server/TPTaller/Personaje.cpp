@@ -154,15 +154,42 @@ void Personaje::leermovimiento(int direccion, int id_jugador){
 			dir_imagen = "TPTaller/imagenes/gusanitoderecha.png";
 			orientacion=1;
 			this->mover(b2Vec2(2,0));
+			return;
 		}
 		if (direccion == 1 && body->GetLinearVelocity().x > -0.7 ){ // para la izquierda
 			dir_imagen = "TPTaller/imagenes/gusanitoizquierda.png";
 			orientacion=-1;
 			this->mover(b2Vec2(-2,0));
+			return;
 		}
-		if (direccion == 2  && body->GetLinearVelocity().y == 0){ // para arriba
-			this->mover(b2Vec2(0,-5));
+		b2Vec2 posicion = this->getPosition();
+		b2CircleShape* over = new b2CircleShape();
+		over->m_radius = 0.0001;
+		b2Transform transformOver = b2Transform(posicion+b2Vec2(0,alto/2), b2Rot(0) );
+		b2World* mundo = body->GetWorld();
+		bool resultado;
+
+		for (b2Body* body_actual = mundo->GetBodyList()->GetNext(); body_actual; body_actual = body_actual->GetNext()){
+
+			if (body_actual->GetPosition() == body->GetPosition()) continue;
+
+			b2Transform transformada_actual = body_actual->GetTransform();
+			b2Fixture* fix = body_actual->GetFixtureList();
+			b2Shape* shape_actual = fix->GetShape();
+
+			resultado = b2TestOverlap(shape_actual,0, over , 0,  transformada_actual, transformOver);
+			if (resultado) break;
 		}
+		delete over;
+
+		if ((direccion == 2  && resultado) || (direccion == 2  && body->GetLinearVelocity().y == 0)){ // para arriba
+			this->mover(b2Vec2(0,-3));
+			return;
+		}
+
+//		if (direccion == 2  && body->GetLinearVelocity().y == 0){ // para arriba
+//			this->mover(b2Vec2(0,-5));
+//		}
 	}
 }
 
