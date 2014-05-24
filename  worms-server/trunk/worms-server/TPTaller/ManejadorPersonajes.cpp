@@ -52,7 +52,7 @@ void ManejadorPersonajes::seleccionarPersonaje(b2Vec2 posicion, int id_jugador){
 			if (id_jugador == dueno) printf ("SELECCIONO UN PERSONAJE PROPIO _____________-----------------_________________ \n");
 		}
 	}
-	delete shapeMouse; //todo
+	delete shapeMouse;
 }
 
 //TODO hay que borrarlo
