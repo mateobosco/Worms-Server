@@ -158,7 +158,7 @@ int Servidor::aceptarConexiones(){
 				this->setAceptado(false);
 				printf("Cliente Rechazado\n");
 				//this->runEnviarInfoInicial(cliente);
-				//if (this->runEnviarInfoInicial(cliente) <= 0 ) /*log Error todo */;
+				if (this->runEnviarInfoInicial(cliente) <= 0 ) /*log Error todo */;
 				delete cliente;
 				return EXIT_FAILURE;
 			}
@@ -427,7 +427,7 @@ Cliente** Servidor::getClientes(){
 int Servidor::getCantidadClientesActivos(){
 	int activos = 0;
 	for(int i = 0; i < this->cantClientes; i++){
-		if(this->clientes[i] == NULL)
+		if(this->clientes[i] != NULL)
 			if(this->clientes[i]->getActivo()) activos++;
 	}
 	this->clientesActivos = activos;
