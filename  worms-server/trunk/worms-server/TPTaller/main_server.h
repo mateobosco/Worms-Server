@@ -40,10 +40,8 @@ int main_server(int argc,char* argv[]){
 		//log error todo
 	}
 	int jugadores = servidor->getCantidadClientes();
-	printf("CANTIDAD DE JUGADORES: %d \n",jugadores);
 	while (jugadores<=0){
 		jugadores = servidor->getCantidadClientes();
-		printf("CANTIDAD DE JUGADORES: %d \n",jugadores);
 		SDL_Delay(2000);
 	}
 
@@ -53,7 +51,6 @@ int main_server(int argc,char* argv[]){
 
 	structPaquete* paqueteCiclo = crearPaqueteCiclo(juego->getMundo(), servidor->getMensajeMostrar());
 	structFigura* vector = paqueteCiclo->vector_figuras;
-	structFigura paqueteFigura = vector[0];
 	servidor->actualizarPaquete((char*)paqueteCiclo);
 	juego->getMundo()->step(0.1,1,1);
 

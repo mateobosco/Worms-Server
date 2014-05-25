@@ -31,7 +31,6 @@ void ManejadorPersonajes::seleccionarPersonaje(b2Vec2 posicion, int id_jugador){
 
 	//for (int i = 0; i < this->personajesMax * this->cantidad_jugadores ; i++){
 	for (int i = 0; i < this->cantidad_actual_personajes ; i++){
-		printf("CANTIDAD ACTUAL DE JUGADORES %d \n", this->cantidad_actual_personajes);
 
 		Personaje* personaje = this->vector_personajes[i];
 		b2Body* body_actual = personaje->getBody();
@@ -46,10 +45,7 @@ void ManejadorPersonajes::seleccionarPersonaje(b2Vec2 posicion, int id_jugador){
 				personaje_aux->setSeleccionado(false, id_jugador);
 			}
 			personaje->setSeleccionado(resultado, id_jugador);
-			printf("selecciono un personaje \n");
 			int dueno = personaje->getNrojugador();
-			printf("SELECCIONO UN PERSONAJE DEL JUGADOR %d Y YO SOY EL JUGADOR %d--------------- \n",dueno,id_jugador);
-			if (id_jugador == dueno) printf ("SELECCIONO UN PERSONAJE PROPIO _____________-----------------_________________ \n");
 		}
 	}
 	delete shapeMouse;
@@ -72,14 +68,6 @@ int ManejadorPersonajes::getCantidadPersonajes(){
 	return this->cantidad_actual_personajes;
 }
 
-//void ManejadorPersonajes::moverPersonaje(SDL_Event event, bool* KEYS,int id_jugador){
-//	for (int j = 0; j < personajesMax * cantidad_jugadores; j++){
-//		Personaje* personaje_actual = vector_personajes[j];
-//		if (! personaje_actual->getMuerto()){
-//			personaje_actual->leermovimiento(event, KEYS, id_jugador);
-//		}
-//	}
-//}
 
 void ManejadorPersonajes::moverPersonaje(int direccion,int id_jugador){
 	for (int j = 0; j < this->cantidad_actual_personajes; j++){
