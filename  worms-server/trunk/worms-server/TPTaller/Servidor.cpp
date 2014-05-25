@@ -116,53 +116,56 @@ int Servidor::aceptarConexiones(){
 		}
 		if(recibio_nombre){
 			int posicion = this->checkNuevoCliente(cliente);
-			if(posicion != -1){
+			if(this->getCantidadClientesActivos() < this->getCantidadMaxConexiones()){
+				if(posicion != -1){
+					Cliente *cliente_viejo = this->clientes[posicion];
+					if (cliente_viejo != NULL){
+						char mensaje[MAX_MENSAJE];
+						strcpy(mensaje, "Se ha reconectado el cliente: ");
+						strcat(mensaje, cliente_viejo->getNombre());
+						this->setMensajeMostrar(mensaje);
+						cliente->setJugador(cliente_viejo->getJugador());
+						cliente->getJugador()->conectar();
+						cliente->setID(cliente_viejo->getID());
+						delete cliente_viejo;
+					} else{
+						this->cantClientes++;
+					}
+					this->setAceptado(true);
+					cliente->activar();
+					if (this->runEnviarInfoInicial(cliente) <= 0 ) /*log Error todo */;
+					conexion_t par;
+					par.cliente = cliente;
+					par.servidor = this;
 
-				Cliente *cliente_viejo = this->clientes[posicion];
-				if (cliente_viejo != NULL){
-					char mensaje[MAX_MENSAJE];
-					strcpy(mensaje, "Se ha reconectado el cliente: ");
-					strcat(mensaje, cliente_viejo->getNombre());
-					this->setMensajeMostrar(mensaje);
-					cliente->setJugador(cliente_viejo->getJugador());
-					cliente->getJugador()->conectar();
-					cliente->setID(cliente_viejo->getID());
-					delete cliente_viejo;
-				} else{
-					this->cantClientes++;
-				}
-				this->setAceptado(true);
-				cliente->activar(); //TODO hay que arreglar esto
-				if (this->runEnviarInfoInicial(cliente) <= 0 ) /*log Error todo */;
-				conexion_t par;
-				par.cliente = cliente;
-				par.servidor = this;
+					comThreads hilosCliente;
+					hilosCliente.enviar = SDL_CreateThread(runSendInfo,"enviar",(void*)&par);
+					if(hilosCliente.enviar ==NULL){
+						//log error todo
+					}
+					hilosCliente.recibir = SDL_CreateThread(runRecvInfo,"recibir",(void*)&par);
+					if(hilosCliente.recibir == NULL){
+						//log error todo
+					}
+					cliente->setHilos(hilosCliente);
 
-				comThreads hilosCliente;
-				hilosCliente.enviar = SDL_CreateThread(runSendInfo,"enviar",(void*)&par);
-				if(hilosCliente.enviar ==NULL){
-					//log error todo
+					this->clientes[posicion] = cliente;
+					this->vector_clientes[posicion] = cliente->getID(); // TODO ponerle un nombre / id de jugador
+					printf("Cantidad de clientes aceptados: %d\n",this->cantClientes);
+					return EXIT_SUCCESS;
+				}else {
+					this->setAceptado(false);
+					printf("Cliente Rechazado\n");
+					//this->runEnviarInfoInicial(cliente);
+					if (this->runEnviarInfoInicial(cliente) <= 0 ) /*log Error todo */;
+					delete cliente;
+					return EXIT_FAILURE;
 				}
-				printf("Se crea el hilo de recibir\n");
-				hilosCliente.recibir = SDL_CreateThread(runRecvInfo,"recibir",(void*)&par);
-				if(hilosCliente.recibir == NULL){
-					//log error todo
-				}
-				cliente->setHilos(hilosCliente);
-
-				this->clientes[posicion] = cliente;
-				this->vector_clientes[posicion] = cliente->getID(); // TODO ponerle un nombre / id de jugador
-				printf("Cantidad de clientes aceptados: %d\n",this->cantClientes);
-				return EXIT_SUCCESS;
-			}else {
+			} else{
 				this->setAceptado(false);
-				printf("Cliente Rechazado\n");
-				//this->runEnviarInfoInicial(cliente);
 				if (this->runEnviarInfoInicial(cliente) <= 0 ) /*log Error todo */;
-				delete cliente;
 				return EXIT_FAILURE;
 			}
-			//SDL_UnlockMutex(this->mutex);
 		}else {
 			delete cliente;
 			return EXIT_FAILURE;
@@ -190,8 +193,6 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 		SDL_Delay(25);
 		char envio[MAX_PACK];
 		char envio2[MAX_PACK];
-
-
 		//SDL_LockMutex(this->mutex);
 		memcpy(envio, this->paqueteEnviar, MAX_PACK);
 		//SDL_UnlockMutex(this->mutex);
@@ -203,7 +204,6 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 		structFigura* vector = paqueteCiclo->vector_figuras;
 		structFigura paqueteFigura = vector[0];
 		b2Vec2 posicion = paqueteFigura.vector_vertices[2];
-
 
 		if (enviados > 0){
 			this->enviar = false;
@@ -228,8 +228,6 @@ int Servidor::runEnviarInfoInicial(Cliente* cliente){
 	//SDL_UnlockMutex(this->mutex);
 	int enviados = cliente->getSocket()->enviar(envio, MAX_PACK);
 
-	printf("envie %d bytes al cliente \n", enviados);
-
 	structPaquete* paqueteCiclo = (structPaquete*) envio;
 
 	structFigura* vector = paqueteCiclo->vector_figuras;
@@ -244,7 +242,7 @@ int Servidor::runEnviarInfoInicial(Cliente* cliente){
 		cliente->desactivar();
 	}
 	if(enviados == -1){ // no se pudo enviar
-		printf("no se envio el paquete \n");
+		printf("No se envió el paquete.\n");
 		cliente->desactivar();
 	}
 	return EXIT_SUCCESS;
@@ -318,7 +316,6 @@ int Servidor::runEscucharConexiones(){
 		}
 	}
 	return EXIT_SUCCESS;
-
 }
 
 int Servidor::getCantidadMaxConexiones(){
@@ -328,7 +325,6 @@ int Servidor::getCantidadMaxConexiones(){
 int Servidor::getCantidadClientes(){
 	return this->cantClientes;
 }
-
 
 int* Servidor::getVectorClientes(){
 	return vector_clientes;
@@ -384,7 +380,6 @@ Cliente** Servidor::getClientes(){
 	return this->clientes;
 }
 
-
 int Servidor::getCantidadClientesActivos(){
 	int activos = 0;
 	for(int i = 0; i < this->cantClientes; i++){
@@ -407,4 +402,3 @@ void Servidor::setMensajeMostrar(char* mensaje){
 	strncpy(this->mensaje_mostrar, mensaje, 50);
 
 }
-
