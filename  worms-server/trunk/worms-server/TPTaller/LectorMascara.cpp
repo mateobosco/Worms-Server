@@ -51,7 +51,6 @@ Uint32 getpixel(SDL_Surface *surface, int x, int y)
 b2Vec2* LectorMascara::LeerMascara(Escalador* escalador){
 
 	Uint32 *pixels = (Uint32 *) superficie->pixels;            // Agarra los pixeles de la superficie
-	printf (" El pixels 0 es %x \n", pixels[0]);
 	if(!pixels)return NULL;
 	int i;
 	//int ancho = this->PIXEL_ANCHO;

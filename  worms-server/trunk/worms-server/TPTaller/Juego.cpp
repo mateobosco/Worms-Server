@@ -44,11 +44,6 @@ Juego::~Juego(){
 	}
 }
 
-//uint8 Juego::crearJugador(){
-//	jugadores[cantidad_jugadores] = new Jugador(mundo, cantidad_jugadores + 1, manejador); //ver delete todo
-//	cantidad_jugadores++;
-//}
-
 Jugador** Juego::getJugadores(){
 	return jugadores;
 }
@@ -222,11 +217,9 @@ structInicial* Juego::getPaqueteInicial(){
 void Juego::aplicarPaquete(structEvento* evento){
 	if (evento == NULL) return;
 	if (evento->click_mouse.x != -1){ // recibio un click
-//		printf(" LLAMO A SELECCIONAR PERSONAJE CON NUMERO ESE NRO DE JUGADOR: %d", evento->nro_jugador);
 		manejador->seleccionarPersonaje(evento->click_mouse, evento->nro_jugador);
 	}
 	if (evento->direccion == 1 || evento->direccion == 2 || evento->direccion == 3){ // recibio un click
-		printf("EL JUGADOR %d QUIERE MOVER UN PERSONAJE \n", evento->nro_jugador);
 		manejador->moverPersonaje(evento->direccion , evento->nro_jugador);
 	}
 	else return;
