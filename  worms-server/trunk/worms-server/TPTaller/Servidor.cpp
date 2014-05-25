@@ -107,11 +107,6 @@ int Servidor::aceptarConexiones(){
 		// xq aumentaría en uno por algo que ya existe.
 		// [Nahue: yo lo dejaría de usar ese atributo de clase]
 		Cliente* cliente = new Cliente(sockCliente);
-
-//		if(validarCliente(cliente)==0){
-//			printf("Cliente existente");
-//		}
-
 		bool recibio_nombre = false;
 		//SDL_LockMutex(this->mutex);
 		while (!recibio_nombre){
@@ -163,6 +158,7 @@ int Servidor::aceptarConexiones(){
 				this->setAceptado(false);
 				printf("Cliente Rechazado\n");
 				//this->runEnviarInfoInicial(cliente);
+				//if (this->runEnviarInfoInicial(cliente) <= 0 ) /*log Error todo */;
 				delete cliente;
 				return EXIT_FAILURE;
 			}
@@ -237,7 +233,6 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 
 int Servidor::runEnviarInfoInicial(Cliente* cliente){
 	SDL_Delay(25);
-	//SDL_Delay(500);
 	char envio[MAX_PACK];
 	//SDL_LockMutex(this->mutex);
 	memcpy(envio, this->paqueteInicial, MAX_PACK);

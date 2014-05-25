@@ -10,10 +10,12 @@ int runServidor(void* serv){
 
 int aceptarConex(void* servidor){
 	Servidor* server = (Servidor*) servidor;
-		while(!server->getFinalizar() && (server->getCantidadClientes() < server->getCantidadMaxConexiones())){
+	while(!server->getFinalizar()){
+		while(server->getCantidadClientesActivos() < server->getCantidadMaxConexiones()){
 			int accept = server->aceptarConexiones();
 			if (accept != EXIT_SUCCESS) printf("Error al aceptar\n");
 		}
+	}
 	return 0;
 }
 
