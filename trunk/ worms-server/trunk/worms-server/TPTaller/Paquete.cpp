@@ -135,12 +135,11 @@ structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, i
 }
 
 structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje){
-	structPaquete* paquete = (structPaquete*) malloc(MAX_PACK);//sizeof(structPaquete)
+	structPaquete* paquete = (structPaquete*) malloc(MAX_PACK);
 	paquete->tipo = 1;
 
 	Personaje** vector_personajes = mundo->getPersonajes();
 	int cantidad_personajes = mundo->getCantidadPersonajes();
-	//structPersonaje** personajesEmpaquetados = (structPersonaje**) malloc(sizeof(structPersonaje*)*cantidad_personajes);
 	for (int i=0 ; i<cantidad_personajes; i++){
 		structPersonaje* paquetito = crearPaquetePersonaje(vector_personajes[i]);
 		memcpy(&paquete->vector_personajes[i], paquetito, sizeof(structPersonaje));
@@ -148,7 +147,6 @@ structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje){
 	}
 	Figura** vector_figuras = mundo->getFiguras();
 	int cantidad_figuras = mundo->getCantidadFiguras();
-	//structFigura** figurasEmpaquetadas = (structFigura**) malloc(sizeof(structFigura*)*cantidad_figuras);
 	for (int i=0 ; i<cantidad_figuras; i++){
 		structFigura* paquetito = crearPaqueteFigura(vector_figuras[i]);
 		memcpy(&paquete->vector_figuras[i],paquetito,sizeof(structFigura));
@@ -162,9 +160,7 @@ structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje){
 	else {
 		memset(paquete->mensaje_mostrar, 0, MAX_MENSAJE);
 	}
-	//paquete->mensaje_mostrar = mensaje;
-//	paquete->vector_figuras = figurasEmpaquetadas;
-//	paquete->vector_personajes = personajesEmpaquetados;
+
 
 
 	return paquete;
