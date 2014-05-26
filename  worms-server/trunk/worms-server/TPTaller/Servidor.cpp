@@ -117,7 +117,7 @@ int Servidor::aceptarConexiones(){
 		if(recibio_nombre){
 			int posicion = this->checkNuevoCliente(cliente);
 			if(this->getCantidadClientesActivos() < this->getCantidadMaxConexiones()){
-				if(posicion != -1){
+				if((posicion != -1) && (this->getCantidadClientes() < MAX_CANT_JUGADORES)){
 					Cliente *cliente_viejo = this->clientes[posicion];
 					if (cliente_viejo != NULL){
 						char mensaje[MAX_MENSAJE];
@@ -400,5 +400,4 @@ char* Servidor::getMensajeMostrar(){
 
 void Servidor::setMensajeMostrar(char* mensaje){
 	strncpy(this->mensaje_mostrar, mensaje, 50);
-
 }
