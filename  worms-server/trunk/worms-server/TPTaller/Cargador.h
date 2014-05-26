@@ -16,8 +16,6 @@
 #include "Constantes.h"
 
 extern ofstream logFile;
-extern void generarFechaYHora(char*,char*);
-extern void loguear();
 
 using namespace std;
 using namespace YAML;

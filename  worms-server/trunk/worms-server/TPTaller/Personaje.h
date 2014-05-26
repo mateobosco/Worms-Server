@@ -34,7 +34,7 @@ public:
 	void leermovimiento(int direccion, int id_jugador);
 	void setSeleccionado(bool seleccion, int id_jugador);
 	b2Vec2 getPosition();
-	char* getDirImagen();
+	const char* getDirImagen();
 	void setMuerto();
 	bool getMuerto();
 	void setConectado(int estado);
@@ -57,7 +57,7 @@ public:
 
 
 private:
-	char* dir_imagen;
+	const char* dir_imagen;
 	char* nombre_cliente;
 	b2Body* body;
 	b2PolygonShape* shape;

@@ -163,8 +163,9 @@ int Servidor::aceptarConexiones(){
 				}
 			} else{
 				this->setAceptado(false);
-				if (this->runEnviarInfoInicial(cliente) <= 0 ) /*log Error todo */;
-				return EXIT_FAILURE;
+				loguear();
+				logFile << "Cliente rechazado \n" << endl;
+				if(this->runEnviarInfoInicial(cliente)<=0)	return EXIT_FAILURE;
 			}
 		}else {
 			delete cliente;
@@ -192,7 +193,9 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 		}
 		SDL_Delay(25);
 		char envio[MAX_PACK];
+		memset(envio,0,MAX_PACK);
 		char envio2[MAX_PACK];
+		memset(envio2,0,MAX_PACK);
 		//SDL_LockMutex(this->mutex);
 		memcpy(envio, this->paqueteEnviar, MAX_PACK);
 		//SDL_UnlockMutex(this->mutex);
@@ -200,7 +203,6 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 		paqueteCiclo->id=cliente->getID();
 		memcpy(envio2, paqueteCiclo, MAX_PACK);
 		int enviados = cliente->getSocket()->enviar(envio2, MAX_PACK);
-
 		structFigura* vector = paqueteCiclo->vector_figuras;
 		structFigura paqueteFigura = vector[0];
 		b2Vec2 posicion = paqueteFigura.vector_vertices[2];
@@ -223,6 +225,7 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 int Servidor::runEnviarInfoInicial(Cliente* cliente){
 	SDL_Delay(25);
 	char envio[MAX_PACK];
+	memset(envio,0,MAX_PACK);
 	//SDL_LockMutex(this->mutex);
 	memcpy(envio, this->paqueteInicial, MAX_PACK);
 	//SDL_UnlockMutex(this->mutex);
@@ -259,10 +262,12 @@ int Servidor::runRecibirInfo(void* cliente){
 		if(cantidad >0){
 			structEvento* evento = (structEvento*) paquete;
 			void* novedad = malloc (MAX_PACK);
+			//SDL_LockMutex(this->mutex);
 			memcpy(novedad, paquete, MAX_PACK); //todo ver como determinar el tamaño del paquete
 			SDL_LockMutex(this->mutex);
 			if (this->paquetesRecibir.empty()) this->paquetesRecibir.push(novedad);
 			structEvento* anterior = (structEvento*) this->paquetesRecibir.front();
+			SDL_UnlockMutex(this->mutex);
 			SDL_UnlockMutex(this->mutex);
 			if (evento == NULL) continue;
 			if (anterior == NULL) continue;
@@ -277,7 +282,8 @@ int Servidor::runRecibirInfo(void* cliente){
 
 		}
 		else if(cantidad == 0){
-			printf("Cliente desconectado\n");
+			loguear();
+			logFile << "Cliente: " << client->getNombre() << "desconectado "<< endl;
 			client->desactivar();
 			char mensaje[MAX_MENSAJE];
 			strcpy(mensaje, "Se ha desconectado el cliente: ");
@@ -287,7 +293,8 @@ int Servidor::runRecibirInfo(void* cliente){
 		}
 		else if(cantidad ==-1){
 			client->desactivar();
-			printf("Error al recibir información del cliente\n");
+			loguear();
+			logFile << "Error al recibir información del cliente: " << client->getNombre() << endl;
 			break;
 		}
 	}
@@ -299,8 +306,12 @@ int Servidor::runEscucharConexiones(){
 	try{
 		conexiones = this->getSocket()->EnlazarYEscuchar(this->cantidadMaxConexiones);
 	}catch(exception &e){
+		//loguear error
+		loguear();
+		logFile << "No se pudo enlazar y escuchar" << endl;
 		close(this->listener->getFD());
 		return EXIT_FAILURE;
+
 	}
 	while(!this->finalizar){
 		while((!this->finalizar) && (this->cantClientes < this->cantidadMaxConexiones)){
@@ -311,7 +322,8 @@ int Servidor::runEscucharConexiones(){
 			}
 		}
 		if(this->cantClientes > this->cantidadMaxConexiones){
-			printf("break\n");
+			loguear();
+			logFile << "Se alcanzó la máxima cantidad de clientes " << endl;
 			break;
 		}
 	}
@@ -332,6 +344,7 @@ int* Servidor::getVectorClientes(){
 
 int Servidor::recibirNombre(Cliente *client){
 	char buffer[MAX_NAME_USER];
+	memset(buffer,0,MAX_NAME_USER);
 	int bytes_recibidos = client->getSocket()->recibir(buffer, MAX_NAME_USER);
 	client->setNombre(buffer);
 	return bytes_recibidos;

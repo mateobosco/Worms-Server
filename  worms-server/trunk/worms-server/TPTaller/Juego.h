@@ -40,7 +40,10 @@ class Juego{
 	public:
 		Juego();
 		~Juego();
+
+		void crearJugador();
 		//uint8 crearJugador();
+
 		Jugador** getJugadores();
 		uint8 getCantidadJugadores();
 		Mundo* getMundo();

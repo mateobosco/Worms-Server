@@ -119,83 +119,114 @@ void loguear(){
 	delete[] hora;
 }
 
+void abrirLog(){
+	logFile.open("log.txt",ios::out);
+	logFile << "Log File. Ejecución Worms" << endl;
+	logFile << "   Fecha  | Hora |  Gravedad  | \t Mensaje " << endl;
+}
 
 void keyboard(SDL_Event event , int* posicion_mouse_movimiento, int* posicion_mouse_click, int* posicion_mouse_wheel) {
-	int numero;
-	while (SDL_PollEvent(&event)) {
+	int numero = 0;
+
+	while (SDL_PollEvent(&event)!=0) {
 		switch (event.type) {
-		case SDL_QUIT:
-			break;
-		case SDL_KEYDOWN:
-			numero = event.key.keysym.sym;
-			if (numero == SDLK_RIGHT){
-				KEYS[100] = true;
+			case SDL_QUIT:
+				break;
+			case SDL_KEYDOWN:
+			{
+				numero = event.key.keysym.sym;
+				if (numero == SDLK_RIGHT){
+					KEYS[100] = true;
+					break;
+				}
+				else if (numero == SDLK_LEFT){
+					KEYS[101] = true;
+					break;
+				}
+				else if (numero == SDLK_UP){
+					KEYS[102] = true;
+					break;
+				}
+				else if (numero == SDLK_DOWN){ //event.key.keysym.sym
+					KEYS[103] = true;
+					break;
+				}
+				if(numero < 1000){ //todo keys se puede acceder hasta la 321
+					//printf("ENTRA ACAAAA 4 \n");
+					KEYS[numero] = true;
+				}
+				posicion_mouse_click[0]=-1;
+				posicion_mouse_click[1]=-1;
 				break;
 			}
-			if (numero == SDLK_LEFT){
-				KEYS[101] = true;
-				break;
-			}
-			if (numero == SDLK_UP){
-				KEYS[102] = true;
-				break;
-			}
-			if (event.key.keysym.sym == SDLK_DOWN){
-				KEYS[103] = true;
-				break;
-			}
-			if(numero < 1000){
-				//printf("ENTRA ACAAAA 4 \n");
-				KEYS[numero] = true;
-			}
-			break;
-		case SDL_KEYUP:
-           if (event.key.keysym.sym == SDLK_RIGHT){
-				KEYS[100] = false;
-				break;
-			}
-			if (event.key.keysym.sym == SDLK_LEFT){
-				KEYS[101] = false;
-				break;
-			}
-			if (event.key.keysym.sym == SDLK_UP){
-				KEYS[102] = false;
-				break;
-			}
-			if (event.key.keysym.sym == SDLK_DOWN){
-				KEYS[103] = false;
-				break;
-			}
+			case SDL_KEYUP:
+			{
+				int key = event.key.keysym.sym;
+				if (key == SDLK_RIGHT){
+					KEYS[100] = false;
+					break;
+				}
+				else if (key == SDLK_LEFT){
+					KEYS[101] = false;
+					break;
+				}
+				else if (key == SDLK_UP){
+					KEYS[102] = false;
+					break;
+				}
+				else if (key == SDLK_DOWN){
+					KEYS[103] = false;
+					break;
+				}
 
-			KEYS[event.key.keysym.sym] = false;
-			break;
-		case SDL_MOUSEBUTTONDOWN:
-			int x, y;
-			SDL_GetMouseState( &x, &y );
-			posicion_mouse_click[0] = x;
-			posicion_mouse_click[1] = y;
-			//printf("LA posicion detectada fue %d, %d \n ", x,y);
-			break;
-		case SDL_MOUSEMOTION:
-			int w, z;
-			SDL_GetMouseState( &w, &z );
-			posicion_mouse_movimiento[0] = w;
-			posicion_mouse_movimiento[1] = z;
-			//printf("LA posicion detectada fue %d, %d \n ", w,z);
-			break;
-		case SDL_MOUSEWHEEL:
-			int a, b,d;
-			SDL_GetMouseState( &a, &b );
-			SDL_MouseWheelEvent wheel = event.wheel;
-			d = (int) wheel.y;
-			posicion_mouse_wheel[0] = a;
-			posicion_mouse_wheel[1] = b;
-			posicion_mouse_wheel[2] = d;
-			break;
-			//printf("LA posicion detectada fue (%d, %d),%d, %d  \n ", a,b,c,d);
+				else{
+					if(key < 322){
+						KEYS[key] = false;
+						break;
+					}
+				}
+			}
+			case SDL_MOUSEBUTTONDOWN:
+			{
+				int x = 0;
+				int y = 0;
+				SDL_GetMouseState( &x, &y );
+				posicion_mouse_click[0] = x;
+				posicion_mouse_click[1] = y;
+				//printf("LA posicion detectada fue %d, %d \n ", x,y);
+				break;
+			}
+			case SDL_MOUSEMOTION:
+			{
+				int w =0;
+				int z = 0;
+				SDL_GetMouseState( &w, &z );
+				posicion_mouse_movimiento[0] = w;
+				posicion_mouse_movimiento[1] = z;
+				//printf("LA posicion detectada fue %d, %d \n ", w,z);
+				posicion_mouse_click[0]=-1;
+				posicion_mouse_click[1]=-1;
+				break;
+			}
+			case SDL_MOUSEWHEEL:
+			{
+				int a = 0;
+				int b = 0;
+				int d = 0;
+				SDL_GetMouseState( &a, &b );
+				SDL_MouseWheelEvent wheel = event.wheel;
+				d = (int) wheel.y;
+				posicion_mouse_wheel[0] = a;
+				posicion_mouse_wheel[1] = b;
+				posicion_mouse_wheel[2] = d;
+				posicion_mouse_click[0]=-1;
+				posicion_mouse_click[1]=-1;
+				break;
+				//printf("LA posicion detectada fue (%d, %d),%d, %d  \n ", a,b,c,d);
 
-		//default:
-			//break;
+				//		default:
+				//			break;
+			}
 		}
    }
 }
@@ -204,6 +235,8 @@ int checkCantParametros(int cant_parametros){
 	if(cant_parametros >= 4){
 		return EXIT_SUCCESS;
 	}
+	loguear();
+	logFile << "Cantidad de parámetros inválida. Intente nuevamente " << endl;
 //	TODO Logear ERROR: Cantidad de parametros insuficientes.
 	return EXIT_FAILURE;
 }

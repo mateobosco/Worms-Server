@@ -217,7 +217,7 @@ float32 Personaje::getAncho(){
 	return ancho;
 }
 
-char* Personaje::getDirImagen(){
+const char* Personaje::getDirImagen(){
 	return dir_imagen;
 }
 

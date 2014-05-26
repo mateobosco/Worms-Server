@@ -90,11 +90,6 @@ void Juego::cargar() {
 	delete cargador;
 }
 
-//TODO ver el tema del retorno
-int Juego::run(){
-
-
-}
 
 
 // Funciones Privadas:
