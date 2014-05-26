@@ -117,7 +117,7 @@ int Servidor::aceptarConexiones(){
 		if(recibio_nombre){
 			int posicion = this->checkNuevoCliente(cliente);
 			if(this->getCantidadClientesActivos() < this->getCantidadMaxConexiones()){
-				if((posicion != -1) && (this->getCantidadClientes() < MAX_CANT_JUGADORES)){
+				if(posicion != -1){
 					Cliente *cliente_viejo = this->clientes[posicion];
 					if (cliente_viejo != NULL){
 						char mensaje[MAX_MENSAJE];
@@ -358,7 +358,7 @@ int Servidor::checkNuevoCliente(Cliente *client){
 		if (indice == MAX_CANT_JUGADORES) break;
 		cliente_recorrido = this->clientes[indice];
 	}
-	if(this->cantClientes > MAX_CANT_JUGADORES) return -1; //No hay más espacio para nuevos Clientes
+	if(this->cantClientes >= MAX_CANT_JUGADORES) return -1; //No hay más espacio para nuevos Clientes
 	return indice; // Devuelve la posicion donde será guardado el nuevo Cliente
 }
 
