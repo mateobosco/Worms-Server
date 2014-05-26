@@ -81,7 +81,7 @@ int mainCliente(int argc, char* argv[]){
 	free(posicion_mouse_movimiento);
 	close();
 */
-	delete cliente;
+	//delete cliente;
 	return 0;
 }
 

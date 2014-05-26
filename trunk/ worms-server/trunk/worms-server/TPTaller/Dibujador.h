@@ -4,13 +4,13 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include <SDL2/SDL_pixels.h>
+#include <stdexcept>
 
 #include "Agua.h"
 
 
+
 extern ofstream logFile;
-extern void generarFechaYHora(char*,char*);
-extern void loguear();
 
 class Dibujable;
 class Figura;
@@ -46,10 +46,13 @@ public:
 	void iniciarFondo(Agua* agua, std::string pathCielo, std::string pathTierra);
 	void dibujarFondo(Agua* agua);
 	int dibujarPaqueteFigura(structFigura paquete);
-	int dibujarPaquetePersonaje(structPersonaje paquete);
+	int dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jugador, bool duenio, int cliente_id, float aux);
 	SDL_Texture* RenderText(std::string message, std::string fontFile,  SDL_Color color, int fontSize);
-
-	void dibujarPaquete(structPaquete* paquete);
+	bool init();
+	void close();
+	void actualizar();
+	void dibujarPaquete(structPaquete* paquete, char* nombre_cliente, int id_cliente, float aux);
+	void dibujarMensaje();
 
 
 protected:
@@ -58,11 +61,18 @@ protected:
 	float32 escalado_x, escalado_y;
 
 private:
-	void actualizar();
+
 	SDL_Texture* loadTexture(const std::string &file, SDL_Renderer *ren);
 	SDL_Texture* textureCielo;
 	SDL_Texture* textureAgua;
 	SDL_Texture* textureTierra;
+	SDL_Texture* flechitaroja;
+	SDL_Window* window;
+	SDL_Texture* texturederecha;
+	SDL_Texture* textureizquierda;
+	SDL_Texture* texturederechaNEGRO;
+	SDL_Texture* textureizquierdaNEGRO;
+	int contador_cerrarse;
 };
 
 

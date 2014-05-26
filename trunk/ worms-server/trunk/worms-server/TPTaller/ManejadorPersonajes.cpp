@@ -17,6 +17,9 @@ ManejadorPersonajes::ManejadorPersonajes() {
 	this->cantidad_actual_personajes = 0;
 	this->cantidad_jugadores = 0;
 	this->vector_personajes = new Personaje*[MAX_CANT_JUGADORES * this->personajesMax];
+	for(int i = 0; i < MAX_CANT_JUGADORES * this->personajesMax ;i++ ){
+		this->vector_personajes[i] = NULL;
+	}
 }
 
 ManejadorPersonajes::~ManejadorPersonajes() {

@@ -18,6 +18,9 @@
 #include "Paquete.h"
 #include "Jugador.h"
 
+extern void loguear();
+extern ofstream logFile;
+
 #define MAX_DATOS 100 // max number of bytes we can get at once
 
 typedef struct communicatedThreads{
@@ -38,8 +41,11 @@ class Cliente{
 		bool conectado;
 		bool enviarpaquete;
 		bool activo;
+		bool servidor_conectado;
 		comThreads hilos;
 		Jugador* jugador;
+		Dibujador* dibujador;
+
 
 	public:
 		Cliente(const char *name, const char *ip_sv, const char* puerto);
@@ -64,7 +70,10 @@ class Cliente{
 		void activar();
 		void desactivar();
 		bool getActivo();
-
+		void setDibujador(Dibujador* dibujador);
+		void dibujarMensajeDesconexion();
+		bool getServidorConectado();
+		void setServidorConectado(bool estado);
 		Jugador* getJugador();
 
 		void setHilos(comThreads hilos_server);

@@ -4,6 +4,8 @@
 
 #include "Agua.h"
 
+extern ofstream logFile;
+
 
 Agua::Agua(float32 nivel_agua, string &origen){
 	this->nivel = nivel_agua;
@@ -18,7 +20,7 @@ Agua::Agua(float32 nivel_agua, string &origen){
 }
 
 Agua::~Agua(){
-	free(this->surface);
+	SDL_FreeSurface(this->surface);
 }
 
 float32 Agua::GetNivel(){
