@@ -82,6 +82,7 @@ class Cliente{
 
 		SDL_mutex* getMutex();
 		void setJugador(Jugador* jug);
+		int getContadorCerrarse();
 };
 
 

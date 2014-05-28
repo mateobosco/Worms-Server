@@ -93,26 +93,11 @@ struct addrinfo* Socket::getInfo(){
 }
 
 int Socket::enviar(const void* dato, size_t longDato){
-	int bytesTotal = 0;
-	int bytesRestantes = longDato;
-	int n;
-	char buffer[longDato];
-	memset(buffer,0,longDato);
-	memcpy(buffer, (char*) dato, longDato);
-	while(bytesRestantes > 0) {
-		n = send(this->sockFD, buffer + bytesTotal, bytesRestantes, 0);
-		if(n == -1)	break;
-		bytesTotal += n; // Incrementamos la cantidad de bytes ya enviados
-		bytesRestantes -= n;   // Decrementamos cantidad de bytes restantes
-	}
-
-	if(n==-1) return -1;
-	return longDato;
+	return send(this->sockFD, dato, longDato, 0);
 }
 
 int Socket::recibir(char* buffer, int longBuffer){
-	int bytes_enviados = recv(this->sockFD, buffer, longBuffer, 0);
-	return bytes_enviados;
+	return recv(this->sockFD, buffer, longBuffer, 0);
 }
 
 int Socket::getFD(){

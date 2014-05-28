@@ -503,3 +503,6 @@ void Dibujador::dibujarMensaje(){
 	SDL_DestroyTexture(mensaje_final);
 }
 
+int Dibujador::getContadorCerrarse(){
+	return this->contador_cerrarse;
+}

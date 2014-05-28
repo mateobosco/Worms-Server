@@ -73,8 +73,7 @@ int runRecvInfo(void* par){
 	conexion_t* cliente_servidor = (conexion_t*) par;
 	Cliente* cliente = cliente_servidor->cliente;
 	Servidor* servidor = cliente_servidor->servidor;
-	servidor->runRecibirInfo(cliente);
-	return 0;
+	return servidor->runRecibirInfo(cliente);
 }
 
 int Servidor::validarSocket(int sock){
@@ -98,23 +97,20 @@ int Servidor::aceptarConexiones(){
 	int sockCliente = this->listener->aceptar();
 	//Se crea un cliente y un thread asociado a el y se invoca el método run.
 	if(sockCliente > 0){
-//		while(validarSocket(sockCliente) == 1){
-//			close(sockCliente);
-//			sockCliente = this->listener->aceptar();
-//		}
-		// Ver que pasa con la ID del cliente,
-		// si ya está creado el usuario con ese nombre,
-		// xq aumentaría en uno por algo que ya existe.
-		// [Nahue: yo lo dejaría de usar ese atributo de clase]
+
 		Cliente* cliente = new Cliente(sockCliente);
 		bool recibio_nombre = false;
 		//SDL_LockMutex(this->mutex);
 		while (!recibio_nombre){
 			int bytes = this->recibirNombre(cliente);
 			if(bytes > 0 ) recibio_nombre = true;
-			//if(bytes == 0) break;// TODO Verificar qué pasa si la # de Bytes es -1 o 0;
+			if(bytes <= 0){
+				printf("Error al recibir nombre del cliente\n");
+				return EXIT_FAILURE;// TODO Verificar qué pasa si la # de Bytes es -1 o 0;
+			}
 		}
 		if(recibio_nombre){
+			printf( "Socket CL %s: %i \n", cliente->getNombre(), sockCliente);
 			int posicion = this->checkNuevoCliente(cliente);
 			if(this->getCantidadClientesActivos() < this->getCantidadMaxConexiones()){
 				if(posicion != -1){
@@ -174,6 +170,7 @@ int Servidor::aceptarConexiones(){
 	}else{
 		return EXIT_FAILURE;
 	}
+	return EXIT_SUCCESS;
 }
 
 int Servidor::validarCliente(Cliente* cliente){
@@ -187,6 +184,11 @@ int Servidor::validarCliente(Cliente* cliente){
 
 int Servidor::runEnviarInfo(Cliente* cliente){
 	while(!cliente->getNombre());
+
+	struct timeval timeout;
+	timeout.tv_sec = 10;
+	timeout.tv_usec = 0;
+
 	while(cliente->getActivo()){
 		if (this->enviar == false){
 			continue;
@@ -202,24 +204,25 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 		structPaquete* paqueteCiclo = (structPaquete*) envio;
 		paqueteCiclo->id=cliente->getID();
 		memcpy(envio2, paqueteCiclo, MAX_PACK);
+		if (setsockopt (cliente->getSocket()->getFD(), SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout,
+			sizeof(timeout)) < 0) return ERROR;
 		int enviados = cliente->getSocket()->enviar(envio2, MAX_PACK);
-		structFigura* vector = paqueteCiclo->vector_figuras;
-		structFigura paqueteFigura = vector[0];
-		b2Vec2 posicion = paqueteFigura.vector_vertices[2];
 
 		if (enviados > 0){
 			this->enviar = false;
 		}
 		else if(enviados == -1){ // no se pudo enviar
-			printf("no se envio el paquete \n");
+			printf("SV-Enviar: Error -1 Cliente %s\n", cliente->getNombre());
+			showTime();
 			cliente->desactivar();
 		}
 		if(enviados == 0){
-				printf("Cliente desconectado\n");
-				cliente->desactivar();
+			printf("SV-Enviar: 0b = Cliente %s desconectado \n", cliente->getNombre());
+			showTime();
+			cliente->desactivar();
 		}
 	}
-		return EXIT_SUCCESS;
+	return EXIT_SUCCESS;
 }
 
 int Servidor::runEnviarInfoInicial(Cliente* cliente){
@@ -229,35 +232,45 @@ int Servidor::runEnviarInfoInicial(Cliente* cliente){
 	//SDL_LockMutex(this->mutex);
 	memcpy(envio, this->paqueteInicial, MAX_PACK);
 	//SDL_UnlockMutex(this->mutex);
+
+	struct timeval timeout;
+	timeout.tv_sec = 10;
+	timeout.tv_usec = 0;
+
+    if (setsockopt (cliente->getSocket()->getFD(), SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout,
+                sizeof(timeout)) < 0) return ERROR;
+
 	int enviados = cliente->getSocket()->enviar(envio, MAX_PACK);
 
-	structPaquete* paqueteCiclo = (structPaquete*) envio;
-
-	structFigura* vector = paqueteCiclo->vector_figuras;
-	structFigura paqueteFigura = vector[0];
-	b2Vec2 posicion = paqueteFigura.vector_vertices[2];
-	
 	if (enviados > 0){
 		this->enviar = false;
 	}
 	if(enviados == 0){
-		printf("Cliente desconectado\n");
+		printf("SV-EnviarInicial: 0b = Cliente %s desconectado \n", cliente->getNombre());
+		showTime();
 		cliente->desactivar();
 	}
 	if(enviados == -1){ // no se pudo enviar
-		printf("No se envió el paquete.\n");
+		printf("SV-EnviarInicial: Error -1 Cliente %s\n", cliente->getNombre());
+		showTime();
 		cliente->desactivar();
 	}
 	return EXIT_SUCCESS;
 }
 
 int Servidor::runRecibirInfo(void* cliente){
+	struct timeval timeout;
+	timeout.tv_sec = 10;
+	timeout.tv_usec = 0;
 	Cliente* client = (Cliente*) cliente;
-	while(!client->getNombre());
+
+	while(!client->getNombre()) printf("Falta Nombre");
 	while(client->getActivo()){
 		SDL_Delay(25);
 		char paquete[MAX_PACK];
 		memset(paquete, 0, MAX_PACK);
+		if (setsockopt (client->getSocket()->getFD(), SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout,
+			sizeof(timeout)) < 0) return ERROR;
 		int cantidad = client->getSocket()->recibir(paquete, MAX_PACK);
 		if(cantidad >0){
 			structEvento* evento = (structEvento*) paquete;
@@ -268,7 +281,7 @@ int Servidor::runRecibirInfo(void* cliente){
 			if (this->paquetesRecibir.empty()) this->paquetesRecibir.push(novedad);
 			structEvento* anterior = (structEvento*) this->paquetesRecibir.front();
 			SDL_UnlockMutex(this->mutex);
-			SDL_UnlockMutex(this->mutex);
+
 			if (evento == NULL) continue;
 			if (anterior == NULL) continue;
 			if (anterior->aleatorio != evento->aleatorio){
@@ -278,10 +291,10 @@ int Servidor::runRecibirInfo(void* cliente){
 					this->paquetesRecibir.push(novedad);
 				}
 			}
-			int cantidad = (int) this->paquetesRecibir.size();
-
 		}
 		else if(cantidad == 0){
+			printf("SV-Recibir: Se ha desconectado el cliente %s.\n", client->getNombre());
+			showTime();
 			loguear();
 			logFile << "Cliente: " << client->getNombre() << "desconectado "<< endl;
 			client->desactivar();
@@ -292,10 +305,12 @@ int Servidor::runRecibirInfo(void* cliente){
 
 		}
 		else if(cantidad ==-1){
+			printf("SV-Recibir: Error -1 Cliente: %s\n", client->getNombre());
+			showTime();
 			client->desactivar();
 			loguear();
 			logFile << "Error al recibir información del cliente: " << client->getNombre() << endl;
-			break;
+//			break;
 		}
 	}
 	return EXIT_SUCCESS;

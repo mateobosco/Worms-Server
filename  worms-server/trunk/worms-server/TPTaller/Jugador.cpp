@@ -69,7 +69,7 @@ SDL_Color Jugador::getColor(){
 
 void Jugador::desconectar(){
 	for( int i =0; i<4; i++){
-		this->personajes[i]->desconectar();
-
+		if((this) && (this->personajes[i]))
+			this->personajes[i]->desconectar();
 	}
 }
