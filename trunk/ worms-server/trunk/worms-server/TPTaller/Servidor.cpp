@@ -117,7 +117,7 @@ int Servidor::aceptarConexiones(){
 					Cliente *cliente_viejo = this->clientes[posicion];
 					if (cliente_viejo != NULL){
 						char mensaje[MAX_MENSAJE];
-						strcpy(mensaje, "Se ha reconectado el cliente: ");
+						strcpy(mensaje, "Se ha reconectado ");
 						strcat(mensaje, cliente_viejo->getNombre());
 						this->setMensajeMostrar(mensaje);
 						cliente->setJugador(cliente_viejo->getJugador());
@@ -299,7 +299,7 @@ int Servidor::runRecibirInfo(void* cliente){
 			logFile << "Cliente: " << client->getNombre() << "desconectado "<< endl;
 			client->desactivar();
 			char mensaje[MAX_MENSAJE];
-			strcpy(mensaje, "Se ha desconectado el cliente: ");
+			strcpy(mensaje, "Se ha desconectado ");
 			strcat(mensaje, client->getNombre());
 			this->setMensajeMostrar(mensaje);
 

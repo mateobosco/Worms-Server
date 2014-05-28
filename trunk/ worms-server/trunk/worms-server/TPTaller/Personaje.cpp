@@ -23,7 +23,7 @@ Personaje::Personaje(Mundo* mundo, Uint8 numero_jugador, char* nombre_client) {
 	nro_jugador = numero_jugador;
 	b2Vec2 escalas = mundo->GetEscalas();
 	alto = escalas.y / 50;
-	ancho = escalas.x / 100;
+	ancho = escalas.x / 60;
 	b2Vec2* vertices_tierra = mundo->GetVerticesTierra();
 	bool posicion_correcta = false;
 	b2Vec2 posicion;

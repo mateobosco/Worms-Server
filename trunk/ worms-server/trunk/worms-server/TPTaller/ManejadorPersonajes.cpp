@@ -10,7 +10,7 @@
 #include <SDL2/SDL.h>
 
 
-#define RADIOMOUSE 1
+#define RADIOMOUSE 0.25
 
 ManejadorPersonajes::ManejadorPersonajes() {
 	this->personajesMax = MAX_CANT_PERSONAJES;

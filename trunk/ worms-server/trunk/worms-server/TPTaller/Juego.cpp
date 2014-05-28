@@ -164,7 +164,7 @@ void Juego::cargarLector(string tierra){
 	this->lector = new LectorMascara(tierra);
 	if(!this->lector){
 		loguear();
-		logFile << "    Error   " << "\t  No se pudo crear el Lector de Máscara. " <<  SDL_GetError()<< endl;
+		logFile << "    Error   " << "\t  No se pudo crear el L ector de Máscara. " <<  SDL_GetError()<< endl;
 	}
 }
 
