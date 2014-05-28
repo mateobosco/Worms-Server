@@ -80,11 +80,11 @@ int main_server(int argc,char* argv[]){
 		destruirPaqueteCiclo(paqueteCiclo);
 
 		structEvento* evento =NULL;
-	    while(evento == NULL){
-	    	SDL_LockMutex(un_mutex);
-	    	evento = (structEvento*) servidor->desencolarPaquete();
-	    	SDL_UnlockMutex(un_mutex);
-	    }
+//	    while(evento == NULL){
+		SDL_LockMutex(un_mutex);
+		evento = (structEvento*) servidor->desencolarPaquete();
+		SDL_UnlockMutex(un_mutex);
+//	    }
 
 	    if(evento!=NULL) {
 	    	juego->aplicarPaquete(evento);
