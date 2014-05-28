@@ -6,6 +6,7 @@
 #include "Dibujador.h"
 #include "Cargador.h"
 #include "ManejadorPersonajes.h"
+#include <ctime>
 
 ofstream logFile;
 
@@ -239,5 +240,13 @@ int checkCantParametros(int cant_parametros){
 	logFile << "Cantidad de parámetros inválida. Intente nuevamente " << endl;
 //	TODO Logear ERROR: Cantidad de parametros insuficientes.
 	return EXIT_FAILURE;
+}
+
+void showTime(){
+	   // current date/time based on current system
+	   time_t now = time(0);
+	   // convert now to string form
+	   char* dt = ctime(&now);
+	   cout << "The local date and time is: " << dt << endl;
 }
 #endif /* FUNCIONES_H_ */

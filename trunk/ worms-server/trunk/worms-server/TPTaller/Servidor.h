@@ -1,4 +1,5 @@
-
+#ifndef SERVIDOR_H_
+#define SERVIDOR_H_
 
 using namespace std;
 #include <sys/types.h>
@@ -20,9 +21,7 @@ using namespace std;
 #include "Cliente.h"
 #include "Paquete.h"
 
-
-#ifndef SERVIDOR_H_
-#define SERVIDOR_H_
+void showTime();
 
 class Servidor {
 public:
