@@ -72,6 +72,7 @@ private:
 
 	b2CircleShape* shape2;
 	float32 radio;
+	//Arma* arma_seleccionada;
 
 };
 

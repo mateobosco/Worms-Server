@@ -186,6 +186,17 @@ void Personaje::leermovimiento(int direccion, int id_jugador){
 			this->mover(b2Vec2(0,-3));
 			return;
 		}
+		//printf( " LA VELOCIDAD EN Y ES : %f \n", body->GetLinearVelocity().y);
+		if ( (direccion == 4  && body->GetLinearVelocity().y == 0 )  ){ // para arriba a la derecha
+			printf(" APLICO UN PAQUETE movimiento en la direccion  4");
+					this->mover(b2Vec2(2,-3));
+					return;
+		}
+		if ( (direccion == 5  && body->GetLinearVelocity().y == 0  )){ // para arriba a la izq
+			printf(" APLICO UN PAQUETE movimiento en la direccion 5 \n");
+				this->mover(b2Vec2(-2,-3));
+				return;
+		}
 
 //		if (direccion == 2  && body->GetLinearVelocity().y == 0){ // para arriba
 //			this->mover(b2Vec2(0,-5));
