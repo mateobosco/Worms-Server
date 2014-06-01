@@ -21,6 +21,7 @@ Juego::Juego(){
 	for (int i =0; i< 4; i++){
 		jugadores[i]=NULL;
 	}
+	jugador_actual = 0;
 }
 
 Juego::~Juego(){
@@ -212,10 +213,13 @@ structInicial* Juego::getPaqueteInicial(){
 void Juego::aplicarPaquete(structEvento* evento){
 	if (evento == NULL) return;
 	if (evento->click_mouse.x != -1){ // recibio un click
+		printf(" APLICO UN PAQUETE CLICKKKKK con las posiciones : (%f, %f) \n", evento->click_mouse.x, evento->click_mouse.y);
 		manejador->seleccionarPersonaje(evento->click_mouse, evento->nro_jugador);
 	}
-	if (evento->direccion == 1 || evento->direccion == 2 || evento->direccion == 3){ // recibio un click
+	if (evento->direccion > 0){ // recibio un click
 		manejador->moverPersonaje(evento->direccion , evento->nro_jugador);
+		//printf(" APLICO UN PAQUETE MOVIMIENTO, PASO DE TURNO");
+		//sthis->pasarTurno();
 	}
 	else return;
 }
@@ -231,3 +235,15 @@ Jugador* Juego::agregarJugador(int id, char* nombre_cliente){
 ManejadorPersonajes* Juego::getManejadorPersonajes(){
 	return this->manejador;
 }
+
+int Juego::getJugadorActual(){
+	return jugador_actual;
+}
+
+void Juego::pasarTurno(){
+	jugador_actual++;
+	if(jugador_actual == 5){
+		jugador_actual =0;
+	}
+}
+

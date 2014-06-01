@@ -30,6 +30,7 @@ class Juego{
 		void generarTierra();
 		void cargarFiguras(Cargador *cargador, Node nodo_escenario);
 		void cargaPrincipal(Cargador *cargador, Node nodo_escenario);
+		int jugador_actual;
 
 
 
@@ -58,6 +59,8 @@ class Juego{
 		void aplicarPaquete(structEvento* evento);
 		Jugador* agregarJugador(int id, char* nombre_cliente);
 		ManejadorPersonajes* getManejadorPersonajes();
+		int getJugadorActual();
+		void pasarTurno();
 
 
 };

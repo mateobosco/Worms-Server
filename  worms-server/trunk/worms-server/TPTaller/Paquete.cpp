@@ -134,7 +134,7 @@ structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, i
 
 }
 
-structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje){
+structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje, int jugador_actual){
 	structPaquete* paquete = (structPaquete*) malloc(MAX_PACK);
 	paquete->tipo = 1;
 
@@ -154,6 +154,7 @@ structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje){
 	}
 	paquete->cantidad_figuras = cantidad_figuras;
 	paquete->cantidad_personajes = cantidad_personajes;
+	paquete->turno_jugador = jugador_actual;
 	if (mensaje != NULL){
 		strcpy(paquete->mensaje_mostrar, mensaje);
 	}

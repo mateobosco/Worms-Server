@@ -193,7 +193,7 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 		if (this->enviar == false){
 			continue;
 		}
-		SDL_Delay(25);
+		SDL_Delay(10);
 		char envio[MAX_PACK];
 		memset(envio,0,MAX_PACK);
 		char envio2[MAX_PACK];
@@ -226,7 +226,7 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 }
 
 int Servidor::runEnviarInfoInicial(Cliente* cliente){
-	SDL_Delay(25);
+	SDL_Delay(10);
 	char envio[MAX_PACK];
 	memset(envio,0,MAX_PACK);
 	//SDL_LockMutex(this->mutex);
@@ -266,13 +266,14 @@ int Servidor::runRecibirInfo(void* cliente){
 
 	while(!client->getNombre()) printf("Falta Nombre");
 	while(client->getActivo()){
-		SDL_Delay(25);
+		SDL_Delay(10);
 		char paquete[MAX_PACK];
 		memset(paquete, 0, MAX_PACK);
 		if (setsockopt (client->getSocket()->getFD(), SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout,
 			sizeof(timeout)) < 0) return ERROR;
 		int cantidad = client->getSocket()->recibir(paquete, MAX_PACK);
 		if(cantidad >0){
+
 			structEvento* evento = (structEvento*) paquete;
 			void* novedad = malloc (MAX_PACK);
 			//SDL_LockMutex(this->mutex);
@@ -280,14 +281,23 @@ int Servidor::runRecibirInfo(void* cliente){
 			SDL_LockMutex(this->mutex);
 			if (this->paquetesRecibir.empty()) this->paquetesRecibir.push(novedad);
 			structEvento* anterior = (structEvento*) this->paquetesRecibir.front();
+			printf( " EL TAMANIO DEL STACK ES : %d \n", paquetesRecibir.size());
 			SDL_UnlockMutex(this->mutex);
 
 			if (evento == NULL) continue;
 			if (anterior == NULL) continue;
 			if (anterior->aleatorio != evento->aleatorio){
+				//printf(" ENTRA ACAAA\n");
 				if (evento->click_mouse.x == -1 && evento->direccion==-9 && evento->click_mouse.y == -1 ){
+					continue;
+				}
+				else if (evento->click_mouse.x == -0  && evento->click_mouse.y == -0){
+
 				}
 				else{
+					structEvento* novedad2 = (structEvento*) novedad;
+
+					printf(" *** dentro de recibir: recibo con las posiciones : (%f, %f) y direccion %d \n", evento->click_mouse.x, evento->click_mouse.y, evento->direccion);
 					this->paquetesRecibir.push(novedad);
 				}
 			}

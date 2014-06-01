@@ -37,6 +37,7 @@ class Mundo {
 		int getCantidadFiguras();
 
 
+
 	private:
 		int cantidad_vertices_tierra;
 		int cantidad_personajes;

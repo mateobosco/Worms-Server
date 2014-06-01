@@ -47,9 +47,9 @@ int main_server(int argc,char* argv[]){
 	juego->getMundo()->setVectorPersonajes(manejador_personajes->getPersonajes(), manejador_personajes->getCantidadPersonajes(), manejador_personajes->getCantidadJugadores());
 	juego->getMundo()->setFiguras(juego->getFiguras(), juego->getCantidadFiguras());
 
-	structPaquete* paqueteCiclo = crearPaqueteCiclo(juego->getMundo(), servidor->getMensajeMostrar());
-	structFigura* vector = paqueteCiclo->vector_figuras;
-	servidor->actualizarPaquete((char*)paqueteCiclo);
+	//structPaquete* paqueteCiclo = crearPaqueteCiclo(juego->getMundo(), servidor->getMensajeMostrar(), 1);
+	//structFigura* vector = paqueteCiclo->vector_figuras;
+	//servidor->actualizarPaquete((char*)paqueteCiclo);
 	juego->getMundo()->step(0.1,1,1);
 
 	SDL_Delay(2000);
@@ -73,18 +73,23 @@ int main_server(int argc,char* argv[]){
 		}
 		juego->getMundo()->setVectorPersonajes(manejador_personajes->getPersonajes(), manejador_personajes->getCantidadPersonajes(), manejador_personajes->getCantidadJugadores());
 		juego->getMundo()->setFiguras(juego->getFiguras(), juego->getCantidadFiguras());
-		structPaquete* paqueteCiclo = crearPaqueteCiclo(juego->getMundo(), servidor->getMensajeMostrar());
+		structPaquete* paqueteCiclo = crearPaqueteCiclo(juego->getMundo(), servidor->getMensajeMostrar(), juego->getJugadorActual());
 
 		servidor->actualizarPaquete((char*)paqueteCiclo);
 
+
+
 		destruirPaqueteCiclo(paqueteCiclo);
+		//printf(" LALALALALALALA \n");
+
+
 
 		structEvento* evento =NULL;
-//	    while(evento == NULL){
-		SDL_LockMutex(un_mutex);
-		evento = (structEvento*) servidor->desencolarPaquete();
-		SDL_UnlockMutex(un_mutex);
-//	    }
+	    //while(evento == NULL){
+	    //	SDL_LockMutex(un_mutex);
+	    	evento = (structEvento*) servidor->desencolarPaquete();
+		//SDL_UnlockMutex(un_mutex);
+	    //}
 
 	    if(evento!=NULL) {
 	    	juego->aplicarPaquete(evento);
