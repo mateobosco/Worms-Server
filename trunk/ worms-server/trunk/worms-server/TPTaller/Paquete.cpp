@@ -111,7 +111,7 @@ structEvento* crearPaqueteVacio(){
 	structEvento* paquete = new structEvento;
 	paquete->click_mouse = b2Vec2 (-1,-1);
 	paquete->direccion = -9;
-	paquete->nro_jugador = 0;
+	paquete->nro_jugador = MAX_CANT_JUGADORES;
 	paquete->aleatorio = random();
 	return paquete;
 }
