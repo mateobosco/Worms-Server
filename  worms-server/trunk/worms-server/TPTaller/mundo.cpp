@@ -41,6 +41,7 @@ void Mundo::crear_tierra(vector<int> vector_tierra){
 	b2BodyDef ChainDef;
 	b2Body* body = my_world->CreateBody(&ChainDef);
 	b2FixtureDef fd; // creo un fixture
+	fd.restitution = 0;
 	fd.shape = &shape; // le pongo el shape creado
 	body->CreateFixture(&fd); // al body le pongo la fixture creada
 	//delete vector; todo

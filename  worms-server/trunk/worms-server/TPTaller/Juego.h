@@ -54,7 +54,6 @@ class Juego{
 		Escalador* getEscalador();
 		string getCielo();
 		uint8 getCantidadFiguras();
-		int run();
 		structInicial* getPaqueteInicial();
 		void aplicarPaquete(structEvento* evento);
 		Jugador* agregarJugador(int id, char* nombre_cliente);
