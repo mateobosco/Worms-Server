@@ -54,7 +54,6 @@ int main_server(int argc,char* argv[]){
 
 	SDL_Delay(2000);
 	//TODO ACA ES DONDE TERMINA EL CODIGO INNECESARIO.
-
 	SDL_mutex *un_mutex = SDL_CreateMutex();
 	while(!servidor->getFinalizar()){
 		for (int i=0 ; i < servidor->getCantidadClientes() ; i++){
@@ -95,9 +94,8 @@ int main_server(int argc,char* argv[]){
 	    	juego->aplicarPaquete(evento);
 	    	free(evento);
 	    }
-	    SDL_Delay(25);
-
-		juego->getMundo()->step(0.05,100,100);
+	    SDL_Delay(10);
+		juego->getMundo()->step(0.025,100,100);
 		juego->getMundo()->comprobar_nivel_agua();
 
 	}

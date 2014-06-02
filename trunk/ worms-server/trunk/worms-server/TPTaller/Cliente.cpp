@@ -137,7 +137,7 @@ int Cliente::runEnviarInfo(){
 
 	while(this->activo){
 		if ( enviarpaquete == true){
-			SDL_Delay(25);
+			SDL_Delay(20);
 			char buffer[MAX_PACK];
 			memset(buffer,0,MAX_PACK);
 			memcpy(buffer, this->paquete_enviar, MAX_PACK);
@@ -179,7 +179,7 @@ int Cliente::runRecibirInfo(){
     timeout.tv_sec = 5;
     timeout.tv_usec = 0;
 	while(this->activo){
-		SDL_Delay(25);
+		SDL_Delay(20);
 		char buffer[MAX_PACK];
 		//char* buffer = (char*) malloc(sizeof(char) * MAX_PACK);
 		memset(buffer, 0, MAX_PACK);
