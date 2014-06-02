@@ -83,6 +83,8 @@ Personaje::~Personaje() {
 
 void Personaje::mover(b2Vec2 direccion){
 	float32 modulo = 0.20;
+	b2Vec2 velocidad = {0, 0};
+	this->getBody()->SetLinearVelocity(velocidad);
 	b2Vec2 fuerza = b2Vec2(modulo * direccion.x, modulo* direccion.y ); // TODO ver cuanto aplicarle
 	if (direccion.x > 0) orientacion = 1;
 	if (direccion.x < 0) orientacion = -1;
@@ -148,7 +150,7 @@ float32* Personaje::getVecY(){
 }
 
 void Personaje::leermovimiento(int direccion, int id_jugador){
-	if (this->nro_jugador == id_jugador&& seleccionado[id_jugador]){
+	if (this->nro_jugador == id_jugador && seleccionado[id_jugador]){
 
 		if (direccion == 3 && body->GetLinearVelocity().x < 0.7){ // para la derecha
 			dir_imagen = "TPTaller/imagenes/gusanitoderecha.png";
@@ -182,19 +184,25 @@ void Personaje::leermovimiento(int direccion, int id_jugador){
 		}
 		delete over;
 
-		if ((direccion == 2  && resultado) || (direccion == 2  && body->GetLinearVelocity().y == 0)){ // para arriba
+		if ((direccion == 2  && resultado) || (direccion == 2 /* && body->GetLinearVelocity().y == 0*/) && (body->GetContactList() != NULL)){ // para arriba
 			this->mover(b2Vec2(0,-3));
 			return;
 		}
 		//printf( " LA VELOCIDAD EN Y ES : %f \n", body->GetLinearVelocity().y);
-		if ( (direccion == 4  && body->GetLinearVelocity().y == 0 )  ){ // para arriba a la derecha
+		if ( (direccion == 4  /*&& body->GetLinearVelocity().y == 0*/ ) && (body->GetContactList() != NULL) ){ // para arriba a la derecha
 			printf(" APLICO UN PAQUETE movimiento en la direccion  4");
-					this->mover(b2Vec2(2,-3));
+			if(body->GetLinearVelocity().y == 0)
+				this->mover(b2Vec2(2,-3));
+			else
+				this->mover(b2Vec2(1,-1));
 					return;
 		}
-		if ( (direccion == 5  && body->GetLinearVelocity().y == 0  )){ // para arriba a la izq
+		if ( (direccion == 5  /*&& body->GetLinearVelocity().y == 0 */ ) && (body->GetContactList() != NULL)){ // para arriba a la izq
 			printf(" APLICO UN PAQUETE movimiento en la direccion 5 \n");
+			if(body->GetLinearVelocity().y == 0)
 				this->mover(b2Vec2(-2,-3));
+			else
+				this->mover(b2Vec2(-1,-1));
 				return;
 		}
 
