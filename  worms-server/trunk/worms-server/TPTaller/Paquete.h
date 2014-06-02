@@ -66,6 +66,6 @@ structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, i
 void destruirPaqueteFigura(structFigura* paquete);
 void destruirPaquetePersonaje(structPersonaje* paquete);
 void destruirPaqueteCiclo(structPaquete* paquete);
-
+bool estaVacio(structEvento* paquete);
 
 #endif /* PAQUETEDIBUJAR_H_ */

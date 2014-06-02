@@ -170,3 +170,7 @@ structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje, int jugador_actual
 void destruirPaqueteCiclo(structPaquete* paquete){
 	free(paquete);
 }
+
+bool estaVacio(structEvento* paquete){
+	return (paquete->nro_jugador == MAX_CANT_JUGADORES);
+}

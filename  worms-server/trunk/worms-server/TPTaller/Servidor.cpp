@@ -193,7 +193,7 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 		if (this->enviar == false){
 			continue;
 		}
-		SDL_Delay(10);
+		SDL_Delay(15);
 		char envio[MAX_PACK];
 		memset(envio,0,MAX_PACK);
 		char envio2[MAX_PACK];
@@ -266,7 +266,7 @@ int Servidor::runRecibirInfo(void* cliente){
 
 	while(!client->getNombre()) printf("Falta Nombre");
 	while(client->getActivo()){
-		SDL_Delay(10);
+		SDL_Delay(15);
 		char paquete[MAX_PACK];
 		memset(paquete, 0, MAX_PACK);
 		if (setsockopt (client->getSocket()->getFD(), SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout,
@@ -275,16 +275,21 @@ int Servidor::runRecibirInfo(void* cliente){
 		if(cantidad >0){
 
 			structEvento* evento = (structEvento*) paquete;
+			if ((evento == NULL) || (estaVacio(evento))) continue;
 			void* novedad = malloc (MAX_PACK);
 			//SDL_LockMutex(this->mutex);
-			memcpy(novedad, paquete, MAX_PACK); //todo ver como determinar el tamaño del paquete
 			SDL_LockMutex(this->mutex);
-			if (this->paquetesRecibir.empty()) this->paquetesRecibir.push(novedad);
-			structEvento* anterior = (structEvento*) this->paquetesRecibir.front();
-			printf( " EL TAMANIO DEL STACK ES : %d \n", paquetesRecibir.size());
+			memcpy(novedad, paquete, MAX_PACK);
 			SDL_UnlockMutex(this->mutex);
+			if (this->paquetesRecibir.empty()){
+				this->paquetesRecibir.push(novedad);
+			} else{
+				continue;
+			}
+			structEvento* anterior = (structEvento*) this->paquetesRecibir.front();
+			//printf( " EL TAMANIO DEL STACK ES : %d \n", paquetesRecibir.size());
 
-			if (evento == NULL) continue;
+//			if (evento == NULL) continue;
 			if (anterior == NULL) continue;
 			if (anterior->aleatorio != evento->aleatorio){
 				//printf(" ENTRA ACAAA\n");
