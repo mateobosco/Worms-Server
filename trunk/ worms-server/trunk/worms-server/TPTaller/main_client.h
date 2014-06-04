@@ -25,12 +25,12 @@ int mainCliente(int argc, char* argv[]){
 	}
 	char* name = new char[MAX_NAME_USER];
 	memset(name,0,MAX_NAME_USER);
-	char* nombre = argv[POS_NAME_USER]; //inicializar todo
+	char* nombre = argv[POS_NAME_USER];
 	strcpy(name,nombre);
 
 	char* ip_sv = new char[20];
 	memset(ip_sv,0,20);
-	char* ip = argv[POS_IP]; //inicializar todo
+	char* ip = argv[POS_IP];
 	strcpy(ip_sv,ip);
 
 	char* puerto = new char[10];
@@ -39,7 +39,6 @@ int mainCliente(int argc, char* argv[]){
 	strcpy(puerto,port);
 
 	Cliente* cliente = new Cliente(name, ip_sv, puerto);
-
 	if(cliente->conectar() != EXIT_SUCCESS){
 		printf("No se ha podido realizar la conexion\n"
 				"El programa se cerrará en 5 segundos.\n");
@@ -47,9 +46,7 @@ int mainCliente(int argc, char* argv[]){
 		return EXIT_FAILURE;
 	}
 
-	while (!cliente->getPaqueteInicial()){
-	}
-
+	while (!cliente->getPaqueteInicial());
 	structInicial* paqueteInicial = (structInicial*) cliente->getPaqueteInicial();
 	if(paqueteInicial->cliente_aceptado){
 		Escalador* escalador = new Escalador(paqueteInicial->ancho_ventana , paqueteInicial->alto_ventana,
@@ -58,10 +55,9 @@ int mainCliente(int argc, char* argv[]){
 		Dibujador* dibujador =new Dibujador(NULL, escalador);
 		dibujador->init();
 		SDL_Event event;
-		for(int i = 0; i < 322; i++) { // inicializa todas en falso
+		for(int i = 0; i < 322; i++) {
 		   KEYS[i] = false;
 		}
-
 		cliente->setDibujador(dibujador);
 		string pathAgua = string(paqueteInicial->agua);
 		string pathTierra = string(paqueteInicial->tierra);
@@ -69,10 +65,7 @@ int mainCliente(int argc, char* argv[]){
 		Agua* agua = new Agua(paqueteInicial->nivel_agua, pathAgua);
 		dibujador->iniciarFondo(agua, pathCielo, pathTierra);
 		dibujador->dibujarFondo(agua);
-
 		SDL_Delay(2000);
-
-
 		int* posicion_mouse_click = (int*)malloc (sizeof(int)*2);
 		memset(posicion_mouse_click,'\0',2);
 		int* posicion_mouse_scroll = (int*)malloc (sizeof(int)*3);
@@ -83,8 +76,7 @@ int mainCliente(int argc, char* argv[]){
 		posicion_mouse_click[1] = -1;
 
 		structPaquete* paquete;
-		float aux2=0;
-
+		float aux2 = 0;
 		while(KEYS[SDLK_ESCAPE] == false){
 			posicion_mouse_click[0] = -1;
 			posicion_mouse_click[1] = -1;
@@ -103,8 +95,8 @@ int mainCliente(int argc, char* argv[]){
 				delete evento;
 			}
 			float aux=cos(aux2);
-			aux2+=0.1;
-			if (aux2==360) aux2=0;
+			aux2 += 0.1;
+			if (aux2 == 360) aux2=0;
 			dibujador->dibujarPaquete(paquete, cliente->getNombre(), cliente->getID(), aux);
 			if(!cliente->getServidorConectado()){
 				cliente->dibujarMensajeDesconexion();

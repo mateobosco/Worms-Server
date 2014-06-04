@@ -37,7 +37,7 @@ Juego::~Juego(){
 	delete lector;
 	delete mundo;
 	delete manejador;
-	delete escalador; //todo
+	delete escalador;
 	for(Uint8 i = 0; i < cantidad_jugadores; i++){
 		if(jugadores[i] != NULL){
 			delete jugadores[i];
@@ -87,11 +87,9 @@ void Juego::cargar() {
 	Node *nodo_escenario = this->cargaInicial(cargador);
 	this->cargaPrincipal(cargador, *nodo_escenario);
 	inicial = cargador->getPaqueteInicial();
-	delete nodo_escenario; //todo
+	delete nodo_escenario;
 	delete cargador;
 }
-
-
 
 // Funciones Privadas:
 
@@ -209,23 +207,18 @@ structInicial* Juego::getPaqueteInicial(){
 	return this->inicial;
 }
 
-
 void Juego::aplicarPaquete(structEvento* evento){
 	if (evento == NULL) return;
 	if (evento->click_mouse.x != -1){ // recibio un click
-		printf(" APLICO UN PAQUETE CLICKKKKK con las posiciones : (%f, %f) \n", evento->click_mouse.x, evento->click_mouse.y);
 		manejador->seleccionarPersonaje(evento->click_mouse, evento->nro_jugador);
 	}
 	if (evento->direccion > 0){ // recibio un click
 		manejador->moverPersonaje(evento->direccion , evento->nro_jugador);
-		//printf(" APLICO UN PAQUETE MOVIMIENTO, PASO DE TURNO");
-		//sthis->pasarTurno();
 	}
 	else return;
 }
 
 Jugador* Juego::agregarJugador(int id, char* nombre_cliente){
-
 	this->jugadores[id] = new Jugador(mundo,id,manejador, nombre_cliente);
 	Personaje** pers = this->jugadores[id]->getPersonajes();
 	this->manejador->AgregarJugador(mundo,id, pers);
@@ -246,4 +239,3 @@ void Juego::pasarTurno(){
 		jugador_actual =0;
 	}
 }
-

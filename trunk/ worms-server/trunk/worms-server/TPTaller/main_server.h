@@ -3,6 +3,7 @@
 #include "Juego.h"
 #include "Funciones.h"
 #include "Servidor.h"
+#include <sys/time.h>
 
 int runServidor(void* serv){
 	return ((Servidor*) serv)->runEscucharConexiones();
@@ -46,28 +47,18 @@ int main_server(int argc,char* argv[]){
 	printf("-----------------------------------------EL SERVIDOR INICIA EL JUEGO-------------------------------------\n");
 	juego->getMundo()->setVectorPersonajes(manejador_personajes->getPersonajes(), manejador_personajes->getCantidadPersonajes(), manejador_personajes->getCantidadJugadores());
 	juego->getMundo()->setFiguras(juego->getFiguras(), juego->getCantidadFiguras());
-
-	//structPaquete* paqueteCiclo = crearPaqueteCiclo(juego->getMundo(), servidor->getMensajeMostrar(), 1);
-	//structFigura* vector = paqueteCiclo->vector_figuras;
-	//servidor->actualizarPaquete((char*)paqueteCiclo);
 	juego->getMundo()->step(0.1,1,1);
-
 	SDL_Delay(2000);
-	//TODO ACA ES DONDE TERMINA EL CODIGO INNECESARIO.
 	SDL_mutex *un_mutex = SDL_CreateMutex();
 	while(!servidor->getFinalizar()){
 		for (int i=0 ; i < servidor->getCantidadClientes() ; i++){
 			int* clientes = servidor->getVectorClientes();
-
 			if (clientes[i] != -1 && juego->getJugadores()[i] == NULL){
 				SDL_Delay(500);
-
 				Cliente* clienteActual = servidor->getClientes()[i];
 				char* nombre = clienteActual->getNombre();
 				Jugador* jug = juego->agregarJugador(i, nombre);
-
 				clienteActual->setJugador(jug);
-
 			}
 		}
 		juego->getMundo()->setVectorPersonajes(manejador_personajes->getPersonajes(), manejador_personajes->getCantidadPersonajes(), manejador_personajes->getCantidadJugadores());
@@ -75,20 +66,9 @@ int main_server(int argc,char* argv[]){
 		structPaquete* paqueteCiclo = crearPaqueteCiclo(juego->getMundo(), servidor->getMensajeMostrar(), juego->getJugadorActual());
 
 		servidor->actualizarPaquete((char*)paqueteCiclo);
-
-
-
 		destruirPaqueteCiclo(paqueteCiclo);
-		//printf(" LALALALALALALA \n");
-
-
-
 		structEvento* evento =NULL;
-	    //while(evento == NULL){
-	    //	SDL_LockMutex(un_mutex);
-	    	evento = (structEvento*) servidor->desencolarPaquete();
-		//SDL_UnlockMutex(un_mutex);
-	    //}
+	    evento = (structEvento*) servidor->desencolarPaquete();
 
 	    if(evento!=NULL) {
 	    	juego->aplicarPaquete(evento);
@@ -97,15 +77,12 @@ int main_server(int argc,char* argv[]){
 	    SDL_Delay(10);
 		juego->getMundo()->step(0.025,100,100);
 		juego->getMundo()->comprobar_nivel_agua();
-
 	}
-
-
 	logFile.close();
 	delete juego;
 	delete servidor;
 	return retorno;
 	SDL_DestroyMutex(un_mutex);
-
 }
+
 #endif /* MAIN_SERVER_H_ */

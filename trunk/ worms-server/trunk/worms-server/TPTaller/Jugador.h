@@ -13,7 +13,6 @@ class Jugador{
 		SDL_Color color;
 		Personaje *personajes[MAX_CANT_PERSONAJES];
 		void seleccionarColor();
-//		static Uint8 cantidad_jugadores;
 
 	public:
 		Jugador(Mundo *mundo, uint8 cantidad, ManejadorPersonajes *manejador, char* nombre_cliente);
@@ -25,7 +24,5 @@ class Jugador{
 		SDL_Color getColor();
 		void desconectar();
 };
-
-//Uint8 Jugador::cantidad_jugadores = 1;
 
 #endif /* JUGADOR_H_ */

@@ -1,12 +1,9 @@
-
-
 #include "Paquete.h"
 
 structFigura* crearPaqueteFigura(Figura* figura){
 	structFigura* paquete = new structFigura;
 	int tipo = figura->tipo;
 	paquete->color= figura->getColor();
-	//b2Vec2* vector1;
 
 	if (tipo == 0){ //ES UN CIRCULO
 		Circulo* circulo = (Circulo*) figura;
@@ -52,7 +49,6 @@ structPersonaje* crearPaquetePersonaje(Personaje* personaje){
 	paquete->conectado = personaje->getConectado();
 	paquete->id_jugador = personaje->getNrojugador();
 	strcpy(paquete->nombre_cliente, personaje->getNombreCliente());
-	//paquete->nombre_cliente = personaje->getNombreCliente();
 	bool* seleccion = personaje->getSeleccion();
 	for (int i = 0 ; i<4; i++){
 		if (seleccion[i]){
@@ -62,21 +58,17 @@ structPersonaje* crearPaquetePersonaje(Personaje* personaje){
 			paquete->seleccionado[i]=0;
 		}
 	}
-
 	return paquete;
 }
 
 
 void destruirPaqueteFigura(structFigura* paquete){
-	//delete[] paquete->vector_vertices;
 	delete paquete;
 }
 
 void destruirPaquetePersonaje(structPersonaje* paquete){
 	delete paquete;
 }
-
-
 
 structEvento* crearPaqueteClick(int* click, Escalador* escalador, int cliente){
 	structEvento* paquete = new structEvento; //todo
@@ -86,7 +78,6 @@ structEvento* crearPaqueteClick(int* click, Escalador* escalador, int cliente){
 	paquete->direccion = -9; //DIRECION NO VALIDA
 	paquete->nro_jugador = cliente;
 	paquete->aleatorio = random();
-
 	return paquete;
 }
 
@@ -131,7 +122,6 @@ structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, i
 		paquete = crearPaqueteVacio();
 	}
 	return paquete;
-
 }
 
 structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje, int jugador_actual){
@@ -161,9 +151,6 @@ structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje, int jugador_actual
 	else {
 		memset(paquete->mensaje_mostrar, 0, MAX_MENSAJE);
 	}
-
-
-
 	return paquete;
 }
 

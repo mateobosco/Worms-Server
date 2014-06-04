@@ -13,11 +13,11 @@ Socket::Socket(const char *ip, const char *puerto) {
 	if (!ip) hints.ai_flags = AI_PASSIVE;
 	int estado = getaddrinfo(ip,this->puerto,&hints,&this->info);
 	if(estado !=0){
-		//loguear error
+		//loguear error todo
 		exit(1);
 	}
 	if ((this->sockFD = socket(info->ai_family, info->ai_socktype,info->ai_protocol)) == -1) {
-		//log error
+		//log error todo
 		perror("socket");
 	}
 	this->activo = true;
@@ -27,10 +27,10 @@ Socket::Socket(const char* puerto, int sockfd) {
 	this->puerto = puerto;
 	this->sockFD = sockfd;
 	this->activo = true;
+	this->info = NULL;
 }
 
 Socket::~Socket() {
-//	if(this->info)freeaddrinfo(this->info);
 	close(this->sockFD);
 }
 
@@ -47,7 +47,7 @@ int Socket::EnlazarYEscuchar(int cantMaxCon){
 	setsockopt(this->sockFD, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int));
 		//log errot todo
 	if (bind(this->sockFD, this->info->ai_addr, this->info->ai_addrlen) == -1) {
-		//log error
+		//log error todo
 		close(this->sockFD);
 		perror("bind");
 	}
@@ -57,10 +57,8 @@ int Socket::EnlazarYEscuchar(int cantMaxCon){
 int Socket::escuchar(int cantMaxCon){
 	int l = listen(this->sockFD, cantMaxCon);
 	if (l == -1) {
-			//loguear error todo
-	//		perror("listen");
-	//		exit(3);
-			return -1;
+		//loguear error todo
+		return -1;
 	}
 	return l;
 }
@@ -77,10 +75,8 @@ int Socket::aceptar(){
 	if (nuevoFD == -1) {
 		//loguear error todo
 		close(nuevoFD);
-		//perror("accept");
 	}
 	return nuevoFD;
-
 }
 
 void Socket::setInfo(struct sockaddr* sock ){
@@ -103,7 +99,3 @@ int Socket::recibir(char* buffer, int longBuffer){
 int Socket::getFD(){
 	return this->sockFD;
 }
-
-
-
-

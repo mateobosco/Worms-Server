@@ -18,11 +18,9 @@ LectorMascara::LectorMascara(string& path) {
 }
 
 LectorMascara::~LectorMascara() {
-
 }
 
-Uint32 getpixel(SDL_Surface *surface, int x, int y)
-{
+Uint32 getpixel(SDL_Surface *surface, int x, int y){
    int bpp = surface->format->BytesPerPixel;
    Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
 
@@ -50,10 +48,9 @@ Uint32 getpixel(SDL_Surface *surface, int x, int y)
 
 b2Vec2* LectorMascara::LeerMascara(Escalador* escalador){
 
-	Uint32 *pixels = (Uint32 *) superficie->pixels;            // Agarra los pixeles de la superficie
+	Uint32 *pixels = (Uint32 *) superficie->pixels; // Agarra los pixeles de la superficie
 	if(!pixels)return NULL;
 	int i;
-	//int ancho = this->PIXEL_ANCHO;
 
 	b2Vec2* tierra_escalada = new b2Vec2[this->PIXEL_ANCHO];
 	vector<int> tierra ;
@@ -73,8 +70,7 @@ b2Vec2* LectorMascara::LeerMascara(Escalador* escalador){
 	for (i = 0; i < this->PIXEL_ANCHO; i++){
 			tierra_escalada[i].x = i * (escalador->getEscalaX()/ escalador->getPixelX());
 			tierra_escalada[i].y = escalador->getEscalaY();
-		}
-
+	}
 	for (int i = 0; i<this->PIXEL_ANCHO ; i++){
 		int j;
 		for(j= 0 ; j< PIXEL_ALTO; j++){
@@ -86,10 +82,10 @@ b2Vec2* LectorMascara::LeerMascara(Escalador* escalador){
 		}
 	}
 	for (i = 0; i < this->PIXEL_ANCHO; i++){
-				if (tierra_escalada[i].y == (escalador->getEscalaY())){
-					tierra_escalada[i].y = (escalador->getEscalaY()) *1.5;
-				}
-			}
+		if (tierra_escalada[i].y == (escalador->getEscalaY())){
+			tierra_escalada[i].y = (escalador->getEscalaY()) *1.5;
+		}
+	}
 	return tierra_escalada; //ver delete todo
 }
 
@@ -107,7 +103,6 @@ void LectorMascara::setMascaraPorDefecto(){
 	if(this->superficie == NULL){
 		loguear();
 		logFile << "    Error   " <<"\t No se puede cargar la máscara. " << endl;
-
 	}
 	this->PIXEL_ANCHO =  superficie->w;
 	this->PIXEL_ALTO =  superficie->h;

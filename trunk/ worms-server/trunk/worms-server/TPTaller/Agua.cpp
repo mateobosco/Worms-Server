@@ -6,10 +6,9 @@
 
 extern ofstream logFile;
 
-
 Agua::Agua(float32 nivel_agua, string &origen){
 	this->nivel = nivel_agua;
-	this->surface = IMG_Load( origen.c_str() );
+	this->surface = IMG_Load(origen.c_str());
 	if(this->surface == NULL){
 		loguear();
 		logFile << "  Warning " <<"\t Imagen de agua no fue cargada. Path incorrecto. Por defecto se carga imagen de agua de:" << pathDefAgua << endl;
@@ -34,4 +33,3 @@ SDL_Surface* Agua::GetSurface(){
 string Agua::GetPath(){
 	return this->path;
 }
-

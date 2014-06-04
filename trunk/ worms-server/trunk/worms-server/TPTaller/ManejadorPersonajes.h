@@ -1,10 +1,3 @@
-/*
- * ManejadorPersonajes.h
- *
- *  Created on: 26/04/2014
- *      Author: juanmahidalgo
- */
-
 #ifndef MANEJADORPERSONAJES_H_
 #define MANEJADORPERSONAJES_H_
 
@@ -14,7 +7,7 @@ class ManejadorPersonajes {
 public:
 	ManejadorPersonajes();
 	void seleccionarPersonaje(b2Vec2 posicion, int id_jugador);
-	void AgregarJugador(Mundo* mundo, int id_jugador, Personaje** pers); //TODO hay que borrarlo
+	void AgregarJugador(Mundo* mundo, int id_jugador, Personaje** pers);
 	Personaje** getPersonajes();
 	int getCantidadPersonajes();
 	void moverPersonaje(int direccion,int id_jugador);
@@ -27,7 +20,6 @@ private:
 	uint8 personajesMax;
 	uint8 cantidad_jugadores;
 	uint8 cantidad_actual_personajes;
-
 };
 
 #endif /* MANEJADORPERSONAJES_H_ */

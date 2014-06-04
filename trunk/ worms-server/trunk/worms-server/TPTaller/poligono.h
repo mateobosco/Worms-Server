@@ -9,7 +9,6 @@
 
 class Poligono : public Figura {
 	public:
-
 		Poligono(Mundo* mundo, b2Vec2 posicion, float32 escala, int lados, bool estatico, SDL_Color color , int masa, float32 rotacion);
 		~Poligono();
 		int getCantVertices();
@@ -17,7 +16,6 @@ class Poligono : public Figura {
 		float32* getVecY();
 		int dibujar(Dibujador* un_dibujador);
 		b2Vec2* getVertices();
-
 
 	private:
 		float32 radio; // longitud desde el centro al vertice (radio)
