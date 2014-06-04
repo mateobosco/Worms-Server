@@ -42,4 +42,3 @@ class Figura : public Dibujable{
 };
 
 #endif
-

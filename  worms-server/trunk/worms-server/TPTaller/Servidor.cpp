@@ -20,8 +20,9 @@ Servidor::Servidor(int maxCon){
 		vector_clientes[i]=0;
 		clientes[i] = NULL;
 	}
+	this->escuchar = NULL;
+	this->aceptar = NULL;
 }
-
 
 Servidor::~Servidor() {
 	this->finalizar = true;
@@ -41,9 +42,7 @@ void Servidor::setPaqueteInicial(char paquete[MAX_PACK]){
 
 void Servidor::actualizarPaquete(char paquete[MAX_PACK]){
 	this->enviar=true;
-	//SDL_LockMutex(mutex);
 	memcpy(this->paqueteEnviar, paquete, MAX_PACK);
-	//SDL_UnlockMutex(mutex);
 }
 
 void* Servidor::desencolarPaquete(){
@@ -86,9 +85,6 @@ int Servidor::validarSocket(int sock){
 			if(fd != fdSock) salida = 0;
 			else return 1;
 		}
-//		int fd = this->clientes[i]->getSocket()->getFD();
-//		if(fd != fdSock) salida = 0;
-//		else return 1;
 	}
 	return salida;
 }
@@ -97,16 +93,14 @@ int Servidor::aceptarConexiones(){
 	int sockCliente = this->listener->aceptar();
 	//Se crea un cliente y un thread asociado a el y se invoca el método run.
 	if(sockCliente > 0){
-
 		Cliente* cliente = new Cliente(sockCliente);
 		bool recibio_nombre = false;
-		//SDL_LockMutex(this->mutex);
 		while (!recibio_nombre){
 			int bytes = this->recibirNombre(cliente);
 			if(bytes > 0 ) recibio_nombre = true;
 			if(bytes <= 0){
 				printf("Error al recibir nombre del cliente\n");
-				return EXIT_FAILURE;// TODO Verificar qué pasa si la # de Bytes es -1 o 0;
+				return EXIT_FAILURE;
 			}
 		}
 		if(recibio_nombre){
@@ -129,7 +123,7 @@ int Servidor::aceptarConexiones(){
 					}
 					this->setAceptado(true);
 					cliente->activar();
-					if (this->runEnviarInfoInicial(cliente) <= 0 ) /*log Error todo */;
+					if (this->runEnviarInfoInicial(cliente) <= 0 ){} /*log Error todo */
 					conexion_t par;
 					par.cliente = cliente;
 					par.servidor = this;
@@ -152,8 +146,7 @@ int Servidor::aceptarConexiones(){
 				}else {
 					this->setAceptado(false);
 					printf("Cliente Rechazado\n");
-					//this->runEnviarInfoInicial(cliente);
-					if (this->runEnviarInfoInicial(cliente) <= 0 ) /*log Error todo */;
+					if (this->runEnviarInfoInicial(cliente) <= 0){} /*log Error todo */
 					delete cliente;
 					return EXIT_FAILURE;
 				}
@@ -184,11 +177,9 @@ int Servidor::validarCliente(Cliente* cliente){
 
 int Servidor::runEnviarInfo(Cliente* cliente){
 	while(!cliente->getNombre());
-
 	struct timeval timeout;
 	timeout.tv_sec = 10;
 	timeout.tv_usec = 0;
-
 	while(cliente->getActivo()){
 		if (this->enviar == false){
 			continue;
@@ -198,16 +189,13 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 		memset(envio,0,MAX_PACK);
 		char envio2[MAX_PACK];
 		memset(envio2,0,MAX_PACK);
-		//SDL_LockMutex(this->mutex);
 		memcpy(envio, this->paqueteEnviar, MAX_PACK);
-		//SDL_UnlockMutex(this->mutex);
 		structPaquete* paqueteCiclo = (structPaquete*) envio;
 		paqueteCiclo->id=cliente->getID();
 		memcpy(envio2, paqueteCiclo, MAX_PACK);
 		if (setsockopt (cliente->getSocket()->getFD(), SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout,
 			sizeof(timeout)) < 0) return ERROR;
 		int enviados = cliente->getSocket()->enviar(envio2, MAX_PACK);
-
 		if (enviados > 0){
 			this->enviar = false;
 		}
@@ -229,10 +217,7 @@ int Servidor::runEnviarInfoInicial(Cliente* cliente){
 	SDL_Delay(10);
 	char envio[MAX_PACK];
 	memset(envio,0,MAX_PACK);
-	//SDL_LockMutex(this->mutex);
 	memcpy(envio, this->paqueteInicial, MAX_PACK);
-	//SDL_UnlockMutex(this->mutex);
-
 	struct timeval timeout;
 	timeout.tv_sec = 10;
 	timeout.tv_usec = 0;
@@ -277,7 +262,6 @@ int Servidor::runRecibirInfo(void* cliente){
 			structEvento* evento = (structEvento*) paquete;
 			if ((evento == NULL) || (estaVacio(evento))) continue;
 			void* novedad = malloc (MAX_PACK);
-			//SDL_LockMutex(this->mutex);
 			SDL_LockMutex(this->mutex);
 			memcpy(novedad, paquete, MAX_PACK);
 			SDL_UnlockMutex(this->mutex);
@@ -287,12 +271,8 @@ int Servidor::runRecibirInfo(void* cliente){
 				continue;
 			}
 			structEvento* anterior = (structEvento*) this->paquetesRecibir.front();
-			//printf( " EL TAMANIO DEL STACK ES : %d \n", paquetesRecibir.size());
-
-//			if (evento == NULL) continue;
 			if (anterior == NULL) continue;
 			if (anterior->aleatorio != evento->aleatorio){
-				//printf(" ENTRA ACAAA\n");
 				if (evento->click_mouse.x == -1 && evento->direccion==-9 && evento->click_mouse.y == -1 ){
 					continue;
 				}
@@ -300,9 +280,6 @@ int Servidor::runRecibirInfo(void* cliente){
 
 				}
 				else{
-					structEvento* novedad2 = (structEvento*) novedad;
-
-					printf(" *** dentro de recibir: recibo con las posiciones : (%f, %f) y direccion %d \n", evento->click_mouse.x, evento->click_mouse.y, evento->direccion);
 					this->paquetesRecibir.push(novedad);
 				}
 			}
@@ -325,7 +302,6 @@ int Servidor::runRecibirInfo(void* cliente){
 			client->desactivar();
 			loguear();
 			logFile << "Error al recibir información del cliente: " << client->getNombre() << endl;
-//			break;
 		}
 	}
 	return EXIT_SUCCESS;
@@ -336,7 +312,6 @@ int Servidor::runEscucharConexiones(){
 	try{
 		conexiones = this->getSocket()->EnlazarYEscuchar(this->cantidadMaxConexiones);
 	}catch(exception &e){
-		//loguear error
 		loguear();
 		logFile << "No se pudo enlazar y escuchar" << endl;
 		close(this->listener->getFD());

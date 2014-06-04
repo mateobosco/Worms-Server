@@ -32,7 +32,6 @@ Jugador::Jugador(Mundo *mundo, uint8 cantidad, ManejadorPersonajes *manejador, c
 		this->personajes[i] = new Personaje(mundo, this->numero, nombre_cliente);
 		manejador->agregarPersonaje(this->personajes[i], this->numero);
 	}
-//	Jugador::cantidad_jugadores++;
 }
 
 Jugador::~Jugador(){
@@ -41,7 +40,6 @@ Jugador::~Jugador(){
 			delete this->personajes[i];
 		}
 	}
-//	Jugador::cantidad_jugadores--;
 }
 
 Personaje** Jugador::getPersonajes(){
@@ -59,7 +57,6 @@ Uint8 Jugador::getNumero(){
 void Jugador::conectar(){
 	for( int i =0; i<4; i++){
 		this->personajes[i]->conectar();
-
 	}
 }
 

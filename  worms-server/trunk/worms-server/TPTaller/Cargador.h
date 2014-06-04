@@ -22,11 +22,10 @@ using namespace YAML;
 
 class Cargador{
 	public:
-
 		Cargador(const char* filename);
 		~Cargador();
 
-		bool load(Mundo mundo); //b2World
+		bool load(Mundo mundo);
 		Escalador* loadEscalador(Node nodo);
 		bool loadPath(Node nodo, const char* clave,string& resultado);
 		Circulo* loadCirculo(Node nodo, Mundo* mundo, Escalador *escalador,size_t i);
@@ -38,7 +37,6 @@ class Cargador{
 		bool getNodo(const Node nodoO,Node &nodoD, const char* clave);
 		ifstream* getStream();
 		structInicial* getPaqueteInicial();
-
 
 	private:
 		ifstream f_input;
@@ -61,11 +59,4 @@ class Cargador{
 
 };
 
-
-
-
-
-
 #endif /* CARGADOR_H_ */
-
-

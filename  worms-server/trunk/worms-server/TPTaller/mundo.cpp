@@ -45,7 +45,6 @@ void Mundo::crear_tierra(vector<int> vector_tierra){
 	fd.shape = &shape; // le pongo el shape creado
 	body->CreateFixture(&fd); // al body le pongo la fixture creada
 	//delete vector; todo
-
 }
 
 b2World* Mundo::devolver_world(){
@@ -85,7 +84,6 @@ void Mundo::Crear_Chains(b2Vec2* tierra, float32 pixelesX){
 	this->vertices_tierra = vs;
 	this->cantidad_vertices_tierra = cantidad+2;
 	delete[] tierra;
-	//delete[] vs;
 }
 
 void Mundo::comprobar_nivel_agua(){
@@ -169,7 +167,6 @@ bool Mundo::checkOverlap(Figura* figura_ins, Escalador *escalador,size_t i){
 			b2ChainShape *chain_world = ((b2ChainShape*) forma_world);
 			b2Vec2* vector_tierra = chain_world->m_vertices;
 			int32 max_vertx = chain_world->GetChildCount();
-
 			b2Vec2 pos_ins = figura_ins->getBody()->GetPosition();
 			if( pos_ins.x < 0 ){
 				if(pos_ins.y > vector_tierra[0].y) {
@@ -209,11 +206,9 @@ bool Mundo::destruir_cuerpo(b2Body* cuerpo){
 	return false;
 }
 
-
 int Mundo::GetCantVerticesTierra(){
 	return cantidad_vertices_tierra;
 }
-
 
 b2Vec2* Mundo::GetVerticesTierra(){
 	return vertices_tierra;
@@ -221,7 +216,6 @@ b2Vec2* Mundo::GetVerticesTierra(){
 b2Vec2 Mundo::GetEscalas(){
 	return escalas;
 }
-
 
 void Mundo::setFiguras(Figura** vect_figuras, int cant_figuras){
 	figuras = vect_figuras;

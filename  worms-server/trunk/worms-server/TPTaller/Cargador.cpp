@@ -8,9 +8,7 @@
 
 using namespace std;
 
-
 Cargador::Cargador(const char* filename){
-
 	this->datos = new structInicial;
 	(this->f_input).open(filename,ios::in);
 	if(!f_input){
@@ -28,6 +26,7 @@ Cargador::Cargador(const char* filename){
 		logFile <<"    Error  " << "\t El escenario no pudo ser cargado en un nodo. Se carga el escenario de '"<<pathDefEs<< "' por defecto." << endl;
 	}
 }
+
 Cargador::~Cargador(){
 	try{
 		this->f_input.close();
@@ -514,9 +513,7 @@ bool Cargador::validarColor(string color){
 			}
 		}
 	}
-
 	return valido;
-
 }
 
 SDL_Color Cargador::cargarColor(string color,size_t i){
@@ -543,7 +540,6 @@ SDL_Color Cargador::cargarColor(string color,size_t i){
 }
 
 int Cargador::cantidadLados(const Node nodo,size_t i,string tipo){
-
 	if(tipo.compare(0,1,"t")==0){
 		return triangulo;
 	}else if(tipo.compare(0,1,"c")==0){

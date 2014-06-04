@@ -26,9 +26,7 @@ Rectangulo::Rectangulo(Mundo* mundo, b2Vec2 posicion, float32 anchoParam, float3
 
 	if(estatico) bodyDef.type = b2_staticBody;
 	else bodyDef.type = b2_dynamicBody;
-
 	body = world->CreateBody(&bodyDef);
-
 
 	b2MassData massData;
 	massData.mass =  masa;
@@ -84,7 +82,6 @@ b2Vec2* Rectangulo::getVertices(){
 	punto.Set(radio*cos(ang * PI/180),radio*sin(ang * PI/180));
 	vertices[3]= punto + body->GetPosition();
 
-
 	return vertices;
 }
 
@@ -97,7 +94,6 @@ float32* Rectangulo::getVecX(){
 		vector_x[i] = vertices[i].x;
 	}
 	delete[] vertices;
-	//free(vertices);
 	return vector_x;
 }
 
@@ -110,7 +106,6 @@ float32* Rectangulo::getVecY(){
 		vector_y[i] = vertices[i].y;
 	}
 	delete[] vertices;
-	//free(vertices);
 	return vector_y;
 }
 

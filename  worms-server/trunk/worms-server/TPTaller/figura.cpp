@@ -6,18 +6,17 @@
 
 #include "figura.h"
 
-
 Figura::Figura(SDL_Color color,	float32 rot){
-	body = NULL;
+	this->body = NULL;
 	this->hundido = false;
 	this->color = color;
 	this->rotacion_inicial = rot;
+	this->tipo = 0;
 }
 
 Figura::~Figura(){
 	b2World* mundo = body->GetWorld();
 	mundo->DestroyBody(body);
-	//delete shape; //SUPONGO QUE ESTO YA LO HACE EL DESTROY BODY
 }
 
 b2Vec2 Figura::obtenerPosicion(){
@@ -43,4 +42,3 @@ void Figura::Hundir(){
 void Figura::setPosicionInicial(){
 	this->body->SetTransform(posicion_inicial,rotacion_inicial);
 }
-

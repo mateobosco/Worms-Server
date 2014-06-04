@@ -18,10 +18,9 @@ Cliente::Cliente(int fd){
 	this->activo = false;
 	this->hilos.enviar = NULL;
 	this->hilos.recibir = NULL;
-	jugador=NULL;
+	this->jugador = NULL;
+	this->dibujador = NULL;
 }
-
-
 
 Cliente::Cliente(const char *name, const char *ip_sv, const char *puerto){
 	this->name_client = new char[MAX_NAME_USER];
@@ -40,13 +39,12 @@ Cliente::Cliente(const char *name, const char *ip_sv, const char *puerto){
 	this->hilos.recibir = NULL;
 	this->enviarpaquete = true;
 	this->servidor_conectado = true;
+	this->jugador = NULL;
+	this->dibujador = NULL;
 }
 
 Cliente::~Cliente(){
-	//if (paqueteInicial) delete paqueteInicial;
 	this->activo = false;
-//	SDL_WaitThread(this->hilos.enviar, 0);
-//	SDL_WaitThread(this->hilos.recibir, 0);
 	delete this->socket_cl;
 	SDL_DestroyMutex(mutex);
 	Cliente::cant_clientes--;
@@ -55,7 +53,6 @@ Cliente::~Cliente(){
 Socket* Cliente::getSocket(){
 	return this->socket_cl;
 }
-
 
 int Cliente::getID(){
 	return this->id;
@@ -66,10 +63,8 @@ void Cliente::setID(int un_id){
 }
 
 char* Cliente::getPaquete(){
-	//SDL_LockMutex(this->mutex);
 	char* buffer = new char[MAX_PACK];
 	memcpy(buffer, this->paquete_recibir, MAX_PACK);
-	//SDL_UnlockMutex(this->mutex);
 	return buffer;
 }
 
@@ -114,7 +109,6 @@ int Cliente::conectar(){
 	if(!this->paqueteInicial->cliente_aceptado) return EXIT_FAILURE;
 	this->activar();
 
-//		this->conectado = true; //todo
 	hilos.recibir = SDL_CreateThread(runRecvInfoCliente, "recibirServidor",(void*)this);
 	if(hilos.recibir == NULL){
 		loguear();
@@ -143,7 +137,7 @@ int Cliente::runEnviarInfo(){
 			memcpy(buffer, this->paquete_enviar, MAX_PACK);
 		    if (setsockopt (this->getSocket()->getFD(), SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout,
 		        sizeof(timeout)) < 0) 	return ERROR;
-			int enviados = this->enviar(buffer, MAX_PACK); //todo
+			int enviados = this->enviar(buffer, MAX_PACK);
 			if (enviados > 0){
 				enviarpaquete = false;
 			}
@@ -153,12 +147,10 @@ int Cliente::runEnviarInfo(){
 				logFile << " Error \t Se enviaron 0 bytes de información al servidor." << endl;
 				this->desactivar();
 			}
-
 				if(enviados == -1){
 				this->servidor_conectado = false;
 				loguear();
 				logFile << "\t Error al enviar información del cliente "<< this->name_client <<" al servidor. " << endl;
-				//break;
 				printf("Tiró -1 en enviar\n");
 				this->desactivar();
 			}
@@ -167,12 +159,10 @@ int Cliente::runEnviarInfo(){
 	return EXIT_SUCCESS;
 }
 
-
 //solo envia info al servidos a través del thread
 int Cliente::enviar(char* mensaje, size_t longData){
 	return this->socket_cl->enviar(mensaje, longData);
 }
-
 
 int Cliente::runRecibirInfo(){
     struct timeval timeout;
@@ -181,7 +171,6 @@ int Cliente::runRecibirInfo(){
 	while(this->activo){
 		SDL_Delay(20);
 		char buffer[MAX_PACK];
-		//char* buffer = (char*) malloc(sizeof(char) * MAX_PACK);
 		memset(buffer, 0, MAX_PACK);
 
 	    if (setsockopt (this->getSocket()->getFD(), SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout,
@@ -191,7 +180,6 @@ int Cliente::runRecibirInfo(){
 			memcpy(this->paquete_recibir, buffer, MAX_PACK);
 		}
 		else if(recibidos ==0){
-			//this->dibujarMensajeDesconexion();
 			this->servidor_conectado = false;
 			loguear();
 			SDL_Delay(11000);
@@ -208,7 +196,6 @@ int Cliente::runRecibirInfo(){
 	}
 	return EXIT_SUCCESS;
 }
-
 
 void Cliente::actualizarPaquete(structEvento* evento){
 	if(evento != NULL){
@@ -270,7 +257,6 @@ void Cliente::setJugador(Jugador* jug){
 Jugador* Cliente::getJugador(){
 	return this->jugador;
 }
-
 
 void Cliente::setDibujador(Dibujador* dibu){
 	this->dibujador = dibu;

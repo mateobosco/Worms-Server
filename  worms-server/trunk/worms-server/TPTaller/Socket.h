@@ -1,10 +1,3 @@
-/*
- * Socket.h
- *
- *  Created on: 06/05/2014
- *      Author: sami
- */
-
 #ifndef SOCKET_H_
 #define SOCKET_H_
 

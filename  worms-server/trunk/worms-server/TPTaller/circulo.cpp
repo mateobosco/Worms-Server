@@ -1,6 +1,5 @@
 #include "circulo.h"
 
-
 Circulo::Circulo(Mundo *mundo,  b2Vec2 posicion, float32 escala,  bool estatico, SDL_Color color, float32 masa, float32 rot) : Figura(color,rot){
 
 	tipo = 0;

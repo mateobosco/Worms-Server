@@ -10,12 +10,10 @@ using namespace std;
 
 class Mundo {
 	public:
-		// inicializa las varibles
 		Mundo(b2Vec2 gravedad, Agua* el_agua, b2Vec2 escalas);
-		// destruye el mundo
 		~Mundo();
-		bool destruir_cuerpo(b2Body* cuerpo); // no estoy seguro si recibe el cuerpo, hay qe pensarlo
-		b2Body* devolverBodies(); // funcion que devuelve todos los cuerpos que estan en el mundo
+		bool destruir_cuerpo(b2Body* cuerpo);
+		b2Body* devolverBodies();
 		void crear_tierra(vector<int> vector_tierra);
 		b2World* devolver_world();
 		void step(float32 timeStep, int32 velocityIterations, int32 positionIterations);
@@ -36,13 +34,10 @@ class Mundo {
 		Figura** getFiguras();
 		int getCantidadFiguras();
 
-
-
 	private:
 		int cantidad_vertices_tierra;
 		int cantidad_personajes;
 		int cantidad_jugadores;
-		//int cantidad_figuras
 		b2Vec2 escalas;
 		b2Vec2* vertices_tierra;
 		b2Vec2 grav;
@@ -54,5 +49,3 @@ class Mundo {
 };
 
 #endif
-
-

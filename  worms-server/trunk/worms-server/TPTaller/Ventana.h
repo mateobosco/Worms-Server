@@ -1,15 +1,7 @@
-/*
- * Ventana.h
- *
- *  Created on: 28/04/2014
- *      Author: mateo
- */
-
 #ifndef VENTANA_H_
 #define VENTANA_H_
 
-
-class Ventana {
+class Ventana{
 public:
 	Ventana(int sizeX , int sizeY, int escenarioX, int escenarioY);
 	virtual ~Ventana();
@@ -22,7 +14,6 @@ public:
 	void moverAbajo();
 	void zoomAlejar();
 	void zoomAcercar();
-
 
 private:
 	int ventanaX;

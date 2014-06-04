@@ -67,5 +67,4 @@ const string pathDefCielo = "TPTaller/imagenes/cieloN.jpg";
 #define MAX_PACK 2000
 #define MAX_MENSAJE 50
 
-
 #endif /* CONSTANTES_H_ */

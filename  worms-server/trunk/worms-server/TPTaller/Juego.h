@@ -32,19 +32,14 @@ class Juego{
 		void cargaPrincipal(Cargador *cargador, Node nodo_escenario);
 		int jugador_actual;
 
-
-
 		void cargar();
 		structInicial* inicial;
-
 
 	public:
 		Juego();
 		~Juego();
 
 		void crearJugador();
-		//uint8 crearJugador();
-
 		Jugador** getJugadores();
 		uint8 getCantidadJugadores();
 		Mundo* getMundo();
@@ -60,8 +55,6 @@ class Juego{
 		ManejadorPersonajes* getManejadorPersonajes();
 		int getJugadorActual();
 		void pasarTurno();
-
-
 };
 
 #endif /* JUEGO_H_ */

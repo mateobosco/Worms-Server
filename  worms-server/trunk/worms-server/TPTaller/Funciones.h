@@ -16,36 +16,32 @@ bool KEYS[322];
 
 bool init(int ancho, int alto){
 	bool success = true;
-	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
-	{
+	if(SDL_Init(SDL_INIT_VIDEO) < 0){
 		loguear();
 		logFile << "    Error   " << "\t  SDL No pudo inicializar! SDL Error: " <<  SDL_GetError()<< endl;
 		success = false;
-	}
-	else{
-		if( !SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" ) ){
+	} else{
+		if(!SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1")){
 			loguear();
 			logFile << "    Warning " << "\t  Linear texture filtering no habilitado! " <<  endl;
 			success = false;
 		}
-		gWindow = SDL_CreateWindow( "WORMS", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, ancho , alto, SDL_WINDOW_SHOWN );
+		gWindow = SDL_CreateWindow("WORMS", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, ancho , alto, SDL_WINDOW_SHOWN);
 		if( gWindow == NULL ){
 			loguear();
 			logFile << "    Error   " << "\t  La ventana no pudo ser creada! SDL Error: " <<  SDL_GetError()<< endl;
 			success = false;
-		}
-		else{
-			gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
-			if( gRenderer == NULL )	{
+		} else{
+			gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+			if(gRenderer == NULL){
 				loguear();
 				logFile << "    Error   " << "\t  Renderer no pudo ser creado! SDL Error: " <<  SDL_GetError()<< endl;
 				success = false;
-			}
-			else{
-				SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
-				int imgFlags = (IMG_INIT_PNG |IMG_INIT_JPG ); //
-				int iniciadas = IMG_Init( imgFlags );
-				if((iniciadas & imgFlags) != imgFlags ){
+			} else{
+				SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+				int imgFlags = (IMG_INIT_PNG |IMG_INIT_JPG );
+				int iniciadas = IMG_Init(imgFlags);
+				if((iniciadas & imgFlags) != imgFlags){
 					loguear();
 					logFile << "    Error   " << "\t  SDL_image no puedo ser inicializado! SDL_image Error: " <<  SDL_GetError()<< endl;
 					success = false;
@@ -148,12 +144,11 @@ void keyboard(SDL_Event event , int* posicion_mouse_movimiento, int* posicion_mo
 					KEYS[102] = true;
 					break;
 				}
-				else if (numero == SDLK_DOWN){ //event.key.keysym.sym
+				else if (numero == SDLK_DOWN){
 					KEYS[103] = true;
 					break;
 				}
 				if(numero < 1000){ //todo keys se puede acceder hasta la 321
-					//printf("ENTRA ACAAAA 4 \n");
 					KEYS[numero] = true;
 				}
 				posicion_mouse_click[0]=-1;
@@ -186,6 +181,7 @@ void keyboard(SDL_Event event , int* posicion_mouse_movimiento, int* posicion_mo
 						break;
 					}
 				}
+				break;
 			}
 			case SDL_MOUSEBUTTONDOWN:
 			{
@@ -194,7 +190,6 @@ void keyboard(SDL_Event event , int* posicion_mouse_movimiento, int* posicion_mo
 				SDL_GetMouseState( &x, &y );
 				posicion_mouse_click[0] = x;
 				posicion_mouse_click[1] = y;
-				//printf("LA posicion detectada fue %d, %d \n ", x,y);
 				break;
 			}
 			case SDL_MOUSEMOTION:
@@ -204,7 +199,6 @@ void keyboard(SDL_Event event , int* posicion_mouse_movimiento, int* posicion_mo
 				SDL_GetMouseState( &w, &z );
 				posicion_mouse_movimiento[0] = w;
 				posicion_mouse_movimiento[1] = z;
-				//printf("LA posicion detectada fue %d, %d \n ", w,z);
 				posicion_mouse_click[0]=-1;
 				posicion_mouse_click[1]=-1;
 				break;
@@ -223,10 +217,6 @@ void keyboard(SDL_Event event , int* posicion_mouse_movimiento, int* posicion_mo
 				posicion_mouse_click[0]=-1;
 				posicion_mouse_click[1]=-1;
 				break;
-				//printf("LA posicion detectada fue (%d, %d),%d, %d  \n ", a,b,c,d);
-
-				//		default:
-				//			break;
 			}
 		}
    }
@@ -238,14 +228,11 @@ int checkCantParametros(int cant_parametros){
 	}
 	loguear();
 	logFile << "Cantidad de parámetros inválida. Intente nuevamente " << endl;
-//	TODO Logear ERROR: Cantidad de parametros insuficientes.
 	return EXIT_FAILURE;
 }
 
 void showTime(){
-	   // current date/time based on current system
 	   time_t now = time(0);
-	   // convert now to string form
 	   char* dt = ctime(&now);
 	   cout << "The local date and time is: " << dt << endl;
 }

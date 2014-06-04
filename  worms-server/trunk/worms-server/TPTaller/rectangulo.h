@@ -13,8 +13,6 @@ class Rectangulo: public Figura{
 		int dibujar(Dibujador*);
 		float32* getVecX();
 		float32* getVecY();
-//		float32 getRotInicial();
-//		float32 getAngulo();
 		b2Vec2* getVertices();
 
 	private:

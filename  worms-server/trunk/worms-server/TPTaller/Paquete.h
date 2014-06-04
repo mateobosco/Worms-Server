@@ -1,5 +1,5 @@
-#ifndef PAQUETEDIBUJAR_H_
-#define PAQUETEDIBUJAR_H_
+#ifndef PAQUETE_H_
+#define PAQUETE_H_
 
 #include "Personaje.h"
 #include "figura.h"
@@ -7,14 +7,14 @@
 #include "poligono.h"
 #include "rectangulo.h"
 
-typedef struct structFigura {
+typedef struct structFigura{
 	b2Vec2 vector_vertices[6] ;
 	int cantidad = 0;
 	SDL_Color color;
-}structFigura;
+} structFigura;
 
 
-typedef struct structPersonaje {
+typedef struct structPersonaje{
 	char nombre_cliente[20];
 	int id_jugador;
 	int seleccionado[4];
@@ -22,7 +22,7 @@ typedef struct structPersonaje {
 	b2Vec2 posicion;
 	b2Vec2 tamano;
 	int direccion; // 0 derecha, 1 izquierda
-}structPersonaje;
+} structPersonaje;
 
 typedef struct structPaquete{
 	int tipo = 0;
@@ -33,9 +33,9 @@ typedef struct structPaquete{
 	int id;
 	char mensaje_mostrar[MAX_MENSAJE];
 	int turno_jugador;
-}structPaquete;
+} structPaquete;
 
-typedef struct structInicial {
+typedef struct structInicial{
 	bool cliente_aceptado = false;
 	int tipo = 0;
 	char tierra[50];
@@ -48,14 +48,14 @@ typedef struct structInicial {
 	int alto_unidades = 0;
 	float32 ancho_escenario = 0.0;
 	float32 alto_escenario = 0.0;
-}structInicial;
+} structInicial;
 
 typedef struct structEvento{
 	b2Vec2 click_mouse; // posicion escalada del mouse
-	int direccion; // -1 izquierda, 0 arriba, 1 derecha //todo
+	int direccion; // -1 izquierda, 0 arriba, 1 derecha
 	int nro_jugador = 0; //Identificador del cliente
 	int aleatorio = 0;
-}structEvento;
+} structEvento;
 
 
 structFigura* crearPaqueteFigura(Figura* figura);
@@ -68,4 +68,4 @@ void destruirPaquetePersonaje(structPersonaje* paquete);
 void destruirPaqueteCiclo(structPaquete* paquete);
 bool estaVacio(structEvento* paquete);
 
-#endif /* PAQUETEDIBUJAR_H_ */
+#endif /* PAQUETE_H_ */

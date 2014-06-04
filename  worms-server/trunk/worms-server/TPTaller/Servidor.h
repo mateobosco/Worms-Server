@@ -25,7 +25,7 @@ void showTime();
 
 class Servidor {
 public:
-	Servidor(int maxCon); //ver puerto
+	Servidor(int maxCon);
 	virtual ~Servidor();
 
 	struct sockaddr_in getDireccion();
@@ -40,9 +40,7 @@ public:
 	int aceptarConexiones();
 
 	int runEnviarInfo(Cliente* cliente);
-
 	int runEnviarInfoInicial(Cliente* cliente);
-
 	int runRecibirInfo(void* paquete);
 
 	int iniciarServidor();
@@ -84,7 +82,6 @@ private:
 	SDL_Thread *escuchar;
 	SDL_Thread *aceptar;
 	char mensaje_mostrar[MAX_MENSAJE];
-
 };
 
 #endif /* SERVIDOR_H_ */

@@ -5,7 +5,6 @@
 
 #include "LectorMascara.h"
 
-
 class Agua {
 	public:
 		Agua(float32 nivel_agua, string &path);
@@ -20,6 +19,4 @@ class Agua {
 		string path;
 };
 
-
 #endif /* AGUA_H */
-

@@ -22,4 +22,3 @@ class Circulo: public Figura {
 };
 
 #endif
-

@@ -1,12 +1,4 @@
-/*
- * Ventana.cpp
- *
- *  Created on: 28/04/2014
- *      Author: mateo
- */
-
 #include "Ventana.h"
-
 
 Ventana::Ventana(int x , int y , int escX , int escY) {
 	this->ventanaX = x;
@@ -16,11 +8,9 @@ Ventana::Ventana(int x , int y , int escX , int escY) {
 	this->offsetX = 0;
 	this->offsetY = 0;
 	this->zoom = 100; //100 es el zoom maximo
-
 }
 
 Ventana::~Ventana() {
-	// TODO Auto-generated destructor stub
 }
 
 int Ventana::getOffsetX(){
