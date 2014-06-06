@@ -3,6 +3,7 @@
 
 #include "Cargador.h"
 #include "Jugador.h"
+#include "Arma.h"
 
 class Juego{
 	private:
@@ -37,6 +38,8 @@ class Juego{
 
 		void cargar();
 		structInicial* inicial;
+
+		Arma *arma_actual;
 
 	public:
 		Juego();

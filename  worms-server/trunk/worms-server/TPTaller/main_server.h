@@ -48,7 +48,7 @@ int main_server(int argc,char* argv[]){
 	juego->getMundo()->setVectorPersonajes(manejador_personajes->getPersonajes(), manejador_personajes->getCantidadPersonajes(), manejador_personajes->getCantidadJugadores());
 	juego->getMundo()->setFiguras(juego->getFiguras(), juego->getCantidadFiguras());
 	juego->getMundo()->step(0.1,1,1);
-	int jugadores_necesarios = 2;
+	int jugadores_necesarios = 1;
 	SDL_Delay(2000);
 
 	int comenzar=0;

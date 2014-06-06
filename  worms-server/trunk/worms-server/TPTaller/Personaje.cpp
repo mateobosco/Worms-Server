@@ -10,7 +10,7 @@ Personaje::Personaje(Mundo* mundo, Uint8 numero_jugador, char* nombre_client) {
 	angulo_arma = 0;
 	conectado = 1;
 	arma_seleccionada =0;
-	energia=100;
+	energia = ENERGIA_WORM;
 	nombre_cliente = nombre_client;
 	muerto = false;
 	shape = NULL;
@@ -269,14 +269,23 @@ int Personaje::getArmaSeleccionada(){
 }
 
 
-
-
 int Personaje::getAnguloArma(){
 	return this->angulo_arma;
 }
 
-
-
 void Personaje::setAnguloArma(int angulo){
+	if((angulo_arma == -90) && (angulo < 0)){
+		return;
+	}
+	if((angulo_arma == 90) && (angulo > 0)){
+		return;
+	}
 	this->angulo_arma += angulo;
+}
+
+void Personaje::quitarEnergia(int descontar){
+	energia -= descontar;
+	if(energia <= 0){
+		this->setMuerto();
+	}
 }

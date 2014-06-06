@@ -25,7 +25,6 @@ typedef struct structPersonaje{
 	int energia;
 	int arma_seleccionada;
 	int angulo_arma;
-
 }structPersonaje;
 
 
@@ -66,8 +65,8 @@ typedef struct structEvento{
 	int nro_jugador = 0; //Identificador del cliente
 	int aleatorio = 0;
 	int arma_seleccionada =0;
-	int angulo_arma;
-
+	int angulo_arma = 0;
+	int fuerza = 0;
 
 }structEvento;
 
