@@ -64,7 +64,7 @@ const string pathDefCielo = "TPTaller/imagenes/cieloN.jpg";
 
 #define ERROR -1
 #define SOCKET_CLIENTE 28
-#define MAX_PACK 2000
+#define MAX_PACK 3000
 #define MAX_MENSAJE 50
 
 #endif /* CONSTANTES_H_ */

@@ -27,6 +27,9 @@ void Jugador::seleccionarColor(){
 
 Jugador::Jugador(Mundo *mundo, uint8 cantidad, ManejadorPersonajes *manejador, char* nombre_cliente){
 	this->numero = cantidad;
+	this->conectado = true;
+	this->nombre = nombre_cliente;
+
 	seleccionarColor();
 	for(int i = 0; i < MAX_CANT_PERSONAJES; i++){
 		this->personajes[i] = new Personaje(mundo, this->numero, nombre_cliente);
@@ -69,4 +72,23 @@ void Jugador::desconectar(){
 		if((this) && (this->personajes[i]))
 			this->personajes[i]->desconectar();
 	}
+}
+
+bool Jugador::getPerdio(){
+	bool perdio = true;
+	for (int i = 0; i < 4; i++){
+		if(!this->personajes[i]->getMuerto()){
+			perdio=false;
+		}
+	}
+	return perdio;
+}
+
+
+bool Jugador::getConectado(){
+	return this->conectado;
+}
+
+char* Jugador::getNombre(){
+	return nombre;
 }

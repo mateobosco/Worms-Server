@@ -49,6 +49,12 @@ structPersonaje* crearPaquetePersonaje(Personaje* personaje){
 	paquete->conectado = personaje->getConectado();
 	paquete->id_jugador = personaje->getNrojugador();
 	strcpy(paquete->nombre_cliente, personaje->getNombreCliente());
+	paquete->energia = personaje->getEnergia();
+	//paquete->nombre_cliente = personaje->getNombreCliente();
+	paquete->arma_seleccionada = personaje->getArmaSeleccionada();
+	paquete->angulo_arma = personaje->getAnguloArma();
+
+
 	bool* seleccion = personaje->getSeleccion();
 	for (int i = 0 ; i<4; i++){
 		if (seleccion[i]){
@@ -124,7 +130,7 @@ structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, i
 	return paquete;
 }
 
-structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje, int jugador_actual){
+structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje, int jugador_actual, int empezar_juego, int tiempo_ronda, char* nombre){
 	structPaquete* paquete = (structPaquete*) malloc(MAX_PACK);
 	paquete->tipo = 1;
 
@@ -145,6 +151,11 @@ structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje, int jugador_actual
 	paquete->cantidad_figuras = cantidad_figuras;
 	paquete->cantidad_personajes = cantidad_personajes;
 	paquete->turno_jugador = jugador_actual;
+	paquete->comenzar = empezar_juego; // 1 si el juego debe comenzar, 0  si se debe esperar a mas jugadores a que se conecten
+	paquete->reloj = tiempo_ronda;
+	strcpy(paquete->nombre_jugador_actual, nombre);
+	//printf(" MANDO EL NOMBREeeeeeeee %s \n", paquete->nombre_jugador_actual);
+	//paquete->nombre_jugador_actual = nombre;
 	if (mensaje != NULL){
 		strcpy(paquete->mensaje_mostrar, mensaje);
 	}

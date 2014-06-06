@@ -22,6 +22,8 @@ Juego::Juego(){
 		jugadores[i]=NULL;
 	}
 	jugador_actual = 0;
+	reloj_ronda=0;
+	indice_jugador_turno=0;
 }
 
 Juego::~Juego(){
@@ -207,21 +209,53 @@ structInicial* Juego::getPaqueteInicial(){
 	return this->inicial;
 }
 
-void Juego::aplicarPaquete(structEvento* evento){
+void Juego::aplicarPaquete(structEvento* evento, int comenzar){
 	if (evento == NULL) return;
 	if (evento->click_mouse.x != -1){ // recibio un click
 		manejador->seleccionarPersonaje(evento->click_mouse, evento->nro_jugador);
 	}
-	if (evento->direccion > 0){ // recibio un click
+	if ((evento->direccion > 0) && (evento->nro_jugador == this->getJugadorActual()) && comenzar ==1){ // PROCESO EL MOVIMIENTO SOLO SI ES SU TURNO
 		manejador->moverPersonaje(evento->direccion , evento->nro_jugador);
+		//printf(" APLICO UN PAQUETE MOVIMIENTO, PASO DE TURNO");
+		//this->pasarTurno();
 	}
-	else return;
+	if (evento->arma_seleccionada != 0){
+		for (int j = 0; j < manejador->getCantidadPersonajes(); j++){ // TODO ver si es necesario cant actuales activos.
+			Personaje* personaje_actual = manejador->getPersonajes()[j];
+			if (! personaje_actual->getMuerto()){
+				if( personaje_actual->getSeleccion()[evento->nro_jugador] ){
+					printf( " SE LE ASIGNO EL PERSONAJE SELECCIONADO EL ARMA %d \n", evento->arma_seleccionada);
+					personaje_actual->setArmaSeleccionada(evento->arma_seleccionada);
+					personaje_actual->setAnguloArma(evento->angulo_arma);
+				}
+			}
+		}
+	}
+	if(evento->angulo_arma != 0){
+		printf( " /////////////////////////////////////////////// \n");
+		for (int j = 0; j < manejador->getCantidadPersonajes(); j++){ // TODO ver si es necesario cant actuales activos.
+					Personaje* personaje_actual = manejador->getPersonajes()[j];
+					if (! personaje_actual->getMuerto()){
+						if( personaje_actual->getSeleccion()[evento->nro_jugador] ){
+							printf( " SE LE ASIGNA EL ARMA UN ANGULO %d \n", evento->angulo_arma);
+							//personaje_actual->setArmaSeleccionada(evento->arma_seleccionada);
+							personaje_actual->setAnguloArma(evento->angulo_arma);
+							printf(" EL ANGULO NEUVO ES %d \n", personaje_actual->getAnguloArma());
+					}
+				}
+			}
+	}
+
+
+
+	//else return;
 }
 
 Jugador* Juego::agregarJugador(int id, char* nombre_cliente){
 	this->jugadores[id] = new Jugador(mundo,id,manejador, nombre_cliente);
 	Personaje** pers = this->jugadores[id]->getPersonajes();
 	this->manejador->AgregarJugador(mundo,id, pers);
+	this->jugadores_jugando.push_back(this->jugadores[id]);
 	return this->jugadores[id];
 }
 
@@ -229,13 +263,67 @@ ManejadorPersonajes* Juego::getManejadorPersonajes(){
 	return this->manejador;
 }
 
+
+
+
 int Juego::getJugadorActual(){
-	return jugador_actual;
+	return indice_jugador_turno;
 }
 
 void Juego::pasarTurno(){
-	jugador_actual++;
-	if(jugador_actual == 5){
-		jugador_actual =0;
+	//reloj_ronda = SDL_GetTicks();
+	this->resetearRelojRonda();
+	//jugador_actual++;
+	indice_jugador_turno++;
+	if(indice_jugador_turno == 2){
+		indice_jugador_turno = 0;
 	}
+	printf(" LLEGA HASTA ACA 1  indice jugador turno es %d \n", indice_jugador_turno);
+	Jugador* jugador_actual = jugadores_jugando.at(indice_jugador_turno);
+	while(jugador_actual->getConectado() == false){
+		//printf(" ENTRA ACAAAAA \n");
+		indice_jugador_turno++;
+
+		jugador_actual = jugadores_jugando.at(indice_jugador_turno);
+		if (indice_jugador_turno > jugadores_jugando.size()){
+			indice_jugador_turno=0;
+		}
+	}
+	//printf(" LLEGA HASTA ACA 2 \n");
+	//if(jugador_actual == 2){
+	//	jugador_actual =0;
+	//}
+
+
+	if (indice_jugador_turno > jugadores_jugando.size()){
+		indice_jugador_turno = 0;
+	}
+	for(int i = 0; i < jugadores_jugando.size(); i++){
+		Jugador* jugador_actual = jugadores_jugando.at(i);
+		//Cliente* clienteActual = servidor->getClientes()[i];
+		Personaje** vector_personajes = jugador_actual->getPersonajes();
+		for (int i = 0; i < 4; i++){
+			Personaje* personaje_actual = vector_personajes[i];
+			if (personaje_actual->getEnergia() == 0){
+				personaje_actual->setMuerto();
+			}
+		}
+		if(jugador_actual->getPerdio()){
+			//jugadores_jugando.erase(jugadores_jugando.begin() + i);
+		}
+	}
+
+
+
+
 }
+
+
+int Juego::getRelojRonda(){
+	return (SDL_GetTicks()-reloj_ronda);
+}
+
+void Juego::resetearRelojRonda(){
+	reloj_ronda=SDL_GetTicks();
+}
+
