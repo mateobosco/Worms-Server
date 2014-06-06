@@ -24,6 +24,7 @@ Juego::Juego(){
 	jugador_actual = 0;
 	reloj_ronda=0;
 	indice_jugador_turno=0;
+	arma_actual = new Arma();
 }
 
 Juego::~Juego(){
@@ -44,6 +45,9 @@ Juego::~Juego(){
 		if(jugadores[i] != NULL){
 			delete jugadores[i];
 		}
+	}
+	if(arma_actual){
+		delete arma_actual;
 	}
 }
 
@@ -245,9 +249,12 @@ void Juego::aplicarPaquete(structEvento* evento, int comenzar){
 				}
 			}
 	}
-
-
-
+	if(evento->fuerza == 1){
+		arma_actual->setFuerza();
+	} else if(evento->fuerza == 2) arma_actual->disparar();
+	if(evento->fuerza == 2){
+		printf("Dejó de disparar\n");
+	}
 	//else return;
 }
 
@@ -275,7 +282,7 @@ void Juego::pasarTurno(){
 	this->resetearRelojRonda();
 	//jugador_actual++;
 	indice_jugador_turno++;
-	if(indice_jugador_turno == 2){
+	if(indice_jugador_turno == 1){
 		indice_jugador_turno = 0;
 	}
 	printf(" LLEGA HASTA ACA 1  indice jugador turno es %d \n", indice_jugador_turno);

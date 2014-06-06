@@ -1,10 +1,3 @@
-/*
- * Personaje.h
- *
- *  Created on: 24/04/2014
- *      Author: juanmahidalgo
- */
-
 #ifndef PERSONAJE_H_
 #define PERSONAJE_H_
 
@@ -21,8 +14,6 @@
 #include <ctime>
 
 #include "mundo.h"
-
-
 
 class Personaje {
 public:
@@ -57,7 +48,7 @@ public:
 	int getArmaSeleccionada();
 	int getAnguloArma();
 	void setAnguloArma(int angulo);
-
+	void quitarEnergia(int descontar);
 
 private:
 	const char* dir_imagen;

@@ -67,4 +67,9 @@ const string pathDefCielo = "TPTaller/imagenes/cieloN.jpg";
 #define MAX_PACK 3000
 #define MAX_MENSAJE 50
 
+#define ENERGIA_WORM 100
+#define MAX_FUERZA 100 //todo ver cuánto convendría que sea el máximo
+#define DANIO_BAZOOKA 25
+#define DANIO_GRANADA 40
+
 #endif /* CONSTANTES_H_ */
