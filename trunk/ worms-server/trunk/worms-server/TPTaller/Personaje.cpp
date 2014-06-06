@@ -7,7 +7,10 @@ int random(int n){
 }
 
 Personaje::Personaje(Mundo* mundo, Uint8 numero_jugador, char* nombre_client) {
+	angulo_arma = 0;
 	conectado = 1;
+	arma_seleccionada =0;
+	energia=100;
 	nombre_cliente = nombre_client;
 	muerto = false;
 	shape = NULL;
@@ -73,6 +76,7 @@ void Personaje::mover(b2Vec2 direccion){
 	body->ApplyLinearImpulse(fuerza, body->GetWorldCenter(), true );
 }
 
+
 SDL_Texture* Personaje::dibujar(Dibujador* el_dibujador){
 	return el_dibujador->dibujarPersonaje2(this);
 }
@@ -115,6 +119,8 @@ float32* Personaje::getVecY(){
 	return vector_y;
 }
 
+
+
 void Personaje::leermovimiento(int direccion, int id_jugador){
 	if (this->nro_jugador == id_jugador && seleccionado[id_jugador]){
 		if (direccion == 3 && body->GetLinearVelocity().x < 0.7){ // para la derecha
@@ -148,13 +154,29 @@ void Personaje::leermovimiento(int direccion, int id_jugador){
 			if (resultado) break;
 		}
 		delete over;
-
 		if((direccion == 2  && resultado) || ((direccion == 2) && (body->GetContactList() != NULL))){ // para arriba
 			this->mover(b2Vec2(0,-3));
 			return;
 		}
-		if((direccion == 4) && (body->GetContactList() != NULL)){ // para arriba a la derecha
+		//printf( " LA VELOCIDAD EN Y ES : %f \n", body->GetLinearVelocity().y);
+		if ( (direccion == 4  && body->GetLinearVelocity().x <0.7 ) && (body->GetContactList() != NULL) ){ // para arriba a la derecha
+			printf(" APLICO UN PAQUETE movimiento en la direccion  4");
 			this->mover(b2Vec2(2,-3));
+//			if(body->GetLinearVelocity().y == 0)
+//				this->mover(b2Vec2(2,-3));
+//			else
+//				this->mover(b2Vec2(1,-1));
+//					return;
+		}
+		if ( (direccion == 5 && body->GetLinearVelocity().x >-0.7 ) && (body->GetContactList() != NULL)){ // para arriba a la izq
+			printf(" APLICO UN PAQUETE movimiento en la direccion 5 \n");
+			this->mover(b2Vec2(-2,-3));
+//			if(body->GetLinearVelocity().y == 0)
+//				this->mover(b2Vec2(-2,-3));
+//			else
+//				this->mover(b2Vec2(-1,-1));
+//				return;
+
 		}
 		if((direccion == 5) && (body->GetContactList() != NULL)){ // para arriba a la izq
 			this->mover(b2Vec2(-2,-3));
@@ -233,3 +255,28 @@ char* Personaje::getNombreCliente(){
 	return this->nombre_cliente;
 }
 
+int Personaje::getEnergia(){
+	return energia;
+}
+
+void Personaje::setArmaSeleccionada(int nro_arma){
+	this->arma_seleccionada = nro_arma;
+
+}
+
+int Personaje::getArmaSeleccionada(){
+	return this->arma_seleccionada;
+}
+
+
+
+
+int Personaje::getAnguloArma(){
+	return this->angulo_arma;
+}
+
+
+
+void Personaje::setAnguloArma(int angulo){
+	this->angulo_arma += angulo;
+}

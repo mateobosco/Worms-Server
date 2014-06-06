@@ -52,6 +52,11 @@ public:
 	int getNrojugador();
 	virtual ~Personaje();
 	bool* getSeleccion();
+	int getEnergia();
+	void setArmaSeleccionada(int nro_arma);
+	int getArmaSeleccionada();
+	int getAnguloArma();
+	void setAnguloArma(int angulo);
 
 
 private:
@@ -67,6 +72,9 @@ private:
 	bool muerto;
 	int conectado;
 	int orientacion;
+	int arma_seleccionada;
+	int energia;
+	int angulo_arma;
 
 	b2CircleShape* shape2;
 	float32 radio;

@@ -31,6 +31,9 @@ class Juego{
 		void cargarFiguras(Cargador *cargador, Node nodo_escenario);
 		void cargaPrincipal(Cargador *cargador, Node nodo_escenario);
 		int jugador_actual;
+		int indice_jugador_turno;
+		int reloj_ronda;
+		std::vector<Jugador*> jugadores_jugando;
 
 		void cargar();
 		structInicial* inicial;
@@ -50,11 +53,14 @@ class Juego{
 		string getCielo();
 		uint8 getCantidadFiguras();
 		structInicial* getPaqueteInicial();
-		void aplicarPaquete(structEvento* evento);
+		void aplicarPaquete(structEvento* evento, int comenzar);
 		Jugador* agregarJugador(int id, char* nombre_cliente);
 		ManejadorPersonajes* getManejadorPersonajes();
 		int getJugadorActual();
 		void pasarTurno();
+		void resetearRelojRonda();
+		int getRelojRonda();
+
 };
 
 #endif /* JUEGO_H_ */

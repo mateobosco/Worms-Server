@@ -48,7 +48,12 @@ int main_server(int argc,char* argv[]){
 	juego->getMundo()->setVectorPersonajes(manejador_personajes->getPersonajes(), manejador_personajes->getCantidadPersonajes(), manejador_personajes->getCantidadJugadores());
 	juego->getMundo()->setFiguras(juego->getFiguras(), juego->getCantidadFiguras());
 	juego->getMundo()->step(0.1,1,1);
+	int jugadores_necesarios = 2;
 	SDL_Delay(2000);
+
+	int comenzar=0;
+	//TODO ACA ES DONDE TERMINA EL CODIGO INNECESARIO.
+
 	SDL_mutex *un_mutex = SDL_CreateMutex();
 	while(!servidor->getFinalizar()){
 		for (int i=0 ; i < servidor->getCantidadClientes() ; i++){
@@ -63,20 +68,45 @@ int main_server(int argc,char* argv[]){
 		}
 		juego->getMundo()->setVectorPersonajes(manejador_personajes->getPersonajes(), manejador_personajes->getCantidadPersonajes(), manejador_personajes->getCantidadJugadores());
 		juego->getMundo()->setFiguras(juego->getFiguras(), juego->getCantidadFiguras());
-		structPaquete* paqueteCiclo = crearPaqueteCiclo(juego->getMundo(), servidor->getMensajeMostrar(), juego->getJugadorActual());
+
+
+		if (jugadores_necesarios == servidor->getCantidadClientesActivos() && comenzar==0){
+			printf(" EMPIEZA LA WEA \n");
+			comenzar=1;
+			juego->resetearRelojRonda();
+
+		}
+		int nro_jugador_actual = juego->getJugadorActual();
+		Jugador* jugador_actual = juego->getJugadores()[nro_jugador_actual];
+		char* nombre1 = jugador_actual->getNombre();
+		//printf(" MANDO EL NOMBRE %s \n", nombre1);
+		structPaquete* paqueteCiclo = crearPaqueteCiclo(juego->getMundo(), servidor->getMensajeMostrar(), nro_jugador_actual, comenzar, juego->getRelojRonda(), nombre1);
 
 		servidor->actualizarPaquete((char*)paqueteCiclo);
+
 		destruirPaqueteCiclo(paqueteCiclo);
+
 		structEvento* evento =NULL;
 	    evento = (structEvento*) servidor->desencolarPaquete();
 
+
 	    if(evento!=NULL) {
-	    	juego->aplicarPaquete(evento);
+	    	juego->aplicarPaquete(evento, comenzar);
 	    	free(evento);
 	    }
+	    //printf(" TIMER: %d \n", juego->getRelojRonda());
+	    if(juego->getRelojRonda() > 60000 && comenzar==1){
+	    	printf(" RESETEO EL RELOJJJ \n");
+	    	printf(" TIMER: %d \n", juego->getRelojRonda()/1000);
+	    	//juego->resetearRelojRonda();
+	    	juego->pasarTurno();
+	    }
 	    SDL_Delay(10);
+
 		juego->getMundo()->step(0.025,100,100);
 		juego->getMundo()->comprobar_nivel_agua();
+
+
 	}
 	logFile.close();
 	delete juego;
