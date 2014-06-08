@@ -34,6 +34,7 @@ class Arma{
 		void setTipo(int tipo_arma);
 		void setDireccion(b2Vec2 una_direccion);
 		void setPosicion(b2Vec2 una_posicion);
+		void aplicarExplosion();
 
 		int getAngulo();
 		int getTipo();

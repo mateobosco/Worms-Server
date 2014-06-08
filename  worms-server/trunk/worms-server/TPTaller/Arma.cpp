@@ -64,6 +64,7 @@ b2Vec2* Arma::definirImpulso(b2Vec2 destino){
 //Retorna True si chocó con una figura.
 //Retorna True si chocó con un personaje.
 //Retorna False no hay choque.
+/*
 bool Arma::checkImpacto(Mundo *mundo){
 
 //	if (this->proyectil->GetContactList() && this->proyectil->GetContactList()->contact->IsTouching()){
@@ -109,6 +110,43 @@ bool Arma::checkImpacto(Mundo *mundo){
 	}
 	return false;
 
+}
+*/
+
+class QueryCheckImpacto : public b2QueryCallback {
+ public:
+     std::vector<b2Shape*> foundShapes;
+
+     bool ReportFixture(b2Fixture* fixture) {
+   	  b2Shape* shape= fixture->GetShape();
+
+   	  if (shape->GetType() == 3){ // b2ChainShape == 3
+		  vector<b2Shape*>::iterator it = std::find(foundShapes.begin(), foundShapes.end(), shape);
+		  if(it==foundShapes.end()){
+			  foundShapes.push_back( shape );
+		  }
+   	  }
+         return true;//keep going to find all fixtures in the query area
+     }
+ };
+
+bool Arma::checkImpacto(Mundo* mundo){
+	float32 radio = this->shape_proy->m_radius;
+	b2Vec2 pos = this->posicion_proyectil;
+	QueryCheckImpacto query;
+	b2AABB aabb;
+	aabb.upperBound = pos - b2Vec2(radio,radio);
+	aabb.lowerBound = pos + b2Vec2(radio,radio);
+
+	b2World* world = mundo->devolver_world();
+	world->QueryAABB(&query, aabb);
+
+	std::vector<b2Shape*> res = query.foundShapes;
+
+	if (res.size() > 0) return true;
+
+
+	return false;
 }
 
 bool Arma::setFuerza(){
@@ -184,4 +222,48 @@ b2Vec2 Arma::getTamanio(){
 
 void Arma::resetFuerza(){
 	this->fuerza = 0.0f;
+}
+
+class RayCastMasCercano : public b2RayCastCallback
+{
+public:
+    b2Body* body;
+    b2Vec2 pos;
+
+    RayCastMasCercano() { body = NULL; }
+
+    float32 ReportFixture(b2Fixture* fixture, const b2Vec2& point, const b2Vec2& normal, float32 fraction)
+    {
+        body = fixture->GetBody();
+        pos = point;
+        return fraction;
+    }
+};
+
+void Arma::aplicarExplosion(){
+	b2World* world = this->proyectil->GetWorld();
+	b2Vec2 pos = this->proyectil->GetPosition();
+	float32 blastRadius = 10;
+	int numRays = 30;
+	for (int i = 0; i < numRays; i++) {
+	  float angle = (i / (float)numRays) * PI;
+	  b2Vec2 rayDir( sinf(angle), cosf(angle) );
+	  b2Vec2 rayEnd = pos + blastRadius * rayDir;
+
+	  RayCastMasCercano callback;
+	  world->RayCast(&callback, pos, rayEnd);
+	  if ( callback.body ){
+		b2Body* body = callback.body;
+		b2Vec2 posImpacto = callback.pos;
+		if ( body == this->proyectil || body->GetType() != b2_dynamicBody ) return;
+		b2Vec2 dir = posImpacto - pos;
+		float32 distancia = dir.Normalize();
+		if (distancia == 0 ) return;
+		float32 invDistancia = 1/distancia;
+		float32 impulso = this->danio * invDistancia;
+		impulso = b2Min(impulso, 500.0f); // estaba en el tutorial, no estoy seguro
+		body->ApplyLinearImpulse(impulso * dir , posImpacto, true);
+		//FALTA SACARLE VIDA A LOS GUSANOS
+	  }
+	}
 }
