@@ -366,6 +366,7 @@ void Juego::checkColisionProyectil(){
 			proj_in_air = false;
 			this->arma_actual->setTipo(0);
 			this->mundo->destruir_cuerpo(arma_actual->getProyectil());
+			this->arma_actual->aplicarExplosion();
 		} else{
 			//b2Vec2 antigravedad = b2Vec2(0,-0.98f);
 			//arma_actual->getProyectil()->ApplyForceToCenter(antigravedad, true );
