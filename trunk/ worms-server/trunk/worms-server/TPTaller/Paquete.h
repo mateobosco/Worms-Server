@@ -41,6 +41,12 @@ typedef struct structPaquete{
 	int reloj;
 	char nombre_jugador_actual[MAX_MENSAJE];
 
+	int tipo_proyectil = 0;
+	bool show_proyectil = false;
+	b2Vec2 posicion_proyectil;
+	b2Vec2 direccion_proyectil;
+	b2Vec2 tamanio_proyectil;
+
 }structPaquete;
 
 

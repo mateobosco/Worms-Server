@@ -34,6 +34,7 @@ void ManejadorPersonajes::seleccionarPersonaje(b2Vec2 posicion, int id_jugador){
 			for (int j = 0; j < this->personajesMax * this->cantidad_jugadores ; j++){
 				Personaje* personaje_aux = this->vector_personajes[j];
 				personaje_aux->setSeleccionado(false, id_jugador);
+				personaje_aux->setArmaSeleccionada(0);
 			}
 			personaje->setSeleccionado(resultado, id_jugador);
 			int dueno = personaje->getNrojugador();

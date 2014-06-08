@@ -39,6 +39,7 @@ class Juego{
 		void cargar();
 		structInicial* inicial;
 
+		bool proj_in_air;
 		Arma *arma_actual;
 
 	public:
@@ -64,6 +65,10 @@ class Juego{
 		void resetearRelojRonda();
 		int getRelojRonda();
 
+		void setArma(int tipo_arma, b2Vec2 posicion, int angulo);
+		void disparar();
+		void checkColisionProyectil();
+		void setPaqueteProyectil(structPaquete *pack);
 };
 
 #endif /* JUEGO_H_ */

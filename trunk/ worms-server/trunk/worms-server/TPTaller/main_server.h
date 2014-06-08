@@ -81,7 +81,7 @@ int main_server(int argc,char* argv[]){
 		char* nombre1 = jugador_actual->getNombre();
 		//printf(" MANDO EL NOMBRE %s \n", nombre1);
 		structPaquete* paqueteCiclo = crearPaqueteCiclo(juego->getMundo(), servidor->getMensajeMostrar(), nro_jugador_actual, comenzar, juego->getRelojRonda(), nombre1);
-
+		juego->setPaqueteProyectil(paqueteCiclo);
 		servidor->actualizarPaquete((char*)paqueteCiclo);
 
 		destruirPaqueteCiclo(paqueteCiclo);
@@ -105,7 +105,7 @@ int main_server(int argc,char* argv[]){
 
 		juego->getMundo()->step(0.025,100,100);
 		juego->getMundo()->comprobar_nivel_agua();
-
+		juego->checkColisionProyectil();
 
 	}
 	logFile.close();
