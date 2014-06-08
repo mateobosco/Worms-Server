@@ -4,6 +4,8 @@
 #include "rectangulo.h"
 #include "Personaje.h"
 #include "Paquete.h"
+#include "Juego.h"
+
 
 #include "SDL2/SDL_ttf.h"
 #include <stdio.h>
@@ -260,11 +262,134 @@ void Dibujador::iniciarFondo(Agua* agua, std::string pathCielo, std::string path
 	this->dibujar_tierra(escalador, pathTierra);
 }
 
-void Dibujador::dibujarFondo(Agua* agua){
+
+
+ class QueryDibujarTierraEdge : public b2QueryCallback {
+  public:
+      std::vector<b2Shape*> foundBodies;
+
+      bool ReportFixture(b2Fixture* fixture) {
+    	  b2Shape* shape= fixture->GetShape();
+
+    	  if (shape->GetType() == 1){ // b2EdgeShape == 1
+    		  foundBodies.push_back( shape );
+    	  }
+          return true;//keep going to find all fixtures in the query area
+      }
+  };
+
+
+void Dibujador::dibujarFondo(Agua* agua, Juego* juego){
 	this->renderTexture(textureCielo, renderizador,0 , 0, escalador->getPixelX(), escalador->getPixelY() );
 	this->renderTexture(textureAgua, renderizador, 0, agua->GetNivel()*(escalador->getPixelY()/escalador->getEscalaY()) , escalador->getPixelX(), escalador->getPixelY());
-	this->renderTexture(textureTierra, renderizador, 0 , 0, escalador->getPixelX() , escalador->getPixelY());
+//	this->renderTexture(textureTierra, renderizador, 0 , 0, escalador->getPixelX() , escalador->getPixelY());
+//	this->dibujarTierraEdge(juego);
+//	this->dibujarTierraPoligono(juego);
+	this->dibujarTierraChain(juego);
+
+
 }
+
+void Dibujador::dibujarTierraEdge(Juego* juego){
+	QueryDibujarTierraEdge query;
+	b2AABB aabb;
+	aabb.upperBound = b2Vec2(escalador->getEscalaX(),escalador->getEscalaY());
+	aabb.lowerBound = b2Vec2(0,0);
+
+	b2World* world = juego->getMundo()->devolver_world();
+	world->QueryAABB(&query, aabb);
+
+	std::vector<b2Shape*> dibujables = query.foundBodies;
+
+
+	for (size_t i = 0 ; i<dibujables.size() ; i++){
+		b2Shape* shape = dibujables[i];
+		b2EdgeShape* edge = (b2EdgeShape*) shape;
+		b2Vec2 escalado1 = edge->m_vertex2;
+		b2Vec2* aux1 = escalador->aplicarZoomPosicion(escalado1);
+		b2Vec2 escalado2 = edge->m_vertex1;
+		b2Vec2* aux2 = escalador->aplicarZoomPosicion(escalado2);
+		b2Vec2 pixelado1 = *aux1;
+		b2Vec2 pixelado2 = *aux2;
+
+		SDL_RenderDrawLine(renderizador,pixelado1.x, pixelado1.y, pixelado2.x, pixelado2.y);
+
+	}
+}
+
+
+class QueryDibujarTierraPoligono : public b2QueryCallback {
+ public:
+     std::vector<b2Body*> foundBodies;
+
+     bool ReportFixture(b2Fixture* fixture) {
+   	  b2Shape* shape= fixture->GetShape();
+   	  b2Body* body = fixture->GetBody();
+
+   	  if ((shape->GetType() == 2) && (body->GetType() == 0 )){ // b2PolygonShape == 2 && b2StaticBody == 0
+   		  foundBodies.push_back( body );
+   	  }
+         return true;//keep going to find all fixtures in the query area
+     }
+ };
+
+class QueryDibujarTierraChain : public b2QueryCallback {
+ public:
+     std::vector<b2Body*> foundBodies;
+
+     bool ReportFixture(b2Fixture* fixture) {
+   	  b2Shape* shape= fixture->GetShape();
+   	  b2Body* body = fixture->GetBody();
+
+   	  if ((shape->GetType() == 1)){ // b2PolygonShape == 2 && b2StaticBody == 0
+   		  foundBodies.push_back( body );
+   	  }
+         return true;//keep going to find all fixtures in the query area
+     }
+ };
+
+void Dibujador::dibujarTierraPoligono(Juego* juego){
+	QueryDibujarTierraPoligono query;
+	b2AABB aabb;
+	aabb.upperBound = b2Vec2(escalador->getEscalaX(),escalador->getEscalaY());
+	aabb.lowerBound = b2Vec2(0,0);
+
+	b2World* world = juego->getMundo()->devolver_world();
+	world->QueryAABB(&query, aabb);
+
+	std::vector<b2Body*> dibujables = query.foundBodies;
+
+
+	for (size_t i = 0 ; i<dibujables.size() ; i++){
+		b2Body* body = dibujables[i];
+		b2Shape* shape = body->GetFixtureList()->GetShape();
+		b2PolygonShape* poli = (b2PolygonShape*) shape;
+		b2Vec2 escalado0 = body->GetWorldPoint(poli->GetVertex(0));
+		b2Vec2 escalado1 = body->GetWorldPoint(poli->GetVertex(1));
+		b2Vec2 escalado2 = body->GetWorldPoint(poli->GetVertex(2));
+		b2Vec2 escalado3 = body->GetWorldPoint(poli->GetVertex(3));
+
+
+		b2Vec2* aux0 = escalador->aplicarZoomPosicion(escalado0);
+		b2Vec2* aux1 = escalador->aplicarZoomPosicion(escalado1);
+		b2Vec2* aux2= escalador->aplicarZoomPosicion(escalado2);
+		b2Vec2* aux3 = escalador->aplicarZoomPosicion(escalado3);
+
+		b2Vec2 pixelado0 = *aux0;
+		b2Vec2 pixelado1 = *aux1;
+		b2Vec2 pixelado2 = *aux2;
+		b2Vec2 pixelado3 = *aux3;
+
+		SDL_RenderDrawLine(renderizador,pixelado0.x, pixelado0.y, pixelado1.x, pixelado1.y);
+		SDL_RenderDrawLine(renderizador,pixelado1.x, pixelado1.y, pixelado2.x, pixelado2.y);
+		SDL_RenderDrawLine(renderizador,pixelado2.x, pixelado2.y, pixelado3.x, pixelado3.y);
+		SDL_RenderDrawLine(renderizador,pixelado3.x, pixelado3.y, pixelado0.x, pixelado0.y);
+
+
+	}
+
+}
+
 
 int Dibujador::dibujarPaqueteFigura(structFigura figura){
 	int cantidad = figura.cantidad;
@@ -441,3 +566,63 @@ void Dibujador::dibujarMensaje(){
 int Dibujador::getContadorCerrarse(){
 	return this->contador_cerrarse;
 }
+
+class QueryDibujarTierraConChain : public b2QueryCallback {
+ public:
+     std::vector<b2ChainShape*> foundBodies;
+
+     bool ReportFixture(b2Fixture* fixture) {
+   	  b2Shape* shape= fixture->GetShape();
+
+   	  if (shape->GetType() == 3){ // b2ChainShape == 3
+   		  b2ChainShape* chain = (b2ChainShape*) shape;
+		  vector<b2ChainShape*>::iterator it = std::find(foundBodies.begin(), foundBodies.end(), chain);
+		  if(it==foundBodies.end()){
+			  foundBodies.push_back( chain );
+		  }
+   	  }
+         return true;//keep going to find all fixtures in the query area
+     }
+ };
+
+void Dibujador::dibujarTierraChain(Juego* juego){
+
+	QueryDibujarTierraConChain query;
+	b2AABB aabb;
+	aabb.upperBound = b2Vec2(escalador->getEscalaX(),escalador->getEscalaY());
+	aabb.lowerBound = b2Vec2(0,0);
+
+	b2World* world = juego->getMundo()->devolver_world();
+	world->QueryAABB(&query, aabb);
+
+	std::vector<b2ChainShape*> dibujables = query.foundBodies;
+
+//	 Mundo* mundo = juego->getMundo()
+	if (dibujables.size()==0) return;
+
+	for (size_t k = 0; k < dibujables.size(); k++){
+
+		b2ChainShape* shapeOriginal = dibujables[k];
+		b2Vec2* verticesOriginal = shapeOriginal->m_vertices;
+		int cantidadOriginal = shapeOriginal->m_count;
+
+		for (int i = 0 ; i<cantidadOriginal-1 ; i++){
+
+			b2Vec2 escalado1 = verticesOriginal[i];
+			b2Vec2* aux1 = escalador->aplicarZoomPosicion(escalado1);
+			b2Vec2 escalado2 = verticesOriginal[i+1];
+			b2Vec2* aux2 = escalador->aplicarZoomPosicion(escalado2);
+			b2Vec2 pixelado1 = *aux1;
+			b2Vec2 pixelado2 = *aux2;
+
+			SDL_RenderDrawLine(renderizador,pixelado1.x, pixelado1.y, pixelado2.x, pixelado2.y);
+
+		}
+
+	}
+
+
+
+
+}
+

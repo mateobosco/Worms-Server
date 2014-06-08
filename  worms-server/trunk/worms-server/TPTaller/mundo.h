@@ -33,6 +33,13 @@ class Mundo {
 		int getCantidadPersonajes();
 		Figura** getFiguras();
 		int getCantidadFiguras();
+		void crearEdge(b2Vec2* tierra, float32 pixelesX);
+		void CrearTierraPoligono(b2Vec2* tierra, float32 pixelesX, Escalador* escalador);
+		void CrearTierraPoligono1(b2Vec2* tierra, float32 pixelesX, Escalador* escalador);
+		b2ChainShape* getChainShape();
+
+
+
 
 	private:
 		int cantidad_vertices_tierra;
@@ -46,6 +53,7 @@ class Mundo {
 		b2World* my_world;
 		Figura** figuras;
 		Personaje** vector_personajes;
+		b2ChainShape* shapeTierra;
 };
 
 #endif
