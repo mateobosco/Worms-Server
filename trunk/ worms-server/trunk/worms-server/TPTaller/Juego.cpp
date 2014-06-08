@@ -1,5 +1,9 @@
 #include "Juego.h"
 
+#include <boost/geometry/geometry.hpp>
+#include <boost/geometry/geometries/register/point.hpp>
+#include <boost/geometry/geometries/register/ring.hpp>
+
 Juego::Juego(){
 	mundo = NULL;
 
@@ -177,6 +181,8 @@ void Juego::cargarLector(string tierra){
 void Juego::generarTierra(){
 	b2Vec2* vectorTierra = this->lector->LeerMascara(this->escalador);
 	this->mundo->Crear_Chains(vectorTierra, this->lector->GetPixelAncho());
+//	this->mundo->crearEdge(vectorTierra, this->lector->GetPixelAncho());
+//	this->mundo->CrearTierraPoligono(vectorTierra, this->lector->GetPixelAncho(),this->escalador);
 }
 
 void Juego::cargarFiguras(Cargador *cargador, Node nodo_escenario){
@@ -388,3 +394,179 @@ void Juego::setPaqueteProyectil(structPaquete *pack){
 		pack->tamanio_proyectil = b2Vec2(0,0);
 	}
 }
+
+
+// class MyQueryCallback : public b2QueryCallback {
+//  public:
+//      std::vector<b2Body*> foundBodies;
+//
+//      bool ReportFixture(b2Fixture* fixture) {
+//    	  b2Body* body = fixture->GetBody();
+//    	  b2Shape* shape= fixture->GetShape();
+//
+//    	  if ((shape->GetType() == 1)){ // b2EdgeShape == 2
+//    		  foundBodies.push_back( body );
+//    	  }
+//          return true;//keep going to find all fixtures in the query area
+//      }
+//  };
+
+
+ class MyQueryCallback : public b2QueryCallback {
+  public:
+      std::vector<b2Body*> foundBodies;
+
+      bool ReportFixture(b2Fixture* fixture) {
+    	  b2Body* body = fixture->GetBody();
+    	  b2Shape* shape= fixture->GetShape();
+
+    	  if ((shape->GetType() == 2) && (body->GetType()==0)){ // b2PoligonShape == 2
+    		  foundBodies.push_back( body );
+    	  }
+		  if ((shape->GetType() == 1)){ // b2EdgeShape == 2
+			  foundBodies.push_back( body );
+		  }
+          return true;//keep going to find all fixtures in the query area
+      }
+  };
+
+
+ std::vector<b2Body*> queryDestructibleBodies(b2Vec2 position, float radius, b2World* world){
+	MyQueryCallback query;
+	b2AABB aabb;
+	aabb.lowerBound = { position.x - radius, position.y - radius };
+	aabb.upperBound = { position.x + radius, position.y + radius };
+
+	world->QueryAABB(&query, aabb);
+
+	return query.foundBodies;
+ }
+
+ BOOST_GEOMETRY_REGISTER_POINT_2D(b2Vec2, float32, boost::geometry::cs::cartesian, x, y/*, z*/)
+
+ typedef boost::geometry::model::polygon<b2Vec2> Polygon;
+ BOOST_GEOMETRY_REGISTER_RING(Polygon::ring_type)
+
+ class QueryChainDestruir : public b2QueryCallback {
+  public:
+      std::vector<b2Fixture*> foundFix;
+      bool ReportFixture(b2Fixture* fixture) {
+    	  b2Shape* shape = fixture->GetShape();
+    	  if (shape->GetType() == 3){ // b2ChainShape == 3
+    		  vector<b2Fixture*>::iterator it = std::find(foundFix.begin(), foundFix.end(), fixture);
+    		  if(it==foundFix.end()){
+    			  foundFix.push_back( fixture );
+    		  }
+    	  }
+          return true;//keep going to find all fixtures in the query area
+      }
+  };
+
+
+
+ void Juego::explotarBomba(b2Vec2 posicion, float32 radio){
+
+	QueryChainDestruir query;
+	b2AABB aabb;
+	aabb.upperBound = b2Vec2(escalador->getEscalaX(),escalador->getEscalaY());
+	aabb.lowerBound = b2Vec2(0,0);
+
+	b2World* world = this->getMundo()->devolver_world();
+	world->QueryAABB(&query, aabb);
+
+	std::vector<b2Fixture*> chainFixtures = query.foundFix;
+
+	if (chainFixtures.size()==0) return;
+	printf("CANTIDAD DE FIXTURES ENCONTRADOS EN LA QUERY %d \n", (int) chainFixtures.size());
+
+	//VER PORQUE DEVUELVE TANTAS FIXTURES
+
+//	for (size_t t=0 ; t<chainFixtures.size();t++){
+//		b2Fixture* fixtureList = chainFixtures[t];
+//		b2Shape* shape = fixtureList->GetShape();
+//		b2ChainShape* chain = (b2ChainShape*) shape;
+//		int pepe = (int) chain->m_count;
+//		b2Vec2* vert = chain->m_vertices;
+////		printf("ESTA CHAIN TIENE %d VERTICES \n",pepe);
+//
+//		for (int g = 0 ; g<pepe ; g++){
+//			printf("%d -> ( %f, %f) ",g, vert[g].x,vert[g].y);
+//		}
+//		printf("\n");
+//	}
+	for (size_t t=0 ; t<chainFixtures.size();t++){
+
+
+		b2Fixture* fixtureList = chainFixtures[t];
+		b2Shape* shape = fixtureList->GetShape();
+		b2ChainShape* shapeOriginal = (b2ChainShape*) shape;
+		b2Vec2* verticesOriginal = shapeOriginal->m_vertices;
+		int cantidadOriginal = shapeOriginal->m_count;
+
+
+		int cantidadExplosion = 15;
+		b2Vec2 verticesExplosion[cantidadExplosion];
+		int anguloInicial = 360/cantidadExplosion;
+		int angulo = anguloInicial - 90;
+		for (int j = 0 ; j<cantidadExplosion ; j ++ ){
+			b2Vec2 punto;
+			punto.x = radio * cos( angulo * PI / 180 );
+			punto.y = radio * sin( angulo * PI / 180 );
+			angulo = angulo + anguloInicial;
+			verticesExplosion[j] = punto+posicion;
+		}
+
+		using boost::geometry::append;
+		using boost::geometry::correct;
+		using boost::geometry::dsv;
+
+		Polygon poliOriginal;
+		Polygon poliExplosion;
+
+		for (int i=0; i<cantidadOriginal ; i++){
+			b2Vec2 verOriginal = verticesOriginal[i];
+			append(poliOriginal, verOriginal);
+		}
+		for (int j=0; j<cantidadExplosion; j++){
+			b2Vec2 verExplosion = verticesExplosion[j];
+			append(poliExplosion, verExplosion);
+		}
+		correct(poliOriginal);
+		correct(poliExplosion);
+
+		std::vector<Polygon> poliNuevo;
+		boost::geometry::difference(poliOriginal, poliExplosion, poliNuevo);
+		if (poliNuevo.size() == 0 ) return;
+		b2Body* bodyDestruir = chainFixtures[t]->GetBody();
+		this->getMundo()->devolver_world()->DestroyBody(bodyDestruir);
+
+		for (size_t y=0; y<poliNuevo.size();y++){
+
+			Polygon inter = poliNuevo[y];
+			correct(inter);
+			std::vector<b2Vec2> const& puntos = inter.outer();
+			size_t cantidadNuevo = puntos.size();
+			b2Vec2* verticesNuevo = new b2Vec2[cantidadNuevo];
+			for (std::vector<b2Vec2>::size_type k = 0; k < (size_t) cantidadNuevo; k++){
+				verticesNuevo[k] = puntos[k];
+			}
+
+			b2Body* body;
+			b2BodyDef bodyDef = b2BodyDef();
+			body = this->getMundo()->devolver_world()->CreateBody(&bodyDef);
+			b2ChainShape shape;
+			shape.CreateChain(verticesNuevo, cantidadNuevo);
+
+			b2FixtureDef fd;
+			fd.shape = &shape;
+
+			body->CreateFixture(&fd);
+			printf("CREO UN CHAIN DE %d VERTICES \n", (int)cantidadNuevo);
+		}
+
+
+	}
+
+    return;
+}
+

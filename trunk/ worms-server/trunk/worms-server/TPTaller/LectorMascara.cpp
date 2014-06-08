@@ -96,6 +96,9 @@ SDL_Surface* LectorMascara :: GetSurface(){
 int LectorMascara::GetPixelAncho(){
 	return this->PIXEL_ANCHO;
 }
+int LectorMascara::GetPixelAlto(){
+	return this->PIXEL_ALTO;
+}
 
 void LectorMascara::setMascaraPorDefecto(){
 	this->superficie = IMG_Load( pathDefMas.c_str());

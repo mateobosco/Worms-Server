@@ -69,6 +69,7 @@ class Juego{
 		void disparar();
 		void checkColisionProyectil();
 		void setPaqueteProyectil(structPaquete *pack);
+		void explotarBomba(b2Vec2 posicion, float32 radio);
 };
 
 #endif /* JUEGO_H_ */

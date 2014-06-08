@@ -20,6 +20,7 @@ public:
 	LectorMascara(std::string& path);
 	b2Vec2* LeerMascara(Escalador* escalador);
 	int GetPixelAncho();
+	int GetPixelAlto();
 	void setMascaraPorDefecto();
 	~LectorMascara();
 	SDL_Surface* GetSurface();
