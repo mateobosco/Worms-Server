@@ -558,8 +558,14 @@ void Juego::setPaqueteProyectil(structPaquete *pack){
 			std::vector<b2Vec2> const& puntos = inter.outer();
 			size_t cantidadNuevo = puntos.size();
 			b2Vec2* verticesNuevo = new b2Vec2[cantidadNuevo];
-			for (std::vector<b2Vec2>::size_type k = 0; k < (size_t) cantidadNuevo; k++){
+			verticesNuevo[0] = puntos[0];
+			for (std::vector<b2Vec2>::size_type k = 1; k < (size_t) cantidadNuevo; k++){
 				verticesNuevo[k] = puntos[k];
+				b2Vec2 v1 = puntos[k-1];
+				b2Vec2 v2 = puntos[k];
+				if (b2DistanceSquared(v1, v2) < 0.005*0.005){
+					verticesNuevo[k] = verticesNuevo[k] + b2Vec2(0,0.1);
+				}
 			}
 
 			b2Body* body;
