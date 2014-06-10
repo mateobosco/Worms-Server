@@ -111,8 +111,8 @@ int main_server(int argc,char* argv[]){
 	logFile.close();
 	delete juego;
 	delete servidor;
-	return retorno;
 	SDL_DestroyMutex(un_mutex);
+	return retorno;
 }
 
 #endif /* MAIN_SERVER_H_ */
