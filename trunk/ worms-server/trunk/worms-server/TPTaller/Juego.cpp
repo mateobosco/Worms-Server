@@ -477,7 +477,6 @@ void Juego::setPaqueteProyectil(structPaquete *pack){
 	std::vector<b2Fixture*> chainFixtures = query.foundFix;
 
 	if (chainFixtures.size()==0) return;
-	printf("CANTIDAD DE FIXTURES ENCONTRADOS EN LA QUERY %d \n", (int) chainFixtures.size());
 
 	//VER PORQUE DEVUELVE TANTAS FIXTURES
 
@@ -523,16 +522,29 @@ void Juego::setPaqueteProyectil(structPaquete *pack){
 		Polygon poliOriginal;
 		Polygon poliExplosion;
 
-		for (int i=0; i<cantidadOriginal ; i++){
-			b2Vec2 verOriginal = verticesOriginal[i];
-			append(poliOriginal, verOriginal);
-		}
 		for (int j=0; j<cantidadExplosion; j++){
 			b2Vec2 verExplosion = verticesExplosion[j];
 			append(poliExplosion, verExplosion);
 		}
+
+		bool incluido = true;
+
+		for (int i=0; i<cantidadOriginal ; i++){
+			b2Vec2 verOriginal = verticesOriginal[i];
+			append(poliOriginal, verOriginal);
+			if (!(boost::geometry::within(verOriginal,poliExplosion))){
+				incluido = false;
+			}
+		}
+
 		correct(poliOriginal);
 		correct(poliExplosion);
+
+		if (incluido){
+			b2Body* bodyDestruir = chainFixtures[t]->GetBody();
+			this->getMundo()->devolver_world()->DestroyBody(bodyDestruir);
+			continue;
+		}
 
 		std::vector<Polygon> poliNuevo;
 		boost::geometry::difference(poliOriginal, poliExplosion, poliNuevo);
@@ -541,7 +553,6 @@ void Juego::setPaqueteProyectil(structPaquete *pack){
 		this->getMundo()->devolver_world()->DestroyBody(bodyDestruir);
 
 		for (size_t y=0; y<poliNuevo.size();y++){
-
 			Polygon inter = poliNuevo[y];
 			correct(inter);
 			std::vector<b2Vec2> const& puntos = inter.outer();
@@ -561,7 +572,7 @@ void Juego::setPaqueteProyectil(structPaquete *pack){
 			fd.shape = &shape;
 
 			body->CreateFixture(&fd);
-			printf("CREO UN CHAIN DE %d VERTICES \n", (int)cantidadNuevo);
+//			printf("CREO UN CHAIN DE %d VERTICES \n", (int)cantidadNuevo);
 		}
 
 
