@@ -396,22 +396,6 @@ void Juego::setPaqueteProyectil(structPaquete *pack){
 }
 
 
-// class MyQueryCallback : public b2QueryCallback {
-//  public:
-//      std::vector<b2Body*> foundBodies;
-//
-//      bool ReportFixture(b2Fixture* fixture) {
-//    	  b2Body* body = fixture->GetBody();
-//    	  b2Shape* shape= fixture->GetShape();
-//
-//    	  if ((shape->GetType() == 1)){ // b2EdgeShape == 2
-//    		  foundBodies.push_back( body );
-//    	  }
-//          return true;//keep going to find all fixtures in the query area
-//      }
-//  };
-
-
  class MyQueryCallback : public b2QueryCallback {
   public:
       std::vector<b2Body*> foundBodies;
@@ -477,31 +461,13 @@ void Juego::setPaqueteProyectil(structPaquete *pack){
 	std::vector<b2Fixture*> chainFixtures = query.foundFix;
 
 	if (chainFixtures.size()==0) return;
-
-	//VER PORQUE DEVUELVE TANTAS FIXTURES
-
-//	for (size_t t=0 ; t<chainFixtures.size();t++){
-//		b2Fixture* fixtureList = chainFixtures[t];
-//		b2Shape* shape = fixtureList->GetShape();
-//		b2ChainShape* chain = (b2ChainShape*) shape;
-//		int pepe = (int) chain->m_count;
-//		b2Vec2* vert = chain->m_vertices;
-////		printf("ESTA CHAIN TIENE %d VERTICES \n",pepe);
-//
-//		for (int g = 0 ; g<pepe ; g++){
-//			printf("%d -> ( %f, %f) ",g, vert[g].x,vert[g].y);
-//		}
-//		printf("\n");
-//	}
 	for (size_t t=0 ; t<chainFixtures.size();t++){
-
 
 		b2Fixture* fixtureList = chainFixtures[t];
 		b2Shape* shape = fixtureList->GetShape();
 		b2ChainShape* shapeOriginal = (b2ChainShape*) shape;
 		b2Vec2* verticesOriginal = shapeOriginal->m_vertices;
 		int cantidadOriginal = shapeOriginal->m_count;
-
 
 		int cantidadExplosion = 15;
 		b2Vec2 verticesExplosion[cantidadExplosion];
@@ -518,7 +484,6 @@ void Juego::setPaqueteProyectil(structPaquete *pack){
 		using boost::geometry::append;
 		using boost::geometry::correct;
 		using boost::geometry::dsv;
-
 		Polygon poliOriginal;
 		Polygon poliExplosion;
 
@@ -567,7 +532,6 @@ void Juego::setPaqueteProyectil(structPaquete *pack){
 					verticesNuevo[k] = verticesNuevo[k] + b2Vec2(0,0.1);
 				}
 			}
-
 			b2Body* body;
 			b2BodyDef bodyDef = b2BodyDef();
 			body = this->getMundo()->devolver_world()->CreateBody(&bodyDef);
@@ -576,14 +540,9 @@ void Juego::setPaqueteProyectil(structPaquete *pack){
 
 			b2FixtureDef fd;
 			fd.shape = &shape;
-
 			body->CreateFixture(&fd);
-//			printf("CREO UN CHAIN DE %d VERTICES \n", (int)cantidadNuevo);
 		}
-
-
 	}
-
     return;
 }
 
