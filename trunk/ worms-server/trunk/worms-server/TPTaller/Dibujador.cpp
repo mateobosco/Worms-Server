@@ -55,6 +55,7 @@ Dibujador::~Dibujador(){
 	if (this->textureizquierda) SDL_DestroyTexture(textureizquierda);
 	if (this->texturederechaNEGRO) SDL_DestroyTexture(texturederechaNEGRO);
 	if (this->textureizquierdaNEGRO) SDL_DestroyTexture(textureizquierdaNEGRO);
+	if (this->surfaceTierra) SDL_FreeSurface(this->surfaceTierra);
 	this->close();
 }
 
@@ -224,7 +225,7 @@ SDL_Texture* Dibujador::dibujarAgua(Escalador* escalador, Agua* agua ){
 }
 
 SDL_Texture* Dibujador::dibujar_tierra(Escalador* escalador, std::string path){
-	SDL_Texture *background = loadTexture(path.c_str(), this->renderizador);
+	SDL_Texture *background = loadTextureTierra(path.c_str(), this->renderizador);
 	if(background == NULL){
 		loguear();
 		logFile << "    Error    " <<"\t No se pudo cargar textura de fondo " << endl;
@@ -251,6 +252,24 @@ SDL_Texture* Dibujador::loadTexture(const std::string &path, SDL_Renderer *ren){
         	logFile << "No se pudo crear textura de: " << path.c_str() << "! SDL Error: " <<  SDL_GetError() << endl;
         }
         SDL_FreeSurface(loadedSurface);
+    }
+    return newTexture;
+}
+
+SDL_Texture* Dibujador::loadTextureTierra(const std::string &path, SDL_Renderer *ren){
+    SDL_Texture* newTexture = NULL;
+    SDL_Surface* loadedSurface = IMG_Load(path.c_str());
+    this->surfaceTierra = loadedSurface;
+
+    if(loadedSurface == NULL){
+        loguear();
+        logFile << "No se pudo cargar la imagen: " << path.c_str() << "! SDL_image Error: " <<  IMG_GetError() << endl;
+    } else{
+        newTexture = SDL_CreateTextureFromSurface(ren, loadedSurface);
+        if(newTexture == NULL){
+        	loguear();
+        	logFile << "No se pudo crear textura de: " << path.c_str() << "! SDL Error: " <<  SDL_GetError() << endl;
+        }
     }
     return newTexture;
 }
@@ -282,7 +301,7 @@ void Dibujador::iniciarFondo(Agua* agua, std::string pathCielo, std::string path
 void Dibujador::dibujarFondo(Agua* agua, Juego* juego){
 	this->renderTexture(textureCielo, renderizador,0 , 0, escalador->getPixelX(), escalador->getPixelY() );
 	this->renderTexture(textureAgua, renderizador, 0, agua->GetNivel()*(escalador->getPixelY()/escalador->getEscalaY()) , escalador->getPixelX(), escalador->getPixelY());
-//	this->renderTexture(textureTierra, renderizador, 0 , 0, escalador->getPixelX() , escalador->getPixelY());
+	this->renderTexture(textureTierra, renderizador, 0 , 0, escalador->getPixelX() , escalador->getPixelY());
 //	this->dibujarTierraEdge(juego);
 //	this->dibujarTierraPoligono(juego);
 	this->dibujarTierraChain(juego);
@@ -621,8 +640,127 @@ void Dibujador::dibujarTierraChain(Juego* juego){
 
 	}
 
-
-
-
 }
 
+Uint32 getpixel(SDL_Surface *surface, int x, int y)
+{
+    int bpp = surface->format->BytesPerPixel;
+    /* Here p is the address to the pixel we want to retrieve */
+    Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
+
+    switch(bpp) {
+    case 1:
+        return *p;
+        break;
+
+    case 2:
+        return *(Uint16 *)p;
+        break;
+
+    case 3:
+        if(SDL_BYTEORDER == SDL_BIG_ENDIAN)
+            return p[0] << 16 | p[1] << 8 | p[2];
+        else
+            return p[0] | p[1] << 8 | p[2] << 16;
+        break;
+
+    case 4:
+        return *(Uint32 *)p;
+        break;
+
+    default:
+        return 0;       /* shouldn't happen, but avoids warnings */
+    }
+}
+
+void putpixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
+{
+    int bpp = surface->format->BytesPerPixel;
+    /* Here p is the address to the pixel we want to set */
+    Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
+
+    switch(bpp) {
+    case 1:
+        *p = pixel;
+        break;
+
+    case 2:
+        *(Uint16 *)p = pixel;
+        break;
+
+    case 3:
+        if(SDL_BYTEORDER == SDL_BIG_ENDIAN) {
+            p[0] = (pixel >> 16) & 0xff;
+            p[1] = (pixel >> 8) & 0xff;
+            p[2] = pixel & 0xff;
+        } else {
+            p[0] = pixel & 0xff;
+            p[1] = (pixel >> 8) & 0xff;
+            p[2] = (pixel >> 16) & 0xff;
+        }
+        break;
+
+    case 4:
+        *(Uint32 *)p = pixel;
+        break;
+    }
+}
+
+
+void Dibujador::borrarExplosion(b2Vec2 pos, float32 radio){
+
+	SDL_Surface* surf = this->surfaceTierra;
+	int alto = surf->h;
+	int ancho = surf->w;
+	Uint32* pixeles = (Uint32*) surf->pixels;
+
+	b2Vec2* posPixAux = escalador->pixelarPosicion(pos);
+	b2Vec2 posPix = *posPixAux;
+	posPix.x = pos.x / (escalador->getEscalaX()/escalador->getPixelX());
+	posPix.y = pos.y / (escalador->getEscalaY()/escalador->getPixelY());
+
+	b2Vec2* radPixAux = escalador->pixelarPosicion(b2Vec2(radio,radio));
+	b2Vec2 radPix = *radPixAux;
+	radPix.x = radPix.x / (escalador->getEscalaX()/escalador->getPixelX());
+	radPix.y = radPix.y / (escalador->getEscalaY()/escalador->getPixelY());
+//
+	radPix.x = (radPix.x) / ((float32)escalador->getPixelX()/ancho);
+	radPix.y = (radPix.y) / ((float32)escalador->getPixelY()/alto);
+
+
+
+
+	for (int i= 0-radPix.x; i<radPix.x; i++){
+		for (int j=0-radPix.y; j<radPix.y; j++){
+			b2Vec2 point = posPix + b2Vec2(i,j);
+			point.x = (point.x) / ((float32)escalador->getPixelX()/ancho);
+			point.y = (point.y) / ((float32)escalador->getPixelY()/alto);
+
+
+
+			float32 x = (i*i / radPix.x);
+			float32 y = (j*j / radPix.y);
+			//			printf(" LOS PUNTOS SON %f, %f \n",x,y);
+
+			if ( (x+y) <= 1) {
+
+				putpixel(surfaceTierra,point.x,point.y,0);
+			}
+
+
+		}
+	}
+
+
+//	if (this->textureTierra) SDL_DestroyTexture(textureTierra);
+//
+//	this->textureTierra = SDL_CreateTextureFromSurface(this->renderizador,this->surfaceTierra);
+	SDL_UpdateTexture(this->textureTierra,NULL,pixeles,this->surfaceTierra->pitch);
+//	SDL_UpdateTexture(this->textureTierra,NULL,pixeles,this->surfaceTierra->w * sizeof(Uint32));
+
+
+
+
+	delete posPixAux;
+	delete radPixAux;
+}

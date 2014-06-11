@@ -56,6 +56,8 @@ public:
 	void dibujarTierraEdge(Juego* juego);
 	void dibujarTierraPoligono(Juego* juego);
 	void dibujarTierraChain(Juego* juego);
+	void borrarExplosion(b2Vec2 pos, float32 radio);
+
 
 
 protected:
@@ -65,9 +67,11 @@ protected:
 
 private:
 	SDL_Texture* loadTexture(const std::string &file, SDL_Renderer *ren);
+	SDL_Texture* loadTextureTierra(const std::string &file, SDL_Renderer *ren);
 	SDL_Texture* textureCielo;
 	SDL_Texture* textureAgua;
 	SDL_Texture* textureTierra;
+	SDL_Surface* surfaceTierra;
 	SDL_Texture* flechitaroja;
 	SDL_Window* window;
 	SDL_Texture* texturederecha;
