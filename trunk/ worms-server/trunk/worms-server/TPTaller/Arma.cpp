@@ -22,8 +22,8 @@ void Arma::disparar(Mundo* mundo){
 
 	b2World* world = mundo->devolver_world();
 	b2BodyDef bodyDef = b2BodyDef(); // creo el body def
-	bodyDef.position.x = posicion_proyectil.x + 4*direccion_proyectil.x; // le asigno una posicion
-	bodyDef.position.y = posicion_proyectil.y + 4*direccion_proyectil.y;
+	bodyDef.position.x = posicion_proyectil.x /*+ 4*direccion_proyectil.x*/; // le asigno una posicion
+	bodyDef.position.y = posicion_proyectil.y /*+ 4*direccion_proyectil.y*/;
 	bodyDef.userData = this; // no se si funciona bien esto,
 	bodyDef.type = b2_dynamicBody;
 	proyectil = world->CreateBody(&bodyDef);
@@ -185,6 +185,7 @@ void Arma::setDireccion(b2Vec2 una_direccion){
 }
 
 void Arma::setPosicion(b2Vec2 una_posicion){
+	printf("UBICO LA BOMBA EN (%f,%f) \n",una_posicion.x,una_posicion.y);
 	this->posicion_proyectil.x = una_posicion.x;
 	this->posicion_proyectil.y = una_posicion.y;
 }
@@ -243,26 +244,30 @@ public:
 void Arma::aplicarExplosion(){
 	b2World* world = this->proyectil->GetWorld();
 	b2Vec2 pos = this->proyectil->GetPosition();
-	float32 blastRadius = 10;
-	int numRays = 30;
+	printf("UBICO LA BOMBA EN (%f,%f) \n",pos.x,pos.y);
+	float32 blastRadius = 30;
+	int numRays = 20;
 	for (int i = 0; i < numRays; i++) {
 	  float angle = (i / (float)numRays) * PI;
 	  b2Vec2 rayDir( sinf(angle), cosf(angle) );
 	  b2Vec2 rayEnd = pos + blastRadius * rayDir;
+	  printf("ANGULOS %f \n",angle);
 
 	  RayCastMasCercano callback;
+	  printf("HAGO UN RAYCAST ENTRE LAS POSICIONES (%f,%f) y (%f,%f) \n",pos.x,pos.y,rayEnd.x,rayEnd.y);
 	  world->RayCast(&callback, pos, rayEnd);
 	  if ( callback.body ){
 		b2Body* body = callback.body;
 		b2Vec2 posImpacto = callback.pos;
-		if ( body == this->proyectil || body->GetType() != b2_dynamicBody ) return;
+		if ( body == this->proyectil || body->GetType() != b2_dynamicBody ) continue;
 		b2Vec2 dir = posImpacto - pos;
 		float32 distancia = dir.Normalize();
-		if (distancia == 0 ) return;
+		if (distancia == 0 ) continue;
 		float32 invDistancia = 1/distancia;
-		float32 impulso = this->danio * invDistancia;
-		impulso = b2Min(impulso, 500.0f); // estaba en el tutorial, no estoy seguro
+		float32 impulso = this->danio * invDistancia*10;
+//		impulso = b2Min(impulso, 500.0f); // estaba en el tutorial, no estoy seguro
 		body->ApplyLinearImpulse(impulso * dir , posImpacto, true);
+		printf("EL RAYCAST ENCONTRO UN CUERPO Y LE APLICA UN LINEAR IMPULSE DE %f \n",impulso);
 		//FALTA SACARLE VIDA A LOS GUSANOS
 	  }
 	}

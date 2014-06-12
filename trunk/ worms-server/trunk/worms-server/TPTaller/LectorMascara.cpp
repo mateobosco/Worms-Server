@@ -20,7 +20,7 @@ LectorMascara::LectorMascara(string& path) {
 LectorMascara::~LectorMascara() {
 }
 
-Uint32 getpixel(SDL_Surface *surface, int x, int y){
+Uint32 getpixel2(SDL_Surface *surface, int x, int y){
    int bpp = surface->format->BytesPerPixel;
    Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
 
@@ -74,7 +74,7 @@ b2Vec2* LectorMascara::LeerMascara(Escalador* escalador){
 	for (int i = 0; i<this->PIXEL_ANCHO ; i++){
 		int j;
 		for(j= 0 ; j< PIXEL_ALTO; j++){
-			if ( (getpixel(superficie, i, j ) != transparente)  && (tierra[i] > (j)) ){
+			if ( (getpixel2(superficie, i, j ) != transparente)  && (tierra[i] > (j)) ){
 				tierra[i] = j;
 				tierra_escalada[i].x = i * (escalador->getEscalaX() / this->PIXEL_ANCHO) ;
 				tierra_escalada[i].y = j * (escalador->getEscalaY() / this->PIXEL_ALTO ) ;
