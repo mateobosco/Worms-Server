@@ -28,6 +28,7 @@ int mainPrueba(int argc,char* argv[]){
 	posicion_mouse_click[0] = -1;
 	posicion_mouse_click[1] = -1;
 	SDL_Event event;
+	Arma* bomba = new Arma();
 
 	while(KEYS[SDLK_ESCAPE] == false){
 
@@ -41,7 +42,14 @@ int mainPrueba(int argc,char* argv[]){
 		dibujador->dibujarFondo(juego->getAgua(),juego);
 		dibujador->dibujarFiguras(juego->getFiguras(),juego->getCantidadFiguras());
 		b2Vec2 pos = b2Vec2(posicion_mouse_click[0], posicion_mouse_click[1]);
-		if (posicion_mouse_click[0] != -1) juego->explotarBomba(escalador->escalarPosicion(pos), 5);
+		if (posicion_mouse_click[0] != -1){
+			bomba->setPosicion(escalador->escalarPosicion(pos));
+			bomba->disparar(juego->getMundo());
+			bomba->setPosicion(escalador->escalarPosicion(pos));
+//			bomba->aplicarExplosion();
+			juego->explotarBomba(escalador->escalarPosicion(pos), 3);
+			dibujador->borrarExplosion(escalador->escalarPosicion(pos), 3);
+		}
 
 		juego->getMundo()->setVectorPersonajes(manejador_personajes->getPersonajes(), manejador_personajes->getCantidadPersonajes(), manejador_personajes->getCantidadJugadores());
 		juego->getMundo()->setFiguras(juego->getFiguras(), juego->getCantidadFiguras());
@@ -62,6 +70,6 @@ int mainPrueba(int argc,char* argv[]){
 
 
 int main(int argc,char* argv[]){
-	main_server(argc, argv);
-//	mainPrueba(argc,argv);
+//	main_server(argc, argv);
+	mainPrueba(argc,argv);
 }

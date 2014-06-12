@@ -642,36 +642,7 @@ void Dibujador::dibujarTierraChain(Juego* juego){
 
 }
 
-Uint32 getpixel(SDL_Surface *surface, int x, int y)
-{
-    int bpp = surface->format->BytesPerPixel;
-    /* Here p is the address to the pixel we want to retrieve */
-    Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
 
-    switch(bpp) {
-    case 1:
-        return *p;
-        break;
-
-    case 2:
-        return *(Uint16 *)p;
-        break;
-
-    case 3:
-        if(SDL_BYTEORDER == SDL_BIG_ENDIAN)
-            return p[0] << 16 | p[1] << 8 | p[2];
-        else
-            return p[0] | p[1] << 8 | p[2] << 16;
-        break;
-
-    case 4:
-        return *(Uint32 *)p;
-        break;
-
-    default:
-        return 0;       /* shouldn't happen, but avoids warnings */
-    }
-}
 
 void putpixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
 {
@@ -707,60 +678,36 @@ void putpixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
 }
 
 
-void Dibujador::borrarExplosion(b2Vec2 pos, float32 radio){
+void Dibujador::borrarExplosion(b2Vec2 posicion, float32 radio){
 
 	SDL_Surface* surf = this->surfaceTierra;
 	int alto = surf->h;
 	int ancho = surf->w;
 	Uint32* pixeles = (Uint32*) surf->pixels;
 
-	b2Vec2* posPixAux = escalador->pixelarPosicion(pos);
-	b2Vec2 posPix = *posPixAux;
-	posPix.x = pos.x / (escalador->getEscalaX()/escalador->getPixelX());
-	posPix.y = pos.y / (escalador->getEscalaY()/escalador->getPixelY());
+	int pos[2];
+	pos[0] = posicion.x * (ancho / escalador->getEscalaX());
+	pos[1] = posicion.y * (alto / escalador->getEscalaY());
 
-	b2Vec2* radPixAux = escalador->pixelarPosicion(b2Vec2(radio,radio));
-	b2Vec2 radPix = *radPixAux;
-	radPix.x = radPix.x / (escalador->getEscalaX()/escalador->getPixelX());
-	radPix.y = radPix.y / (escalador->getEscalaY()/escalador->getPixelY());
-//
-	radPix.x = (radPix.x) / ((float32)escalador->getPixelX()/ancho);
-	radPix.y = (radPix.y) / ((float32)escalador->getPixelY()/alto);
+	int rad[2];
+	rad[0] = radio * (ancho / escalador->getEscalaX());
+	rad[1] = radio * (alto / escalador->getEscalaY());
 
+	int pixel[2];
 
+	for (int i= 0-rad[0]; i<rad[0]; i++){
+		for (int j=0-rad[1]; j<rad[1]; j++){
+			pixel[0] = pos[0] + i;
+			pixel[1] = pos[1] + j;
 
-
-	for (int i= 0-radPix.x; i<radPix.x; i++){
-		for (int j=0-radPix.y; j<radPix.y; j++){
-			b2Vec2 point = posPix + b2Vec2(i,j);
-			point.x = (point.x) / ((float32)escalador->getPixelX()/ancho);
-			point.y = (point.y) / ((float32)escalador->getPixelY()/alto);
-
-
-
-			float32 x = (i*i / radPix.x);
-			float32 y = (j*j / radPix.y);
-			//			printf(" LOS PUNTOS SON %f, %f \n",x,y);
-
+			float32 x = (( ((float32) i*i) / ((float32) rad[0]*rad[0])));
+			float32 y = (( ((float32) j*j) / ((float32) rad[1]*rad[1])));
+			printf(" LOS PUNTOS SON %d, %d y %d,%d y dan x=%f y=%f x+y = %f \n", i,j,rad[0],rad[1],x,y,x+y);
 			if ( (x+y) <= 1) {
-
-				putpixel(surfaceTierra,point.x,point.y,0);
+				putpixel(surfaceTierra,pixel[0],pixel[1],0);
 			}
-
-
 		}
 	}
-
-
-//	if (this->textureTierra) SDL_DestroyTexture(textureTierra);
-//
-//	this->textureTierra = SDL_CreateTextureFromSurface(this->renderizador,this->surfaceTierra);
 	SDL_UpdateTexture(this->textureTierra,NULL,pixeles,this->surfaceTierra->pitch);
-//	SDL_UpdateTexture(this->textureTierra,NULL,pixeles,this->surfaceTierra->w * sizeof(Uint32));
 
-
-
-
-	delete posPixAux;
-	delete radPixAux;
 }
