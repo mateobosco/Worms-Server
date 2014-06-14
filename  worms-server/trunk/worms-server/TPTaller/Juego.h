@@ -47,6 +47,8 @@ class Juego{
 		~Juego();
 
 		void crearJugador();
+		void setArmaVacia();
+
 		Jugador** getJugadores();
 		uint8 getCantidadJugadores();
 		Mundo* getMundo();
@@ -67,7 +69,7 @@ class Juego{
 
 		void setArma(int tipo_arma, b2Vec2 posicion, int angulo);
 		void disparar();
-		void checkColisionProyectil();
+		void checkColisionProyectil(structPaquete* paquete);
 		void setPaqueteProyectil(structPaquete *pack);
 		void explotarBomba(b2Vec2 posicion, float32 radio);
 };

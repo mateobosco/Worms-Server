@@ -62,11 +62,14 @@ public:
 	void setFinalizar(bool condicion);
 	char* getMensajeMostrar();
 	void setMensajeMostrar(char* mensaje);
+	void encolarExplosion(structPaquete* paquete);
+	size_t getTamanioColaExplosion();
 
 private:
 	char paqueteEnviar[MAX_PACK];
 	char paqueteInicial[MAX_PACK];
 	queue<void*> paquetesRecibir;
+	queue<structPaquete*> paquetesExplosion;
 	int cantidadMaxConexiones;
 	int cantClientes;
 	int clientesActivos;

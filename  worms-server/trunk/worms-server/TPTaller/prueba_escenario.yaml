@@ -8,7 +8,7 @@ escenario:
     agua:          65
 
     tierra:        "TPTaller/imagenes/nueva.png"
-    cielo:         "TPTaller/imagenes/cieloN.png"
+    cielo:         "TPTaller/imagenes/fondoNegro.png"
     obj:
         - tipo:       circulo #1
           x:        25

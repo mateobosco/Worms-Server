@@ -47,7 +47,7 @@ int main_server(int argc,char* argv[]){
 	printf("-----------------------------------------EL SERVIDOR INICIA EL JUEGO-------------------------------------\n");
 	juego->getMundo()->setVectorPersonajes(manejador_personajes->getPersonajes(), manejador_personajes->getCantidadPersonajes(), manejador_personajes->getCantidadJugadores());
 	juego->getMundo()->setFiguras(juego->getFiguras(), juego->getCantidadFiguras());
-	juego->getMundo()->step(0.1,1,1);
+	//juego->getMundo()->step(0.1,1,1);
 	int jugadores_necesarios = 1;
 	SDL_Delay(2000);
 
@@ -71,7 +71,6 @@ int main_server(int argc,char* argv[]){
 
 
 		if (jugadores_necesarios == servidor->getCantidadClientesActivos() && comenzar==0){
-			printf(" EMPIEZA LA WEA \n");
 			comenzar=1;
 			juego->resetearRelojRonda();
 
@@ -82,6 +81,13 @@ int main_server(int argc,char* argv[]){
 		//printf(" MANDO EL NOMBRE %s \n", nombre1);
 		structPaquete* paqueteCiclo = crearPaqueteCiclo(juego->getMundo(), servidor->getMensajeMostrar(), nro_jugador_actual, comenzar, juego->getRelojRonda(), nombre1);
 		juego->setPaqueteProyectil(paqueteCiclo);
+		//printf(" EL TAMANIO DEL STACK PROYECTIL ES %d \n", servidor->getTamanioColaExplosion());
+		juego->checkColisionProyectil(paqueteCiclo);
+		if(paqueteCiclo->radio_explosion != 0 && paqueteCiclo->radio_explosion != -1 && servidor->getTamanioColaExplosion()==0){
+			printf(" LO encolo y el radio es %d \n", paqueteCiclo->radio_explosion);
+
+			servidor->encolarExplosion(paqueteCiclo);
+		}
 		servidor->actualizarPaquete((char*)paqueteCiclo);
 
 		destruirPaqueteCiclo(paqueteCiclo);
@@ -103,9 +109,10 @@ int main_server(int argc,char* argv[]){
 	    }
 	    SDL_Delay(10);
 
-		juego->getMundo()->step(0.025,100,100);
+
 		juego->getMundo()->comprobar_nivel_agua();
-		juego->checkColisionProyectil();
+
+		juego->getMundo()->step(0.025,100,100);
 
 	}
 	logFile.close();

@@ -357,6 +357,11 @@ void Juego::setArma(int tipo_arma, b2Vec2 posicion, int angulo){
 	this->arma_actual->setAngulo(angulo);
 }
 
+void Juego::setArmaVacia(){
+	this->arma_actual->setTipo(0);
+	this->arma_actual->setAngulo(0);
+}
+
 void Juego::disparar(){
 	if(arma_actual->getTipo() != 0){
 		arma_actual->disparar(this->mundo);
@@ -366,17 +371,30 @@ void Juego::disparar(){
 	}
 }
 
-void Juego::checkColisionProyectil(){
+void Juego::checkColisionProyectil(structPaquete* paquete){
 	if(proj_in_air){
 		if(arma_actual->checkImpacto(this->mundo)){
+			printf(" ENTROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO \n");
 			proj_in_air = false;
 			this->arma_actual->setTipo(0);
 			this->mundo->destruir_cuerpo(arma_actual->getProyectil());
 			this->arma_actual->aplicarExplosion();
+			paquete->radio_explosion=3;
+			paquete->posicion_proyectil=arma_actual->getProyectil()->GetPosition();
+			printf(" LE MANDO LA POSICION %f, %f \n", paquete->posicion_proyectil.x, paquete->posicion_proyectil.y);
+			this->explotarBomba(paquete->posicion_proyectil, paquete->radio_explosion);
+			this->setArmaVacia();
+			this->pasarTurno();
+
 		} else{
+			paquete->radio_explosion=-1;
+
 			//b2Vec2 antigravedad = b2Vec2(0,-0.98f);
 			//arma_actual->getProyectil()->ApplyForceToCenter(antigravedad, true );
 		}
+	}
+	else{
+		paquete->radio_explosion=-1;
 	}
 }
 
@@ -470,7 +488,7 @@ void Juego::setPaqueteProyectil(structPaquete *pack){
 		int cantidadOriginal = shapeOriginal->m_count;
 
 		int cantidadExplosion = 15;
-		b2Vec2 verticesExplosion[cantidadExplosion];
+		b2Vec2 verticesExplosion[15];
 		int anguloInicial = 360/cantidadExplosion;
 		int angulo = anguloInicial - 90;
 		for (int j = 0 ; j<cantidadExplosion ; j ++ ){

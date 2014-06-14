@@ -23,7 +23,14 @@ Personaje::Personaje(Mundo* mundo, Uint8 numero_jugador, char* nombre_client) {
 	b2Vec2* vertices_tierra = mundo->GetVerticesTierra();
 	bool posicion_correcta = false;
 	b2Vec2 posicion;
+	//b2Vec2 aux=b2Vec2(10, 10);
+	for (int w=0; w < mundo->GetCantVerticesTierra(); w++){
+		printf( "%f , %f \n", vertices_tierra[w].x, vertices_tierra[w].y);
+	}
+	printf(" -------------- \n");
 	while (!posicion_correcta){
+		posicion.x+=10;
+		//aux+=10;
 		int indice = random( (mundo->GetCantVerticesTierra()));
 		posicion = vertices_tierra[indice] - b2Vec2(0,alto/2);
 		if (posicion.y < mundo->getAgua()->GetNivel()){
@@ -33,10 +40,12 @@ Personaje::Personaje(Mundo* mundo, Uint8 numero_jugador, char* nombre_client) {
 	b2World* world = mundo->devolver_world();
 	b2BodyDef bodyDef = b2BodyDef(); // creo el body def
 	bodyDef.position = posicion; // le asigno una posicion
+	printf(" LO VOY A PONER EN ESTA POSICION: (%f, %f) \n", posicion.x, posicion.y);
 	bodyDef.userData = this; // no se si funciona bien esto,
 	bodyDef.type = b2_dynamicBody;
-	body = world->CreateBody(&bodyDef);
 
+	body = world->CreateBody(&bodyDef);
+	printf(" ************ \n");
 	b2MassData massData = b2MassData();
 	massData.mass = 0.1;
 	massData.center = b2Vec2(0, 0);

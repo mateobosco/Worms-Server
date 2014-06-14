@@ -191,6 +191,14 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 		memset(envio2,0,MAX_PACK);
 		memcpy(envio, this->paqueteEnviar, MAX_PACK);
 		structPaquete* paqueteCiclo = (structPaquete*) envio;
+		if( this->paquetesExplosion.size()==1 ){
+			structPaquete* paquete_explosion = this->paquetesExplosion.front();
+			memcpy(envio, paquete_explosion, MAX_PACK );
+			this->paquetesExplosion.pop();
+		}
+		if(paqueteCiclo->radio_explosion==3){
+			printf(" DESDE EL MANDAR LO MADNOOOO -------------------------------- \n");
+		}
 		paqueteCiclo->id=cliente->getID();
 		memcpy(envio2, paqueteCiclo, MAX_PACK);
 		if (setsockopt (cliente->getSocket()->getFD(), SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout,
@@ -418,4 +426,13 @@ char* Servidor::getMensajeMostrar(){
 
 void Servidor::setMensajeMostrar(char* mensaje){
 	strncpy(this->mensaje_mostrar, mensaje, 50);
+}
+
+
+void Servidor::encolarExplosion(structPaquete* paquete){
+	this->paquetesExplosion.push(paquete);
+}
+
+size_t Servidor::getTamanioColaExplosion(){
+	return this->paquetesExplosion.size();
 }

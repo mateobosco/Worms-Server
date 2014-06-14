@@ -56,13 +56,13 @@ void Mundo::step(float32 timeStep, int32 velocityIterations, int32 positionItera
 }
 
 void Mundo::Crear_Chains(b2Vec2* tierra, float32 pixelesX){
-	size_t cantidad = pixelesX/10;
+	int cantidad = pixelesX;
 	b2Vec2* vs = new b2Vec2[cantidad+3];
 	size_t i;
 	vs[0].Set(-10, 200);
 	float32 aux = 0;
 	for(i = 0; i < cantidad; i++){
-		vs[i+1].Set(tierra[i*10].x ,tierra[i*10].y);
+		vs[i+1].Set(tierra[i].x ,tierra[i].y);
 		aux = tierra[i].x;
 	}
 	vs[cantidad+1].Set(aux + 100, 200);
@@ -143,7 +143,7 @@ void Mundo::crearEdge(b2Vec2* tierra, float32 pixelesX){
 void Mundo::CrearTierraPoligono(b2Vec2* tierra, float32 pixelesX,Escalador* escalador){
 	//El vector tierra tiene todos los puntos mas altos de la mascara.
 	size_t cantidad = pixelesX;
-	b2Vec2 vs[(int)escalador->getEscalaX()];
+	b2Vec2 vs[200];
 	size_t i;
 	int saltoHori = (pixelesX/ escalador->getEscalaX())/* + (pixelesX / escalador->getPixelX())*/; //puede ser float
 
