@@ -162,6 +162,7 @@ structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje, int jugador_actual
 	else {
 		memset(paquete->mensaje_mostrar, 0, MAX_MENSAJE);
 	}
+	paquete->radio_explosion=-1;
 	return paquete;
 }
 

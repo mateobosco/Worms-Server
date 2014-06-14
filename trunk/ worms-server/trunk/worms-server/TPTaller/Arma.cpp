@@ -47,8 +47,8 @@ void Arma::disparar(Mundo* mundo){
 	proyectil->CreateFixture(&fd); // al body le pongo la fixture creada
 //	proyectil->SetAwake(false);
 	b2Vec2 velocidad;
-	velocidad.x = direccion_proyectil.x*10; // Multiplicar por Fuerza 
-	velocidad.y = direccion_proyectil.y*10; // Multiplicar por Fuerza 
+	velocidad.x = direccion_proyectil.x*this->fuerza; // Multiplicar por Fuerza
+	velocidad.y = direccion_proyectil.y*this->fuerza; // Multiplicar por Fuerza
 	proyectil->SetLinearVelocity(velocidad);
 //	b2Vec2 antigravedad = b2Vec2(0,-9.8f);
 //	proyectil->ApplyForceToCenter(antigravedad, true );
@@ -126,24 +126,28 @@ class QueryCheckImpacto : public b2QueryCallback {
 			  foundShapes.push_back( shape );
 		  }
    	  }
-         return true;//keep going to find all fixtures in the query area
+      return true;//keep going to find all fixtures in the query area
      }
  };
 
 bool Arma::checkImpacto(Mundo* mundo){
+	printf(" Entra acaaaaaaaaaaa \n");
 	float32 radio = this->shape_proy->m_radius;
-	b2Vec2 pos = this->posicion_proyectil;
+	b2Vec2 pos = this->proyectil->GetPosition();
 	QueryCheckImpacto query;
 	b2AABB aabb;
-	aabb.upperBound = pos - b2Vec2(radio,radio);
-	aabb.lowerBound = pos + b2Vec2(radio,radio);
+	aabb.upperBound = pos + b2Vec2(radio,radio);
+	aabb.lowerBound = pos - b2Vec2(radio,radio);
 
 	b2World* world = mundo->devolver_world();
 	world->QueryAABB(&query, aabb);
 
 	std::vector<b2Shape*> res = query.foundShapes;
 
-	if (res.size() > 0) return true;
+	if (res.size() > 0) {
+		printf(" DEVUELVE TRUEEEE\n");
+		return true;
+	}
 
 
 	return false;
@@ -154,8 +158,8 @@ bool Arma::setFuerza(){
 		//printf("entra al setFuerza: %f \n", this->fuerza);
 		return false;
 	} else{
-		this->fuerza += (MAX_FUERZA / 10);//todo poner algo inferior
-		//printf("entra al setFuerza: %f \n", this->fuerza);
+		this->fuerza += (MAX_FUERZA/20);//todo poner algo inferior
+		printf("entra al setFuerza: %f \n", this->fuerza);
 		return true;
 	}
 }
@@ -244,17 +248,17 @@ public:
 void Arma::aplicarExplosion(){
 	b2World* world = this->proyectil->GetWorld();
 	b2Vec2 pos = this->proyectil->GetPosition();
-	printf("UBICO LA BOMBA EN (%f,%f) \n",pos.x,pos.y);
+	//printf("UBICO LA BOMBA EN (%f,%f) \n",pos.x,pos.y);
 	float32 blastRadius = 30;
 	int numRays = 20;
 	for (int i = 0; i < numRays; i++) {
 	  float angle = (i / (float)numRays) * PI;
 	  b2Vec2 rayDir( sinf(angle), cosf(angle) );
 	  b2Vec2 rayEnd = pos + blastRadius * rayDir;
-	  printf("ANGULOS %f \n",angle);
+	  //printf("ANGULOS %f \n",angle);
 
 	  RayCastMasCercano callback;
-	  printf("HAGO UN RAYCAST ENTRE LAS POSICIONES (%f,%f) y (%f,%f) \n",pos.x,pos.y,rayEnd.x,rayEnd.y);
+	  //printf("HAGO UN RAYCAST ENTRE LAS POSICIONES (%f,%f) y (%f,%f) \n",pos.x,pos.y,rayEnd.x,rayEnd.y);
 	  world->RayCast(&callback, pos, rayEnd);
 	  if ( callback.body ){
 		b2Body* body = callback.body;
@@ -267,7 +271,7 @@ void Arma::aplicarExplosion(){
 		float32 impulso = this->danio * invDistancia*10;
 //		impulso = b2Min(impulso, 500.0f); // estaba en el tutorial, no estoy seguro
 		body->ApplyLinearImpulse(impulso * dir , posImpacto, true);
-		printf("EL RAYCAST ENCONTRO UN CUERPO Y LE APLICA UN LINEAR IMPULSE DE %f \n",impulso);
+		//printf("EL RAYCAST ENCONTRO UN CUERPO Y LE APLICA UN LINEAR IMPULSE DE %f \n",impulso);
 		//FALTA SACARLE VIDA A LOS GUSANOS
 	  }
 	}
