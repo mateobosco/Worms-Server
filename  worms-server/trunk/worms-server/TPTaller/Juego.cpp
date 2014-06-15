@@ -3,6 +3,7 @@
 #include "Bazooka.h"
 #include "Granada.h"
 #include "GranadaHoly.h"
+#include "Suicida.h"
 
 #include <boost/geometry/geometry.hpp>
 #include <boost/geometry/geometries/register/point.hpp>
@@ -367,6 +368,11 @@ void Juego::setArma(int tipo_arma, b2Vec2 posicion, int angulo, int direccion){
 		Jugador* jugador_actual = this->jugadores[this->jugador_actual];
 		this->arma_actual = new GranadaHoly(jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()]);
 	}
+	if(tipo_arma ==5 ){
+		printf(" Suicida \n");
+		Jugador* jugador_actual = this->jugadores[this->jugador_actual];
+		this->arma_actual = new Suicida(jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()]);
+	}
 	//this->arma_actual->setTipo(tipo_arma);
 	this->arma_actual->setPosicion(posicion);
 	this->arma_actual->setAngulo(angulo, direccion);
@@ -403,7 +409,8 @@ void Juego::checkColisionProyectil(structPaquete* paquete){
 			Personaje* personaje_sel = jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()];
 			personaje_sel->setArmaSeleccionada(0);
 			this->pasarTurno();
-			delete this->arma_actual;
+			if(this->arma_actual)
+				delete this->arma_actual;
 
 
 
