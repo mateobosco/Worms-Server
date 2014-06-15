@@ -79,6 +79,16 @@ int main_server(int argc,char* argv[]){
 		Jugador* jugador_actual = juego->getJugadores()[nro_jugador_actual];
 		char* nombre1 = jugador_actual->getNombre();
 		//printf(" MANDO EL NOMBRE %s \n", nombre1);
+		Arma* arma_actual=juego->getArmaActual();
+//		int nro_arma;
+//		if(arma_actual){
+//			printf(" ========================== \n");
+//			nro_arma=arma_actual->getTipo();
+//
+//		}
+//		else{
+//			nro_arma=0;
+//		}
 		structPaquete* paqueteCiclo = crearPaqueteCiclo(juego->getMundo(), servidor->getMensajeMostrar(), nro_jugador_actual, comenzar, juego->getRelojRonda(), nombre1);
 		juego->setPaqueteProyectil(paqueteCiclo);
 		//printf(" EL TAMANIO DEL STACK PROYECTIL ES %d \n", servidor->getTamanioColaExplosion());
@@ -88,6 +98,7 @@ int main_server(int argc,char* argv[]){
 
 			servidor->encolarExplosion(paqueteCiclo);
 		}
+
 		servidor->actualizarPaquete((char*)paqueteCiclo);
 
 		destruirPaqueteCiclo(paqueteCiclo);
@@ -107,6 +118,11 @@ int main_server(int argc,char* argv[]){
 	    	//juego->resetearRelojRonda();
 	    	juego->pasarTurno();
 	    }
+	    Jugador* jugador_actual = juego->getJugadores()[juego->getJugadorActual()];
+	    if(jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()]->getMuerto()){
+	    	juego->pasarTurno();
+	    }
+
 	    SDL_Delay(10);
 
 

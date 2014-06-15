@@ -80,7 +80,7 @@ typedef struct structEvento{
 
 
 structFigura* crearPaqueteFigura(Figura* figura);
-structPersonaje* crearPaquetePersonaje(Personaje* personaje);
+structPersonaje* crearPaquetePersonaje(Personaje* personaje, int nro_arma);
 structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje, int turno_jugador, int empezar_juego, int tiempo_ronda, char* nombre);
 structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, int cliente);
 

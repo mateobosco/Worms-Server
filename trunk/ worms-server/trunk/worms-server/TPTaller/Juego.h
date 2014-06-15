@@ -62,12 +62,14 @@ class Juego{
 		void aplicarPaquete(structEvento* evento, int comenzar);
 		Jugador* agregarJugador(int id, char* nombre_cliente);
 		ManejadorPersonajes* getManejadorPersonajes();
+		Arma* getArmaActual();
+
 		int getJugadorActual();
 		void pasarTurno();
 		void resetearRelojRonda();
 		int getRelojRonda();
 
-		void setArma(int tipo_arma, b2Vec2 posicion, int angulo);
+		void setArma(int tipo_arma, b2Vec2 posicion, int angulo, int direc);
 		void disparar();
 		void checkColisionProyectil(structPaquete* paquete);
 		void setPaqueteProyectil(structPaquete *pack);

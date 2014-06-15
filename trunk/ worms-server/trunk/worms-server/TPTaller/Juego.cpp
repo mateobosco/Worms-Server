@@ -1,34 +1,32 @@
 #include "Juego.h"
 
+#include "Bazooka.h"
+#include "Granada.h"
+#include "GranadaHoly.h"
+
 #include <boost/geometry/geometry.hpp>
 #include <boost/geometry/geometries/register/point.hpp>
 #include <boost/geometry/geometries/register/ring.hpp>
 
 Juego::Juego(){
 	mundo = NULL;
-
 	cantidad_jugadores = 0;
-
 	escalador = NULL;
 	lector = NULL;
-
 	figuras = NULL;
 	cantidad_figuras = 0;
-
 	cielo.clear();
 	agua = NULL;
 	inicial = NULL;
-
 	this->cargar();
 	manejador = new ManejadorPersonajes();
-
 	for (int i =0; i< 4; i++){
 		jugadores[i]=NULL;
 	}
 	jugador_actual = 0;
 	reloj_ronda=0;
 	indice_jugador_turno=0;
-	arma_actual = new Arma();
+	arma_actual = 0;
 	proj_in_air = false;
 }
 
@@ -241,7 +239,7 @@ void Juego::aplicarPaquete(structEvento* evento, int comenzar){
 						personaje_actual->setAnguloArma(evento->angulo_arma);
 //						printf("evento arma \n ");
 //						printf("posicion: x- %f y- %f \n", personaje_actual->getPosition().x, personaje_actual->getPosition().y);
-						this->setArma(evento->arma_seleccionada, personaje_actual->getPosition(), personaje_actual->getAnguloArma() );
+						this->setArma(evento->arma_seleccionada, personaje_actual->getPosition(), personaje_actual->getAnguloArma(), evento->direccion );
 					}
 				}
 			}
@@ -255,7 +253,7 @@ void Juego::aplicarPaquete(structEvento* evento, int comenzar){
 						printf( " SE LE ASIGNA EL ARMA UN ANGULO %d \n", evento->angulo_arma);
 						//personaje_actual->setArmaSeleccionada(evento->arma_seleccionada);
 						personaje_actual->setAnguloArma(evento->angulo_arma);
-						this->arma_actual->setAngulo(personaje_actual->getAnguloArma());
+						this->arma_actual->setAngulo(personaje_actual->getAnguloArma(), personaje_actual->getOrientacion());
 						printf(" EL ANGULO NEUVO ES %d \n SELECCIONADA ES %i \n", personaje_actual->getAnguloArma(), evento->arma_seleccionada);
 					}
 				}
@@ -299,6 +297,8 @@ void Juego::pasarTurno(){
 	//reloj_ronda = SDL_GetTicks();
 	this->resetearRelojRonda();
 	//jugador_actual++;
+	Jugador* jugador_anterior = this->jugadores[this->jugador_actual];
+	jugador_anterior->seleccionarSiguientePersonaje();
 	indice_jugador_turno++;
 	if(indice_jugador_turno == 1){
 		indice_jugador_turno = 0;
@@ -351,19 +351,34 @@ void Juego::resetearRelojRonda(){
 	reloj_ronda=SDL_GetTicks();
 }
 
-void Juego::setArma(int tipo_arma, b2Vec2 posicion, int angulo){
-	this->arma_actual->setTipo(tipo_arma);
+void Juego::setArma(int tipo_arma, b2Vec2 posicion, int angulo, int direccion){
+	if(tipo_arma ==1 ){
+		printf(" Creo una Bazooka \n");
+		Jugador* jugador_actual = this->jugadores[this->jugador_actual];
+		this->arma_actual = new Bazooka(jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()]);
+	}
+	if(tipo_arma ==2 ){
+		printf(" Creo una Granada \n");
+		Jugador* jugador_actual = this->jugadores[this->jugador_actual];
+		this->arma_actual = new Granada(jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()]);
+	}
+	if(tipo_arma ==4 ){
+		printf(" Creo una Granada Holy \n");
+		Jugador* jugador_actual = this->jugadores[this->jugador_actual];
+		this->arma_actual = new GranadaHoly(jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()]);
+	}
+	//this->arma_actual->setTipo(tipo_arma);
 	this->arma_actual->setPosicion(posicion);
-	this->arma_actual->setAngulo(angulo);
+	this->arma_actual->setAngulo(angulo, direccion);
 }
 
 void Juego::setArmaVacia(){
 	this->arma_actual->setTipo(0);
-	this->arma_actual->setAngulo(0);
+	this->arma_actual->setAngulo(0, 0);
 }
 
 void Juego::disparar(){
-	if(arma_actual->getTipo() != 0){
+	if(arma_actual){
 		arma_actual->disparar(this->mundo);
 		proj_in_air = true;
 	} else{
@@ -379,12 +394,18 @@ void Juego::checkColisionProyectil(structPaquete* paquete){
 			this->arma_actual->setTipo(0);
 			this->mundo->destruir_cuerpo(arma_actual->getProyectil());
 			this->arma_actual->aplicarExplosion();
-			paquete->radio_explosion=3;
+			paquete->radio_explosion=this->arma_actual->getRadioExplosion();
 			paquete->posicion_proyectil=arma_actual->getProyectil()->GetPosition();
 			printf(" LE MANDO LA POSICION %f, %f \n", paquete->posicion_proyectil.x, paquete->posicion_proyectil.y);
 			this->explotarBomba(paquete->posicion_proyectil, paquete->radio_explosion);
 			this->setArmaVacia();
+			Jugador* jugador_actual=this->jugadores[this->jugador_actual];
+			Personaje* personaje_sel = jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()];
+			personaje_sel->setArmaSeleccionada(0);
 			this->pasarTurno();
+			delete this->arma_actual;
+
+
 
 		} else{
 			paquete->radio_explosion=-1;
@@ -402,6 +423,7 @@ void Juego::setPaqueteProyectil(structPaquete *pack){
 	pack->show_proyectil = this->proj_in_air;
 	if (proj_in_air){
 		pack->tipo_proyectil = this->arma_actual->getTipo();
+		printf(" LE PONE DE TIPO %d \n", pack->tipo_proyectil);
 		pack->posicion_proyectil = this->arma_actual->getPosicion();
 		pack->direccion_proyectil = this->arma_actual->getDireccion();
 		pack->tamanio_proyectil = this->arma_actual->getTamanio();
@@ -563,4 +585,8 @@ void Juego::setPaqueteProyectil(structPaquete *pack){
 	}
     return;
 }
+
+ Arma* Juego::getArmaActual(){
+	 return arma_actual;
+ }
 
