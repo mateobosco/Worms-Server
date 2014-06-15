@@ -28,7 +28,10 @@ void Bazooka::disparar(Mundo* mundo){
 	b2BodyDef bodyDef = b2BodyDef(); // creo el body def
 //	bodyDef.position.x = posicion_proyectil.x /*+ 4*direccion_proyectil.x*/; // le asigno una posicion
 //	bodyDef.position.y = posicion_proyectil.y /*+ 4*direccion_proyectil.y*/;
-	bodyDef.position.x = this->personaje_duenio->getPosition().x; // le asigno una posicion
+	if(this->personaje_duenio->getOrientacion() == 1)
+		bodyDef.position.x = this->personaje_duenio->getPosition().x + 1; // le asigno una posicion
+	else
+		bodyDef.position.x = this->personaje_duenio->getPosition().x - 1;
 	bodyDef.position.y = this->personaje_duenio->getPosition().y-1;
 	bodyDef.userData = this; // no se si funciona bien esto,
 	bodyDef.type = b2_dynamicBody;
