@@ -1,30 +1,42 @@
+/*
+ * GranadaHoly.cpp
+ *
+ *  Created on: 14/06/2014
+ *      Author: juanmahidalgo
+ */
+
+#include "GranadaHoly.h"
+
 #include "Arma.h"
 
-Arma::Arma(){
+GranadaHoly::GranadaHoly(Personaje* personaje){
 	this->fuerza = 0;
-	this->tipo = ninguno;
-	//this->personaje_duenio=personaje;
+	this->tipo = 4;
+	personaje_duenio=personaje;
+	this->radio_explosion=10;
 }
 
-Arma::~Arma(){
+GranadaHoly::~GranadaHoly(){
 
 }
 
-void Arma::disparar(Mundo* mundo){
+void GranadaHoly::disparar(Mundo* mundo){
 	dir_imagen = "TPTaller/imagenes/misil_bazooka.png";
 //	printf("DISPARAR \n ");
 //	printf("posicion: x- %f y- %f \n", posicion_proyectil.x, posicion_proyectil.y);
 //	printf("Direccion: x- %f y- %f \n", direccion_proyectil.x, direccion_proyectil.y);
 //	printf("Tamanio: x- %f y- %f \n", tamanio_proyectil.x, tamanio_proyectil.y);
-	printf(" LLEGA HASTA ACA \n");
+
 	b2Vec2 escalas = mundo->GetEscalas();
 	tamanio_proyectil.x = escalas.x / 60;
 	tamanio_proyectil.y = escalas.y / 50;
 
 	b2World* world = mundo->devolver_world();
 	b2BodyDef bodyDef = b2BodyDef(); // creo el body def
-	bodyDef.position.x = posicion_proyectil.x /*+ 4*direccion_proyectil.x*/; // le asigno una posicion
-	bodyDef.position.y = posicion_proyectil.y /*+ 4*direccion_proyectil.y*/;
+//	bodyDef.position.x = posicion_proyectil.x /*+ 4*direccion_proyectil.x*/; // le asigno una posicion
+//	bodyDef.position.y = posicion_proyectil.y /*+ 4*direccion_proyectil.y*/;
+	bodyDef.position.x = this->personaje_duenio->getPosition().x; // le asigno una posicion
+	bodyDef.position.y = this->personaje_duenio->getPosition().y-1;
 	bodyDef.userData = this; // no se si funciona bien esto,
 	bodyDef.type = b2_dynamicBody;
 	proyectil = world->CreateBody(&bodyDef);
@@ -55,7 +67,7 @@ void Arma::disparar(Mundo* mundo){
 //	proyectil->ApplyForceToCenter(antigravedad, true );
 }
 
-b2Vec2* Arma::definirImpulso(b2Vec2 destino){
+b2Vec2* GranadaHoly::definirImpulso(b2Vec2 destino){
 	b2Vec2 *impulso = new b2Vec2();
 	impulso->x = (destino.x - this->proyectil->GetPosition().x) * this->fuerza;
 	impulso->y = (destino.y - this->proyectil->GetPosition().y) * this->fuerza;
@@ -131,7 +143,7 @@ class QueryCheckImpacto : public b2QueryCallback {
      }
  };
 
-bool Arma::checkImpacto(Mundo* mundo){
+bool GranadaHoly::checkImpacto(Mundo* mundo){
 	printf(" Entra acaaaaaaaaaaa \n");
 	float32 radio = this->shape_proy->m_radius;
 	b2Vec2 pos = this->proyectil->GetPosition();
@@ -154,7 +166,7 @@ bool Arma::checkImpacto(Mundo* mundo){
 	return false;
 }
 
-bool Arma::setFuerza(){
+bool GranadaHoly::setFuerza(){
 	if(this->fuerza >= MAX_FUERZA){
 		//printf("entra al setFuerza: %f \n", this->fuerza);
 		return false;
@@ -165,53 +177,62 @@ bool Arma::setFuerza(){
 	}
 }
 
-void Arma::setAngulo(int un_angulo, int direc){
+void GranadaHoly::setAngulo(int un_angulo, int direc){
 	this->angulo = un_angulo;
 	b2Vec2 direccion;
-	direccion.x = 1 * cos( angulo * PI / 180 ); //Orientacion Derecha
-	direccion.y = 1 * sin( angulo * PI / 180 );
-	this->setDireccion(direccion);
-}
-
-void Arma::setTipo(int tipo_arma){
-	this->tipo = (type_arma) tipo_arma;
-	switch (tipo){
-		case ninguno: break;
-		case bazooka: {
-//			danio = 100;
-		}
-		default: break;
+	printf(" ENTRA EN ESTE ANGULO3 Y RECIBE DE DIRECCION ESTO : %d \n", direc);
+	//direccion.x = 1 * cos( angulo * PI / 180 ); //Orientacion Derecha
+	//direccion.y = 1 * sin( angulo * PI / 180 );
+	if(direc == 1){
+		direccion.x = 1 * cos( angulo * PI / 180 ); //Orientacion Derecha
+		direccion.y = 1 * sin( angulo * PI / 180 );
+		this->setDireccion(direccion);
 	}
+	if(direc == -1){
+		direccion.x = -1 * cos( angulo * PI / 180 ); //Orientacion IZQ
+		direccion.y = -1 * sin( angulo * PI / 180 );
+		this->setDireccion(direccion);
+	}
+	if(direc == 0){
+		direccion.x = 1 * cos( angulo * PI / 180 ); //Orientacion IZQ
+		direccion.y = 1 * sin( angulo * PI / 180 );
+		this->setDireccion(direccion);
+	}
+
+
 }
 
-void Arma::setDireccion(b2Vec2 una_direccion){
+void GranadaHoly::setTipo(int tipo_arma){
+	this->tipo = 4;
+}
+
+void GranadaHoly::setDireccion(b2Vec2 una_direccion){
 	this->direccion_proyectil.x = una_direccion.x;
 	this->direccion_proyectil.y = una_direccion.y;
 }
 
-void Arma::setPosicion(b2Vec2 una_posicion){
+void GranadaHoly::setPosicion(b2Vec2 una_posicion){
 	printf("UBICO LA BOMBA EN (%f,%f) \n",una_posicion.x,una_posicion.y);
 	this->posicion_proyectil.x = una_posicion.x;
 	this->posicion_proyectil.y = una_posicion.y;
 }
 
-b2Body* Arma::getProyectil(){
+b2Body* GranadaHoly::getProyectil(){
 	return proyectil;
 }
 
-int Arma::getAngulo(){
+int GranadaHoly::getAngulo(){
 	b2Vec2 velocidad = proyectil->GetLinearVelocity();
 	float32 angulo_aux = atan2( velocidad.y, velocidad.x);
 	this->angulo = (int) angulo_aux;
 	return angulo;
 }
 
-int Arma::getTipo(){
-	printf(" ENTRA EN EL GET TIPO DE BAZOOOOKAAA ****************\n");
+int GranadaHoly::getTipo(){
 	return this->tipo;
 }
 
-b2Vec2 Arma::getDireccion(){
+b2Vec2 GranadaHoly::getDireccion(){
 	b2Vec2 velocidad = proyectil->GetLinearVelocity();
 	float32 modulo = sqrt((velocidad.x * velocidad.x) + (velocidad.y * velocidad.y) );
 	direccion_proyectil.x = velocidad.x / modulo;
@@ -219,15 +240,15 @@ b2Vec2 Arma::getDireccion(){
 	return this->direccion_proyectil;
 }
 
-b2Vec2 Arma::getPosicion(){
+b2Vec2 GranadaHoly::getPosicion(){
 	return this->posicion_proyectil = proyectil->GetPosition();
 }
 
-b2Vec2 Arma::getTamanio(){
+b2Vec2 GranadaHoly::getTamanio(){
 	return this->tamanio_proyectil;
 }
 
-void Arma::resetFuerza(){
+void GranadaHoly::resetFuerza(){
 	this->fuerza = 0.0f;
 }
 
@@ -247,11 +268,11 @@ public:
     }
 };
 
-void Arma::aplicarExplosion(){
+void GranadaHoly::aplicarExplosion(){
 	b2World* world = this->proyectil->GetWorld();
 	b2Vec2 pos = this->proyectil->GetPosition();
 	//printf("UBICO LA BOMBA EN (%f,%f) \n",pos.x,pos.y);
-	float32 blastRadius = 30;
+	float32 blastRadius = 60;
 	int numRays = 20;
 	for (int i = 0; i < numRays; i++) {
 	  float angle = (i / (float)numRays) * PI;
@@ -279,6 +300,7 @@ void Arma::aplicarExplosion(){
 	}
 }
 
-int Arma::getRadioExplosion(){
+
+int GranadaHoly::getRadioExplosion(){
 	return this->radio_explosion;
 }

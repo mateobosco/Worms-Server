@@ -29,12 +29,13 @@ Jugador::Jugador(Mundo *mundo, uint8 cantidad, ManejadorPersonajes *manejador, c
 	this->numero = cantidad;
 	this->conectado = true;
 	this->nombre = nombre_cliente;
-
+	this->personaje_seleccionado=0;
 	seleccionarColor();
 	for(int i = 0; i < MAX_CANT_PERSONAJES; i++){
 		this->personajes[i] = new Personaje(mundo, this->numero, nombre_cliente);
 		manejador->agregarPersonaje(this->personajes[i], this->numero);
 	}
+	this->personajes[personaje_seleccionado]->setSeleccionado(true, numero);
 }
 
 Jugador::~Jugador(){
@@ -91,4 +92,27 @@ bool Jugador::getConectado(){
 
 char* Jugador::getNombre(){
 	return nombre;
+}
+
+void Jugador::seleccionarSiguientePersonaje(){
+	// agregar qe si el jugador perdio no cambie nada aca
+	this->personaje_seleccionado++;
+	if(this->personaje_seleccionado == 4){
+		this->personaje_seleccionado=0;
+	}
+	for(int i = 0 ; i < 4; i++){
+		this->personajes[i]->setSeleccionado(false, this->numero);
+	}
+	while(this->personajes[personaje_seleccionado]->getMuerto()){
+		this->personaje_seleccionado++;
+		if(this->personaje_seleccionado == 4){
+			this->personaje_seleccionado=0;
+		}
+	}
+	this->personajes[personaje_seleccionado]->setSeleccionado(true, this->numero);
+}
+
+
+int Jugador::getPersonajeSeleccionado(){
+	return this->personaje_seleccionado;
 }

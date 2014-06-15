@@ -21,29 +21,32 @@ class Arma{
 		int danio;
 		float fuerza;
 		int angulo;
+		int radio_explosion;
 		type_arma tipo;
 		b2Vec2* definirImpulso(b2Vec2 destino);
+		Personaje* personaje_duenio;
 
 	public:
 		Arma();
 		virtual ~Arma();
-		void disparar(Mundo* mundo);
-		bool checkImpacto(Mundo *mundo);
-		bool setFuerza();
-		void setAngulo(int un_angulo);
-		void setTipo(int tipo_arma);
-		void setDireccion(b2Vec2 una_direccion);
-		void setPosicion(b2Vec2 una_posicion);
-		void aplicarExplosion();
+		virtual void disparar(Mundo* mundo);
+		virtual bool checkImpacto(Mundo *mundo);
+		virtual bool setFuerza();
+		virtual void setAngulo(int un_angulo, int direc);
+		virtual void setTipo(int tipo_arma);
+		virtual void setDireccion(b2Vec2 una_direccion);
+		virtual void setPosicion(b2Vec2 una_posicion);
+		virtual void aplicarExplosion();
+		virtual int getRadioExplosion();
 
-		int getAngulo();
-		int getTipo();
-		b2Vec2 getDireccion();
-		b2Vec2 getPosicion();
-		b2Vec2 getTamanio();
+		virtual int getAngulo();
+		virtual int getTipo();
+		virtual b2Vec2 getDireccion();
+		virtual b2Vec2 getPosicion();
+		virtual b2Vec2 getTamanio();
 		void resetFuerza();
 
-		b2Body* getProyectil();
+		virtual b2Body* getProyectil();
 
 };
 

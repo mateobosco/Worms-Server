@@ -15,6 +15,7 @@ class Jugador{
 		void seleccionarColor();
 		bool conectado;
 		char* nombre;
+		int personaje_seleccionado;
 
 	public:
 		Jugador(Mundo *mundo, uint8 cantidad, ManejadorPersonajes *manejador, char* nombre_cliente);
@@ -28,6 +29,9 @@ class Jugador{
 		bool getPerdio();
 		bool getConectado();
 		char* getNombre();
+		void seleccionarSiguientePersonaje();
+		int getPersonajeSeleccionado();
+
 };
 
 #endif /* JUGADOR_H_ */
