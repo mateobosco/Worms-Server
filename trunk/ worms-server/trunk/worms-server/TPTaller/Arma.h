@@ -11,7 +11,7 @@ typedef enum tipo_de_arma{
 }type_arma;
 
 class Arma{
-	private:
+	protected:
 		char* dir_imagen;
 		b2Vec2 posicion_proyectil;
 		b2Vec2 direccion_proyectil;
