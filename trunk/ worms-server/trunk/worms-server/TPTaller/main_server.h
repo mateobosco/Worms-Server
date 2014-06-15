@@ -118,8 +118,8 @@ int main_server(int argc,char* argv[]){
 	    	//juego->resetearRelojRonda();
 	    	juego->pasarTurno();
 	    }
-	    Jugador* jugador_actual = juego->getJugadores()[juego->getJugadorActual()];
-	    if(jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()]->getMuerto()){
+	    Jugador* jugador_actual2 = juego->getJugadores()[juego->getJugadorActual()];
+	    if(jugador_actual2->getPersonajes()[jugador_actual2->getPersonajeSeleccionado()]->getMuerto()){
 	    	juego->pasarTurno();
 	    }
 
