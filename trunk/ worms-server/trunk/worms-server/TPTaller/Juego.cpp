@@ -4,6 +4,7 @@
 #include "Granada.h"
 #include "GranadaHoly.h"
 #include "Suicida.h"
+#include "Patada.h"
 
 #include <boost/geometry/geometry.hpp>
 #include <boost/geometry/geometries/register/point.hpp>
@@ -373,6 +374,12 @@ void Juego::setArma(int tipo_arma, b2Vec2 posicion, int angulo, int direccion){
 		Jugador* jugador_actual = this->jugadores[this->jugador_actual];
 		this->arma_actual = new Suicida(jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()]);
 	}
+	if(tipo_arma ==6 ){
+		printf(" Patada \n");
+		Jugador* jugador_actual = this->jugadores[this->jugador_actual];
+		Personaje* personaje = jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()];
+		this->arma_actual = new Patada(personaje);
+	}
 	//this->arma_actual->setTipo(tipo_arma);
 	this->arma_actual->setPosicion(posicion);
 	this->arma_actual->setAngulo(angulo, direccion);
@@ -411,8 +418,11 @@ void Juego::checkColisionProyectil(structPaquete* paquete){
 			this->pasarTurno();
 			if(this->arma_actual)
 				delete this->arma_actual;
-
-
+		}
+		if (arma_actual->tipo == 6){ //patada
+			arma_actual->disparar(this->getMundo());
+			delete this->arma_actual;
+			proj_in_air = false;
 
 		} else{
 			paquete->radio_explosion=-1;
