@@ -15,6 +15,8 @@ public:
 	void agregarPersonaje(Personaje *personaje, uint8 numero_jugador);
 	int getCantidadJugadores();
 	void resetManejador();
+	void quitarVidaPersonaje(Personaje *personaje, int danio);
+	void resetDaniadoTurnoActual();
 
 private:
 	Personaje** vector_personajes;

@@ -4,7 +4,7 @@
 #include <cmath>
 #include "Constantes.h"
 #include "figura.h"
-#include "Personaje.h"
+#include "ManejadorPersonajes.h"
 
 typedef enum tipo_de_arma{
 	ninguno, bazooka, etc
@@ -25,6 +25,7 @@ class Arma{
 		type_arma tipo;
 		b2Vec2* definirImpulso(b2Vec2 destino);
 		Personaje* personaje_duenio;
+		void checkPersonajeLastimado(b2Body *body, ManejadorPersonajes *manejador);
 
 	public:
 		Arma();
@@ -36,7 +37,7 @@ class Arma{
 		virtual void setTipo(int tipo_arma);
 		virtual void setDireccion(b2Vec2 una_direccion);
 		virtual void setPosicion(b2Vec2 una_posicion);
-		virtual void aplicarExplosion();
+		virtual void aplicarExplosion(ManejadorPersonajes *manejador);
 		virtual int getRadioExplosion();
 
 		virtual int getAngulo();

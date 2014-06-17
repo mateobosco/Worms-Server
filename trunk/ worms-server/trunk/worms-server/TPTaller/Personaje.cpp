@@ -68,6 +68,7 @@ Personaje::Personaje(Mundo* mundo, Uint8 numero_jugador, char* nombre_client) {
 		seleccionado[i] = false;
 	}
 	orientacion = 1;
+	daniado_turno_actual = false;
 }
 
 Personaje::~Personaje() {
@@ -295,6 +296,15 @@ void Personaje::setAnguloArma(int angulo){
 void Personaje::quitarEnergia(int descontar){
 	energia -= descontar;
 	if(energia <= 0){
+		energia = 0;
 		this->setMuerto();
 	}
+}
+
+bool Personaje::getDaniadoTurnoActual(){
+	return daniado_turno_actual;
+}
+
+void Personaje::setDaniadoTurnoActual(bool estado){
+	daniado_turno_actual = estado;
 }

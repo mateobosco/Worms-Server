@@ -83,3 +83,16 @@ void ManejadorPersonajes::resetManejador(){
 	this->cantidad_jugadores = 0;
 	this->cantidad_actual_personajes = 0;
 }
+
+void ManejadorPersonajes::quitarVidaPersonaje(Personaje *personaje, int danio){
+	if(!personaje->getDaniadoTurnoActual()){
+		personaje->setDaniadoTurnoActual(true);
+		personaje->quitarEnergia(danio);
+	}
+}
+
+void ManejadorPersonajes::resetDaniadoTurnoActual(){
+	for(int i = 0; i < this->cantidad_actual_personajes; i++){
+		this->vector_personajes[i]->setDaniadoTurnoActual(false);
+	}
+}

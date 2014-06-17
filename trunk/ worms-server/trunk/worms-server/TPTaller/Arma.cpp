@@ -247,16 +247,30 @@ public:
     }
 };
 
-void Arma::aplicarExplosion(){
+void Arma::checkPersonajeLastimado(b2Body *body, ManejadorPersonajes *manejador){
+	if(body == NULL)
+		return;
+	for(int i = 0; i < manejador->getCantidadPersonajes(); i++){
+		Personaje *personaje = manejador->getPersonajes()[i];
+		if((!personaje->getMuerto()) && (personaje->getBody() == body)){
+			printf("Daño: %i\n", this->danio);
+			manejador->quitarVidaPersonaje(personaje, this->danio);
+			return;
+		}
+	}
+}
+
+void Arma::aplicarExplosion(ManejadorPersonajes *manejador){
 	b2World* world = this->proyectil->GetWorld();
 	b2Vec2 pos = this->proyectil->GetPosition();
 	//printf("UBICO LA BOMBA EN (%f,%f) \n",pos.x,pos.y);
 	float32 blastRadius = 30;
 	int numRays = 20;
 	for (int i = 0; i < numRays; i++) {
-		float angle = (i / (float)numRays) * PI;
+		float angle = (i / (float)numRays) * 2 * PI;
 		b2Vec2 rayDir( sinf(angle), cosf(angle) );
-		b2Vec2 rayEnd = pos + blastRadius * rayDir;
+		rayDir *= blastRadius;
+		b2Vec2 rayEnd = pos + /*blastRadius * */rayDir;
 		//printf("ANGULOS %f \n",angle);
 
 		RayCastMasCercano callback;
@@ -269,6 +283,7 @@ void Arma::aplicarExplosion(){
 			b2Vec2 dir = posImpacto - pos;
 			float32 distancia = dir.Normalize();
 			if (distancia == 0 ) continue;
+			this->checkPersonajeLastimado(body, manejador);
 			//		float32 invDistancia = 1/distancia;
 			//		float32 impulso = this->danio * invDistancia;//*10;
 			//		impulso = b2Min(impulso, 500.0f); // estaba en el tutorial, no estoy seguro

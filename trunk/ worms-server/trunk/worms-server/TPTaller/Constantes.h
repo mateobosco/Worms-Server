@@ -71,6 +71,8 @@ const string pathDefCielo = "TPTaller/imagenes/cieloN.jpg";
 #define MAX_FUERZA 100 //todo ver cuánto convendría que sea el máximo
 #define DANIO_BAZOOKA 25
 #define DANIO_GRANADA 40
+#define DANIO_GRANADA_HOLY 25
 #define DANIO_SUICIDA 70
+#define DANIO_DINAMITA 20
 
 #endif /* CONSTANTES_H_ */

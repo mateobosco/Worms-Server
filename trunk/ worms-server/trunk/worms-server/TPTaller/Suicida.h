@@ -18,7 +18,7 @@ public:
 	void setTipo(int tipo_arma);
 	void setDireccion(b2Vec2 una_direccion);
 	void setPosicion(b2Vec2 una_posicion);
-	void aplicarExplosion();
+	void aplicarExplosion(ManejadorPersonajes *manejador);
 	int getRadioExplosion();
 
 	int getAngulo();
