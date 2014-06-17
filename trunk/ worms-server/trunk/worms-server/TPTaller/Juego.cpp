@@ -257,10 +257,10 @@ void Juego::aplicarPaquete(structEvento* evento, int comenzar){
 				}
 			}
 		}
-		if((evento->fuerza == 1) && arma_actual){
+		if((evento->fuerza == 1) && arma_actual!= NULL){
 			arma_actual->setFuerza();
 		} else
-			if((evento->fuerza == 2) && arma_actual) {
+			if((evento->fuerza == 2) && arma_actual != NULL) {
 				this->disparar();
 				arma_actual->resetFuerza();
 			}
@@ -418,7 +418,10 @@ void Juego::checkColisionProyectil(structPaquete* paquete){
 			Personaje* personaje_sel = jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()];
 			personaje_sel->setArmaSeleccionada(0);
 			this->pasarTurno();
-			if(this->arma_actual) delete this->arma_actual;
+			if(this->arma_actual){
+				delete this->arma_actual;
+				this->arma_actual = NULL;
+			}
 
 		}
 	} else{
