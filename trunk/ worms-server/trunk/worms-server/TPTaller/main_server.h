@@ -124,15 +124,12 @@ int main_server(int argc,char* argv[]){
 	    	//juego->resetearRelojRonda();
 	    	juego->pasarTurno();
 	    }
-
 	    Jugador* jugador_actual2 = juego->getJugadores()[juego->getJugadorActual()];
 	    if(jugador_actual2->getPersonajes()[jugador_actual2->getPersonajeSeleccionado()]->getMuerto()){
 	    	juego->pasarTurno();
 	    }
 
-
 	    SDL_Delay(10);
-
 
 		juego->getMundo()->comprobar_nivel_agua();
 
