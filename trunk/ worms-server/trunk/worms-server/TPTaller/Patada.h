@@ -15,8 +15,10 @@ class Patada: public Arma {
 public:
 	Patada(Personaje* personaje);
 	virtual ~Patada();
-	void disparar(Mundo* mundo);
-//	int getTipo();
+	void aplicarExplosion();
+	bool checkImpacto(Mundo* mundo);
+	int getTipo();
+
 private:
 	int tipo;
 
