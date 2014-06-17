@@ -116,13 +116,11 @@ structEvento* crearPaqueteVacio(){
 structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, int cliente){
 	structEvento* paquete;
 	if ( KEYS[100] || KEYS[101] || KEYS[102] || KEYS[SDLK_SPACE]){ // no es un click, es un movimiento
-		printf (" CREO UN PAQUETE MOVIMIENTO ------------------------ \n");
 		paquete = crearPaqueteMovimiento(KEYS, cliente);
 
 	}
 	else if (click[0] != -1){
 		paquete = crearPaqueteClick(click, escalador, cliente);
-		printf (" CREO UN PAQUETE CLICK ------------------------ \n");
 	}
 	else {
 		paquete = crearPaqueteVacio();
@@ -154,8 +152,6 @@ structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje, int jugador_actual
 	paquete->comenzar = empezar_juego; // 1 si el juego debe comenzar, 0  si se debe esperar a mas jugadores a que se conecten
 	paquete->reloj = tiempo_ronda;
 	strcpy(paquete->nombre_jugador_actual, nombre);
-	//printf(" MANDO EL NOMBREeeeeeeee %s \n", paquete->nombre_jugador_actual);
-	//paquete->nombre_jugador_actual = nombre;
 	if (mensaje != NULL){
 		strcpy(paquete->mensaje_mostrar, mensaje);
 	}

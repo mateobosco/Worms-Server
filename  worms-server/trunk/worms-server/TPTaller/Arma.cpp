@@ -207,7 +207,6 @@ int Arma::getAngulo(){
 }
 
 int Arma::getTipo(){
-	printf(" ENTRA EN EL GET TIPO DE BAZOOOOKAAA ****************\n");
 	return this->tipo;
 }
 

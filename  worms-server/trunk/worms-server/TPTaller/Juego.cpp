@@ -229,8 +229,7 @@ void Juego::aplicarPaquete(structEvento* evento, int comenzar){
 		}
 		if ((evento->direccion > 0) && (evento->nro_jugador == this->getJugadorActual()) && comenzar ==1){ // PROCESO EL MOVIMIENTO SOLO SI ES SU TURNO
 			manejador->moverPersonaje(evento->direccion , evento->nro_jugador);
-			//printf(" APLICO UN PAQUETE MOVIMIENTO, PASO DE TURNO");
-			//this->pasarTurno();
+
 		}
 		if (evento->arma_seleccionada != 0 ){
 			for (int j = 0; j < manejador->getCantidadPersonajes(); j++){ // TODO ver si es necesario cant actuales activos.
@@ -240,24 +239,20 @@ void Juego::aplicarPaquete(structEvento* evento, int comenzar){
 						printf( " SE LE ASIGNO EL PERSONAJE SELECCIONADO EL ARMA %d \n", evento->arma_seleccionada);
 						personaje_actual->setArmaSeleccionada(evento->arma_seleccionada);
 						personaje_actual->setAnguloArma(evento->angulo_arma);
-//						printf("evento arma \n ");
-//						printf("posicion: x- %f y- %f \n", personaje_actual->getPosition().x, personaje_actual->getPosition().y);
+
 						this->setArma(evento->arma_seleccionada, personaje_actual->getPosition(), personaje_actual->getAnguloArma(), evento->direccion );
 					}
 				}
 			}
 		}
 		if(evento->angulo_arma != 0){
-			printf( " /////////////////////////////////////////////// \n");
 			for (int j = 0; j < manejador->getCantidadPersonajes(); j++){ // TODO ver si es necesario cant actuales activos.
 				Personaje* personaje_actual = manejador->getPersonajes()[j];
 				if (! personaje_actual->getMuerto()){
 					if( personaje_actual->getSeleccion()[evento->nro_jugador] ){
-						printf( " SE LE ASIGNA EL ARMA UN ANGULO %d \n", evento->angulo_arma);
 						//personaje_actual->setArmaSeleccionada(evento->arma_seleccionada);
 						personaje_actual->setAnguloArma(evento->angulo_arma);
 						this->arma_actual->setAngulo(personaje_actual->getAnguloArma(), personaje_actual->getOrientacion());
-						printf(" EL ANGULO NEUVO ES %d \n SELECCIONADA ES %i \n", personaje_actual->getAnguloArma(), evento->arma_seleccionada);
 					}
 				}
 			}
@@ -411,31 +406,20 @@ void Juego::checkColisionProyectil(structPaquete* paquete){
 			printf(" ENTROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO \n");
 			proj_in_air = false;
 			this->arma_actual->setTipo(0);
-			this->mundo->destruir_cuerpo(arma_actual->getProyectil());
+			if (this->arma_actual->getTipo() != 6 ) this->mundo->destruir_cuerpo(arma_actual->getProyectil());
 			this->arma_actual->aplicarExplosion(this->manejador);
 			manejador->resetDaniadoTurnoActual();
 			paquete->radio_explosion=this->arma_actual->getRadioExplosion();
 			paquete->posicion_proyectil=arma_actual->getProyectil()->GetPosition();
 			printf(" LE MANDO LA POSICION %f, %f \n", paquete->posicion_proyectil.x, paquete->posicion_proyectil.y);
-			this->explotarBomba(paquete->posicion_proyectil, paquete->radio_explosion);
+			if (this->arma_actual->getTipo() != 6 ) this->explotarBomba(paquete->posicion_proyectil, paquete->radio_explosion);
 			this->setArmaVacia();
 			Jugador* jugador_actual=this->jugadores[this->jugador_actual];
 			Personaje* personaje_sel = jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()];
 			personaje_sel->setArmaSeleccionada(0);
 			this->pasarTurno();
-			if(this->arma_actual)
-				delete this->arma_actual;
-		} else{
-			if((arma_actual != NULL) && (arma_actual->getTipo() == 6)){ //patada
-				arma_actual->disparar(this->getMundo());
-				delete this->arma_actual;
-				proj_in_air = false;
-			} else{
-				paquete->radio_explosion=-1;
+			if(this->arma_actual) delete this->arma_actual;
 
-			//b2Vec2 antigravedad = b2Vec2(0,-0.98f);
-			//arma_actual->getProyectil()->ApplyForceToCenter(antigravedad, true );
-			}
 		}
 	} else{
 		paquete->radio_explosion=-1;
@@ -446,7 +430,6 @@ void Juego::setPaqueteProyectil(structPaquete *pack){
 	pack->show_proyectil = this->proj_in_air;
 	if (proj_in_air){
 		pack->tipo_proyectil = this->arma_actual->getTipo();
-		printf(" LE PONE DE TIPO %d \n", pack->tipo_proyectil);
 		pack->posicion_proyectil = this->arma_actual->getPosicion();
 		pack->direccion_proyectil = this->arma_actual->getDireccion();
 		pack->tamanio_proyectil = this->arma_actual->getTamanio();
@@ -638,6 +621,8 @@ Arma* Juego::getArmaActual(){
 	return arma_actual;
 }
 
-void Juego::cargarSiguienteNivel(){
-	//Volver a enviar structInicial con la nueva info
-}
+
+ void Juego::cargarSiguienteNivel(){
+ //Volver a enviar structInicial con la nueva info
+ }
+
