@@ -48,6 +48,7 @@ typedef struct structPaquete{
 	b2Vec2 tamanio_proyectil;
 	b2Vec2 posicion_projectil;
 	int radio_explosion = -1;
+	int contador_segundos = 0;
 
 }structPaquete;
 

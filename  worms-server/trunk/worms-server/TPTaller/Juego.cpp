@@ -2,6 +2,7 @@
 
 #include "Bazooka.h"
 #include "Granada.h"
+#include "Dinamita.h"
 #include "GranadaHoly.h"
 #include "Suicida.h"
 #include "Patada.h"
@@ -354,29 +355,35 @@ void Juego::resetearRelojRonda(){
 }
 
 void Juego::setArma(int tipo_arma, b2Vec2 posicion, int angulo, int direccion){
+	Jugador* jugador_actual;
 	if(tipo_arma ==1 ){
 		printf(" Creo una Bazooka \n");
-		Jugador* jugador_actual = this->jugadores[this->jugador_actual];
+		jugador_actual = this->jugadores[this->jugador_actual];
 		this->arma_actual = new Bazooka(jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()]);
 	}
 	if(tipo_arma ==2 ){
 		printf(" Creo una Granada \n");
-		Jugador* jugador_actual = this->jugadores[this->jugador_actual];
+		jugador_actual = this->jugadores[this->jugador_actual];
 		this->arma_actual = new Granada(jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()]);
+	}
+	if(tipo_arma ==3 ){
+		printf(" Creo una Dinamita \n");
+		jugador_actual = this->jugadores[this->jugador_actual];
+		this->arma_actual = new Dinamita(jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()]);
 	}
 	if(tipo_arma ==4 ){
 		printf(" Creo una Granada Holy \n");
-		Jugador* jugador_actual = this->jugadores[this->jugador_actual];
+		jugador_actual = this->jugadores[this->jugador_actual];
 		this->arma_actual = new GranadaHoly(jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()]);
 	}
 	if(tipo_arma ==5 ){
 		printf(" Suicida \n");
-		Jugador* jugador_actual = this->jugadores[this->jugador_actual];
+		jugador_actual = this->jugadores[this->jugador_actual];
 		this->arma_actual = new Suicida(jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()]);
 	}
 	if(tipo_arma ==6 ){
 		printf(" Patada \n");
-		Jugador* jugador_actual = this->jugadores[this->jugador_actual];
+		jugador_actual = this->jugadores[this->jugador_actual];
 		Personaje* personaje = jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()];
 		this->arma_actual = new Patada(personaje);
 	}
@@ -419,10 +426,12 @@ void Juego::checkColisionProyectil(structPaquete* paquete){
 			if(this->arma_actual)
 				delete this->arma_actual;
 		}
-		if (arma_actual->tipo == 6){ //patada
+		if (arma_actual->getTipo() == 6){ //patada
 			arma_actual->disparar(this->getMundo());
 			delete this->arma_actual;
 			proj_in_air = false;
+
+
 
 		} else{
 			paquete->radio_explosion=-1;
@@ -444,6 +453,10 @@ void Juego::setPaqueteProyectil(structPaquete *pack){
 		pack->posicion_proyectil = this->arma_actual->getPosicion();
 		pack->direccion_proyectil = this->arma_actual->getDireccion();
 		pack->tamanio_proyectil = this->arma_actual->getTamanio();
+		if(pack->tipo_proyectil == 3)
+			pack->contador_segundos = ((Dinamita*)(this->arma_actual))->getContadorSegundos();
+		else
+			pack->contador_segundos = -1;
 	} else{
 		pack->tipo_proyectil = 0;
 		pack->posicion_proyectil = b2Vec2(0,0);
