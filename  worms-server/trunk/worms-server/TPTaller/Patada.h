@@ -15,7 +15,7 @@ class Patada: public Arma {
 public:
 	Patada(Personaje* personaje);
 	virtual ~Patada();
-	void aplicarExplosion();
+	void aplicarExplosion(ManejadorPersonajes* manejador);
 	bool checkImpacto(Mundo* mundo);
 	int getTipo();
 

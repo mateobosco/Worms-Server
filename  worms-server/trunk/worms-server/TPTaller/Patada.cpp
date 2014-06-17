@@ -38,7 +38,7 @@ public:
     }
 };
 
-void Patada::aplicarExplosion(){
+void Patada::aplicarExplosion(ManejadorPersonajes* manejador ){
 	b2World* world = this->proyectil->GetWorld();
 	b2Vec2 pos = this->proyectil->GetPosition();
 	float32 blastRadius = (float) radio_explosion;
@@ -55,11 +55,10 @@ void Patada::aplicarExplosion(){
 	b2Vec2 dir = posImpacto - pos;
 	float32 distancia = dir.Normalize();
 	if (distancia == 0 ) return;
-	float32 invDistancia = 1/distancia;
-	float32 impulso = this->danio * invDistancia*10;
-	body->ApplyLinearImpulse(impulso * dir , posImpacto, true);
-	//FALTA SACARLE VIDA A LOS GUSANOS
-
+    this->checkPersonajeLastimado(body, manejador, this->danio * (blastRadius/distancia) );
+    if((abs(body->GetLinearVelocity().x) < 10) && (abs(body->GetLinearVelocity().y) < 10)){
+        body->ApplyLinearImpulse(b2Vec2(dir.x* (blastRadius/distancia) ,dir.y* (blastRadius/distancia)), posImpacto, true);
+    }
 	}
 }
 
