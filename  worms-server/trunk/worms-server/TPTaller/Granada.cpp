@@ -268,28 +268,30 @@ void Granada::aplicarExplosion(){
 	float32 blastRadius = 30;
 	int numRays = 20;
 	for (int i = 0; i < numRays; i++) {
-	  float angle = (i / (float)numRays) * PI;
-	  b2Vec2 rayDir( sinf(angle), cosf(angle) );
-	  b2Vec2 rayEnd = pos + blastRadius * rayDir;
-	  //printf("ANGULOS %f \n",angle);
+		float angle = (i / (float)numRays) * PI;
+		b2Vec2 rayDir(cosf(angle), sinf(angle));
+		b2Vec2 rayEnd = pos + blastRadius * rayDir;
+		//printf("ANGULOS %f \n",angle);
 
-	  RayCastMasCercano callback;
-	  //printf("HAGO UN RAYCAST ENTRE LAS POSICIONES (%f,%f) y (%f,%f) \n",pos.x,pos.y,rayEnd.x,rayEnd.y);
-	  world->RayCast(&callback, pos, rayEnd);
-	  if ( callback.body ){
-		b2Body* body = callback.body;
-		b2Vec2 posImpacto = callback.pos;
-		if ( body == this->proyectil || body->GetType() != b2_dynamicBody ) continue;
-		b2Vec2 dir = posImpacto - pos;
-		float32 distancia = dir.Normalize();
-		if (distancia == 0 ) continue;
-		float32 invDistancia = 1/distancia;
-		float32 impulso = this->danio * invDistancia*10;
-//		impulso = b2Min(impulso, 500.0f); // estaba en el tutorial, no estoy seguro
-		body->ApplyLinearImpulse(impulso * dir , posImpacto, true);
-		//printf("EL RAYCAST ENCONTRO UN CUERPO Y LE APLICA UN LINEAR IMPULSE DE %f \n",impulso);
-		//FALTA SACARLE VIDA A LOS GUSANOS
-	  }
+		RayCastMasCercano callback;
+		//printf("HAGO UN RAYCAST ENTRE LAS POSICIONES (%f,%f) y (%f,%f) \n",pos.x,pos.y,rayEnd.x,rayEnd.y);
+		world->RayCast(&callback, pos, rayEnd);
+		if ( callback.body ){
+			b2Body* body = callback.body;
+			b2Vec2 posImpacto = callback.pos;
+			if ( body == this->proyectil || body->GetType() != b2_dynamicBody ) continue;
+			b2Vec2 dir = posImpacto - pos;
+			float32 distancia = dir.Normalize();
+			if (distancia == 0 ) continue;
+//			float32 invDistancia = 1/distancia;
+//			float32 impulso = this->danio * invDistancia*10;
+	//		impulso = b2Min(impulso, 500.0f); // estaba en el tutorial, no estoy seguro
+		  	if((abs(body->GetLinearVelocity().x) < 10) && (abs(body->GetLinearVelocity().y) < 10)){
+		  		body->ApplyLinearImpulse(dir, posImpacto, true);
+		  	}
+			//printf("EL RAYCAST ENCONTRO UN CUERPO Y LE APLICA UN LINEAR IMPULSE DE %f \n",impulso);
+			//FALTA SACARLE VIDA A LOS GUSANOS
+		}
 	}
 }
 

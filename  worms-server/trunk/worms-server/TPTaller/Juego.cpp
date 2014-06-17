@@ -262,10 +262,10 @@ void Juego::aplicarPaquete(structEvento* evento, int comenzar){
 				}
 			}
 		}
-		if(evento->fuerza == 1){
+		if((evento->fuerza == 1) && arma_actual){
 			arma_actual->setFuerza();
 		} else
-			if(evento->fuerza == 2) {
+			if((evento->fuerza == 2) && arma_actual) {
 				this->disparar();
 				arma_actual->resetFuerza();
 			}
@@ -343,10 +343,6 @@ void Juego::pasarTurno(){
 			//jugadores_jugando.erase(jugadores_jugando.begin() + i);
 		}
 	}
-
-
-
-
 }
 
 int Juego::getRelojRonda(){
@@ -428,22 +424,19 @@ void Juego::checkColisionProyectil(structPaquete* paquete){
 			this->pasarTurno();
 			if(this->arma_actual)
 				delete this->arma_actual;
-		}
-
-//		if (arma_actual->getTipo() == 6){ //patada
-//			arma_actual->disparar(this->getMundo());
-//			delete this->arma_actual;
-//			proj_in_air = false;
-//		}
-	else{
-			paquete->radio_explosion=-1;
+		} else{
+			if((arma_actual != NULL) && (arma_actual->getTipo() == 6)){ //patada
+				arma_actual->disparar(this->getMundo());
+				delete this->arma_actual;
+				proj_in_air = false;
+			} else{
+				paquete->radio_explosion=-1;
 
 			//b2Vec2 antigravedad = b2Vec2(0,-0.98f);
 			//arma_actual->getProyectil()->ApplyForceToCenter(antigravedad, true );
+			}
 		}
-
-	}
-	else{
+	} else{
 		paquete->radio_explosion=-1;
 	}
 }
@@ -619,8 +612,7 @@ void Juego::setPaqueteProyectil(structPaquete *pack){
     return;
 }
 
-
- void Juego::resetNivel(){
+void Juego::resetNivel(){
 	this->mundo->resetMundo();
 	delete this->arma_actual;
 	this->arma_actual = NULL;
@@ -639,8 +631,7 @@ void Juego::setPaqueteProyectil(structPaquete *pack){
 		this->jugadores[i]=NULL;
 	}
 
- }
-
+}
  Arma* Juego::getArmaActual(){
 	 return arma_actual;
  }
