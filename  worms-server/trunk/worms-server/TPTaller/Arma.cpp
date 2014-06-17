@@ -296,3 +296,8 @@ void Arma::aplicarExplosion(ManejadorPersonajes *manejador){
 int Arma::getRadioExplosion(){
 	return this->radio_explosion;
 }
+
+float Arma::getFuerza(){
+	return fuerza;
+}
+

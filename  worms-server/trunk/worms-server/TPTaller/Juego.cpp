@@ -436,6 +436,7 @@ void Juego::setPaqueteProyectil(structPaquete *pack){
 		pack->posicion_proyectil = this->arma_actual->getPosicion();
 		pack->direccion_proyectil = this->arma_actual->getDireccion();
 		pack->tamanio_proyectil = this->arma_actual->getTamanio();
+		pack->potencia = arma_actual->getFuerza();
 		if(pack->tipo_proyectil == 3)
 			pack->contador_segundos = ((Dinamita*)(this->arma_actual))->getContadorSegundos();
 		else
@@ -445,6 +446,7 @@ void Juego::setPaqueteProyectil(structPaquete *pack){
 		pack->posicion_proyectil = b2Vec2(0,0);
 		pack->direccion_proyectil = b2Vec2(0,0);
 		pack->tamanio_proyectil = b2Vec2(0,0);
+
 	}
 }
 
