@@ -14,6 +14,7 @@ public:
 	virtual ~ManejadorPersonajes();
 	void agregarPersonaje(Personaje *personaje, uint8 numero_jugador);
 	int getCantidadJugadores();
+	void resetManejador();
 
 private:
 	Personaje** vector_personajes;

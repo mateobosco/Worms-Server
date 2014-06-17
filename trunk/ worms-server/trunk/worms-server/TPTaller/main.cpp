@@ -66,7 +66,8 @@ int mainPrueba(int argc,char* argv[]){
 
 
 int main(int argc,char* argv[]){
-
 	main_server(argc, argv);
-	//mainPrueba(argc,argv);
+//	mainPrueba(argc,argv);
+
+
 }

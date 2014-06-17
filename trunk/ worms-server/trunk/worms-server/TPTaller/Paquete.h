@@ -46,7 +46,7 @@ typedef struct structPaquete{
 	b2Vec2 posicion_proyectil;
 	b2Vec2 direccion_proyectil;
 	b2Vec2 tamanio_proyectil;
-	b2Vec2 posicion_projectil;
+	b2Vec2 posicion_projectil; //todo esta 2 veces
 	int radio_explosion = -1;
 	int contador_segundos = 0;
 
@@ -76,7 +76,7 @@ typedef struct structEvento{
 	int arma_seleccionada =0;
 	int angulo_arma = 0;
 	int fuerza = 0;
-
+	int reset = 0; //0 no resetear, 1 resetear
 }structEvento;
 
 

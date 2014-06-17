@@ -48,7 +48,7 @@ int main_server(int argc,char* argv[]){
 	juego->getMundo()->setVectorPersonajes(manejador_personajes->getPersonajes(), manejador_personajes->getCantidadPersonajes(), manejador_personajes->getCantidadJugadores());
 	juego->getMundo()->setFiguras(juego->getFiguras(), juego->getCantidadFiguras());
 	//juego->getMundo()->step(0.1,1,1);
-	int jugadores_necesarios = 1;
+	int jugadores_necesarios = 1; //4
 	SDL_Delay(2000);
 
 	int comenzar=0;
@@ -101,6 +101,12 @@ int main_server(int argc,char* argv[]){
 
 		servidor->actualizarPaquete((char*)paqueteCiclo);
 
+		//if(juego->getCantidadJugadores()==1)
+//	    if(juego->getCantidadJugadores()==1){
+//	    	printf("PasarNivel\n");
+//	    	juego->resetNivel();
+//	    	juego->cargarSiguienteNivel();
+//	    }
 		destruirPaqueteCiclo(paqueteCiclo);
 
 		structEvento* evento =NULL;
@@ -118,10 +124,12 @@ int main_server(int argc,char* argv[]){
 	    	//juego->resetearRelojRonda();
 	    	juego->pasarTurno();
 	    }
+
 	    Jugador* jugador_actual2 = juego->getJugadores()[juego->getJugadorActual()];
 	    if(jugador_actual2->getPersonajes()[jugador_actual2->getPersonajeSeleccionado()]->getMuerto()){
 	    	juego->pasarTurno();
 	    }
+
 
 	    SDL_Delay(10);
 
