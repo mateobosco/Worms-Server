@@ -75,3 +75,11 @@ void ManejadorPersonajes::agregarPersonaje(Personaje *personaje, uint8 numero_ju
 int ManejadorPersonajes::getCantidadJugadores(){
 	return this->cantidad_jugadores;
 }
+
+void ManejadorPersonajes::resetManejador(){
+	for(int i = 0; i < MAX_CANT_JUGADORES * this->personajesMax ;i++ ){
+		this->vector_personajes[i] = NULL;
+	}
+	this->cantidad_jugadores = 0;
+	this->cantidad_actual_personajes = 0;
+}

@@ -16,6 +16,7 @@ public:
 	Patada(Personaje* personaje);
 	virtual ~Patada();
 	void disparar(Mundo* mundo);
+//	int getTipo();
 private:
 	int tipo;
 

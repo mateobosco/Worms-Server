@@ -37,6 +37,7 @@ class Mundo {
 		void CrearTierraPoligono(b2Vec2* tierra, float32 pixelesX, Escalador* escalador);
 		void CrearTierraPoligono1(b2Vec2* tierra, float32 pixelesX, Escalador* escalador);
 		b2ChainShape* getChainShape();
+		void resetMundo();
 
 
 

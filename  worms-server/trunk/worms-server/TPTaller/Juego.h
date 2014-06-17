@@ -68,12 +68,14 @@ class Juego{
 		void pasarTurno();
 		void resetearRelojRonda();
 		int getRelojRonda();
+		void resetNivel();
 
 		void setArma(int tipo_arma, b2Vec2 posicion, int angulo, int direc);
 		void disparar();
 		void checkColisionProyectil(structPaquete* paquete);
 		void setPaqueteProyectil(structPaquete *pack);
 		void explotarBomba(b2Vec2 posicion, float32 radio);
+		void cargarSiguienteNivel();
 };
 
 #endif /* JUEGO_H_ */

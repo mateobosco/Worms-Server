@@ -62,7 +62,7 @@ Jugador** Juego::getJugadores(){
 }
 
 uint8 Juego::getCantidadJugadores(){
-	return cantidad_jugadores;
+	return this->cantidad_jugadores;
 }
 
 Mundo* Juego::getMundo(){
@@ -269,6 +269,9 @@ void Juego::aplicarPaquete(structEvento* evento, int comenzar){
 				this->disparar();
 				arma_actual->resetFuerza();
 			}
+	    if(evento->reset == 1) {
+	    	this->resetNivel();
+	    }
 
 //	if(evento->fuerza == 2){
 //		printf("Dejó de disparar\n");
@@ -426,19 +429,19 @@ void Juego::checkColisionProyectil(structPaquete* paquete){
 			if(this->arma_actual)
 				delete this->arma_actual;
 		}
-		if (arma_actual->getTipo() == 6){ //patada
-			arma_actual->disparar(this->getMundo());
-			delete this->arma_actual;
-			proj_in_air = false;
 
-
-
-		} else{
+//		if (arma_actual->getTipo() == 6){ //patada
+//			arma_actual->disparar(this->getMundo());
+//			delete this->arma_actual;
+//			proj_in_air = false;
+//		}
+	else{
 			paquete->radio_explosion=-1;
 
 			//b2Vec2 antigravedad = b2Vec2(0,-0.98f);
 			//arma_actual->getProyectil()->ApplyForceToCenter(antigravedad, true );
 		}
+
 	}
 	else{
 		paquete->radio_explosion=-1;
@@ -616,7 +619,32 @@ void Juego::setPaqueteProyectil(structPaquete *pack){
     return;
 }
 
+
+ void Juego::resetNivel(){
+	this->mundo->resetMundo();
+	delete this->arma_actual;
+	this->arma_actual = NULL;
+	for(int i = 0; i < this->cantidad_figuras ; i++){
+	this->figuras[i] = NULL;
+	}
+	this->cantidad_figuras = 0;
+	this->cantidad_jugadores = 0;
+	this->indice_jugador_turno = 0;
+	this->jugador_actual = 0;
+	this->reloj_ronda=0;
+	this->arma_actual = 0;
+	this->proj_in_air = false;
+	this->manejador->resetManejador();
+	for (int i =0; i< 4; i++){
+		this->jugadores[i]=NULL;
+	}
+
+ }
+
  Arma* Juego::getArmaActual(){
 	 return arma_actual;
  }
 
+ void Juego::cargarSiguienteNivel(){
+ //Volver a enviar structInicial con la nueva info
+ }

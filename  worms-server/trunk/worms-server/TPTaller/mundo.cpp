@@ -439,3 +439,11 @@ int Mundo::getCantidadFiguras(){
 b2ChainShape* Mundo::getChainShape(){
 	return shapeTierra;
 }
+
+void Mundo::resetMundo(){
+	this->cantidad_figuras = 0;
+	this->cantidad_jugadores = 0;
+	this->cantidad_personajes = 0;
+	this->figuras = NULL; //todo
+	this->vector_personajes = NULL; //todo
+}

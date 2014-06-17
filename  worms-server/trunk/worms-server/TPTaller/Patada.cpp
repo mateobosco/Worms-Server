@@ -66,4 +66,8 @@ void Patada::disparar(Mundo* mundo){
 	}
 }
 
+//int Patada::getTipo(){
+//	return this->tipo;
+//}
+
 
