@@ -46,6 +46,7 @@ class Arma{
 		virtual b2Vec2 getPosicion();
 		virtual b2Vec2 getTamanio();
 		void resetFuerza();
+		float getFuerza();
 
 		virtual b2Body* getProyectil();
 
