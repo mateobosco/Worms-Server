@@ -1,10 +1,3 @@
-/*
- * GranadaHoly.cpp
- *
- *  Created on: 14/06/2014
- *      Author: juanmahidalgo
- */
-
 #include "GranadaHoly.h"
 
 #include "Arma.h"
@@ -14,6 +7,7 @@ GranadaHoly::GranadaHoly(Personaje* personaje){
 	this->tipo = 4;
 	personaje_duenio=personaje;
 	this->radio_explosion=10;
+	this->danio = DANIO_GRANADA_HOLY;
 }
 
 GranadaHoly::~GranadaHoly(){
@@ -268,14 +262,14 @@ public:
     }
 };
 
-void GranadaHoly::aplicarExplosion(){
+void GranadaHoly::aplicarExplosion(ManejadorPersonajes *manejador){
 	b2World* world = this->proyectil->GetWorld();
 	b2Vec2 pos = this->proyectil->GetPosition();
 	//printf("UBICO LA BOMBA EN (%f,%f) \n",pos.x,pos.y);
 	float32 blastRadius = 60;
 	int numRays = 20;
 	for (int i = 0; i < numRays; i++) {
-		float angle = (i / (float)numRays) * PI;
+		float angle = (i / (float)numRays) * 2 * PI;
 		b2Vec2 rayDir( sinf(angle), cosf(angle) );
 		b2Vec2 rayEnd = pos + blastRadius * rayDir;
 		//printf("ANGULOS %f \n",angle);
@@ -290,6 +284,7 @@ void GranadaHoly::aplicarExplosion(){
 			b2Vec2 dir = posImpacto - pos;
 			float32 distancia = dir.Normalize();
 			if (distancia == 0 ) continue;
+			this->checkPersonajeLastimado(body, manejador);
 			//		float32 invDistancia = 1/distancia;
 			//		float32 impulso = this->danio * invDistancia*10;
 			//		impulso = b2Min(impulso, 500.0f); // estaba en el tutorial, no estoy seguro

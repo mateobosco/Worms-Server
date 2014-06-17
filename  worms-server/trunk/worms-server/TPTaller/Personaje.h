@@ -49,6 +49,8 @@ public:
 	int getAnguloArma();
 	void setAnguloArma(int angulo);
 	void quitarEnergia(int descontar);
+	bool getDaniadoTurnoActual();
+	void setDaniadoTurnoActual(bool estado);
 
 private:
 	const char* dir_imagen;
@@ -69,6 +71,7 @@ private:
 
 	b2CircleShape* shape2;
 	float32 radio;
+	bool daniado_turno_actual;
 };
 
 #endif /* PERSONAJE_H_ */

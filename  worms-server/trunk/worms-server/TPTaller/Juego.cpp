@@ -412,7 +412,8 @@ void Juego::checkColisionProyectil(structPaquete* paquete){
 			proj_in_air = false;
 			this->arma_actual->setTipo(0);
 			this->mundo->destruir_cuerpo(arma_actual->getProyectil());
-			this->arma_actual->aplicarExplosion();
+			this->arma_actual->aplicarExplosion(this->manejador);
+			manejador->resetDaniadoTurnoActual();
 			paquete->radio_explosion=this->arma_actual->getRadioExplosion();
 			paquete->posicion_proyectil=arma_actual->getProyectil()->GetPosition();
 			printf(" LE MANDO LA POSICION %f, %f \n", paquete->posicion_proyectil.x, paquete->posicion_proyectil.y);
@@ -632,10 +633,11 @@ void Juego::resetNivel(){
 	}
 
 }
- Arma* Juego::getArmaActual(){
-	 return arma_actual;
- }
 
- void Juego::cargarSiguienteNivel(){
- //Volver a enviar structInicial con la nueva info
- }
+Arma* Juego::getArmaActual(){
+	return arma_actual;
+}
+
+void Juego::cargarSiguienteNivel(){
+	//Volver a enviar structInicial con la nueva info
+}

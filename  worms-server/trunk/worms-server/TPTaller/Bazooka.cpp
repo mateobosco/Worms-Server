@@ -1,12 +1,15 @@
 #include "Bazooka.h"
 
-#include "Arma.h"
-
 Bazooka::Bazooka(Personaje* personaje){
 	this->fuerza = 0;
 	this->tipo = 1;
-	this->radio_explosion=3;
-	personaje_duenio=personaje;
+	this->radio_explosion = 3;
+	this->danio = DANIO_BAZOOKA;
+	this->personaje_duenio = personaje;
+	this->proyectil = NULL;
+	this->shape_proy = NULL;
+	this->angulo = 0;
+	this->dir_imagen = NULL;
 }
 
 Bazooka::~Bazooka(){
@@ -264,7 +267,7 @@ public:
     }
 };
 
-void Bazooka::aplicarExplosion(){
+void Bazooka::aplicarExplosion(ManejadorPersonajes *manejador){
 	b2World* world = this->proyectil->GetWorld();
 	b2Vec2 pos = this->proyectil->GetPosition();
 	//printf("UBICO LA BOMBA EN (%f,%f) \n",pos.x,pos.y);
@@ -286,6 +289,7 @@ void Bazooka::aplicarExplosion(){
 			b2Vec2 dir = posImpacto - pos;
 			float32 distancia = dir.Normalize();
 			if (distancia == 0 ) continue;
+			this->checkPersonajeLastimado(body, manejador);
 	//		float32 invDistancia = 1/distancia;
 	//		float32 impulso = this->danio * invDistancia*10;
 	//		impulso = b2Min(impulso, 500.0f); // estaba en el tutorial, no estoy seguro
