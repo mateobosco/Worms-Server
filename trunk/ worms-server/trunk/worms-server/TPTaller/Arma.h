@@ -25,7 +25,7 @@ class Arma{
 		type_arma tipo;
 		b2Vec2* definirImpulso(b2Vec2 destino);
 		Personaje* personaje_duenio;
-		void checkPersonajeLastimado(b2Body *body, ManejadorPersonajes *manejador);
+		void checkPersonajeLastimado(b2Body *body, ManejadorPersonajes *manejador, int danio);
 
 	public:
 		Arma();

@@ -260,38 +260,40 @@ public:
 };
 
 void Dinamita::aplicarExplosion(ManejadorPersonajes *manejador){
-	b2World* world = this->proyectil->GetWorld();
-	b2Vec2 pos = this->proyectil->GetPosition();
-	//printf("UBICO LA BOMBA EN (%f,%f) \n",pos.x,pos.y);
-	float32 blastRadius = 30;
-	int numRays = 20;
-	for (int i = 0; i < numRays; i++) {
-		float angle = (i / (float)numRays) * 2 * PI;
-		b2Vec2 rayDir(cosf(angle), sinf(angle));
-		b2Vec2 rayEnd = pos + blastRadius * rayDir;
-		//printf("ANGULOS %f \n",angle);
+    b2World* world = this->proyectil->GetWorld();
+    b2Vec2 pos = this->proyectil->GetPosition();
+    //printf("UBICO LA BOMBA EN (%f,%f) \n",pos.x,pos.y);
+    float32 blastRadius = 25;
+    int numRays = 20;
+    for (int i = 0; i < numRays; i++) {
+        float angle = (i / (float)numRays) * 2 * PI;
+        b2Vec2 rayDir( sinf(angle), cosf(angle) );
+        rayDir *= blastRadius;
+        b2Vec2 rayEnd = pos + /*blastRadius * */rayDir;
+        //printf("ANGULOS %f \n",angle);
 
-		RayCastMasCercano callback;
-		//printf("HAGO UN RAYCAST ENTRE LAS POSICIONES (%f,%f) y (%f,%f) \n",pos.x,pos.y,rayEnd.x,rayEnd.y);
-		world->RayCast(&callback, pos, rayEnd);
-		if ( callback.body ){
-			b2Body* body = callback.body;
-			b2Vec2 posImpacto = callback.pos;
-			if((body == this->proyectil) || (body->GetType() != b2_dynamicBody)) continue;
-		  	b2Vec2 dir = posImpacto - pos;
-		  	float32 distancia = dir.Normalize();
-		  	if (distancia == 0 ) continue;
-		  	this->checkPersonajeLastimado(body, manejador);
-//		  	float32 invDistancia = 1/distancia;
-//		  	float32 impulso = this->danio * invDistancia*10;
-		  	if((abs(body->GetLinearVelocity().x) < 10) && (abs(body->GetLinearVelocity().y) < 10)){
-		  		body->ApplyLinearImpulse(dir, posImpacto, true);
-		  	}//printf("EL RAYCAST ENCONTRO UN CUERPO Y LE APLICA UN LINEAR IMPULSE DE %f \n",impulso);
-		  	//FALTA SACARLE VIDA A LOS GUSANOS
-		}
-	}
+        RayCastMasCercano callback;
+        //printf("HAGO UN RAYCAST ENTRE LAS POSICIONES (%f,%f) y (%f,%f) \n",pos.x,pos.y,rayEnd.x,rayEnd.y);
+        world->RayCast(&callback, pos, rayEnd);
+        if ( callback.body ){
+            b2Body* body = callback.body;
+            b2Vec2 posImpacto = callback.pos;
+            if ( body == this->proyectil || body->GetType() != b2_dynamicBody ) continue;
+            b2Vec2 dir = posImpacto - pos;
+            float32 distancia = dir.Normalize();
+            if (distancia == 0 ) continue;
+            this->checkPersonajeLastimado(body, manejador, this->danio * (blastRadius/distancia) );
+            //      float32 invDistancia = 1/distancia;
+            //      float32 impulso = this->danio * invDistancia;//*10;
+            //      impulso = b2Min(impulso, 500.0f); // estaba en el tutorial, no estoy seguro
+            if((abs(body->GetLinearVelocity().x) < 10) && (abs(body->GetLinearVelocity().y) < 10)){
+                body->ApplyLinearImpulse(b2Vec2(dir.x* (blastRadius/distancia) ,dir.y* (blastRadius/distancia)), posImpacto, true);
+            }
+            //printf("EL RAYCAST ENCONTRO UN CUERPO Y LE APLICA UN LINEAR IMPULSE DE %f \n",impulso);
+            //FALTA SACARLE VIDA A LOS GUSANOS
+        }
+    }
 }
-
 int Dinamita::getRadioExplosion(){
 	return this->radio_explosion;
 }
