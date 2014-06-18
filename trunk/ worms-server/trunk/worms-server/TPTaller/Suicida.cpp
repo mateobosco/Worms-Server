@@ -289,6 +289,7 @@ void Suicida::aplicarExplosion(ManejadorPersonajes *manejador){
             //FALTA SACARLE VIDA A LOS GUSANOS
         }
     }
+    this->personaje_duenio->setMuerto();
 }
 
 int Suicida::getRadioExplosion(){

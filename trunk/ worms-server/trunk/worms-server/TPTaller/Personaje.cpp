@@ -235,7 +235,8 @@ int Personaje::getNrojugador(){
 }
 
 void Personaje::setMuerto(){
-	muerto=true;
+	energia = 0;
+	muerto = true;
 }
 
 bool Personaje::getMuerto(){
