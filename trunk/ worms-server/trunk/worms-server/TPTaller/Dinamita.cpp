@@ -14,7 +14,6 @@ Dinamita::~Dinamita() {
 }
 
 void Dinamita::disparar(Mundo* mundo){
-	dir_imagen = "TPTaller/imagenes/dinamita_chispa.png";
 
 	b2Vec2 escalas = mundo->GetEscalas();
 	tamanio_proyectil.x = escalas.x / 60;
@@ -51,59 +50,6 @@ void Dinamita::disparar(Mundo* mundo){
 	this->reloj_comienzo = SDL_GetTicks();
 }
 
-
-//Retorna True si chocó con una figura.
-//Retorna True si chocó con un personaje.
-//Retorna False no hay choque.
-/*
-bool Arma::checkImpacto(Mundo *mundo){
-
-//	if (this->proyectil->GetContactList() && this->proyectil->GetContactList()->contact->IsTouching()){
-//		printf("BIINGOOOO: HAY IMPACTO \n");
-//		return true;
-//	} else{
-//		return false;
-//	}
-
-	Figura **figuras = mundo->getFiguras();
-	Figura *figura_aux;
-	Personaje **personajes = mundo->getPersonajes();
-	Personaje *personaje_aux;
-
-	b2Shape *forma_ins, *forma_world;
-	int index_ins, index_world;
-	b2Transform transf_ins, transf_world;
-
-	forma_ins = this->proyectil->GetFixtureList()->GetShape();
-	index_ins = 0;
-	transf_ins = this->proyectil->GetTransform();
-	bool overlap;
-	for(unsigned int i = 0; i < mundo->GetCantidadFiguras(); i++){
-		figura_aux = figuras[i];
-		forma_world = figura_aux->getBody()->GetFixtureList()->GetShape();
-		index_world = 0;
-		transf_world = figura_aux->getBody()->GetTransform();
-		overlap = b2TestOverlap(forma_ins, index_ins, forma_world, index_world, transf_ins, transf_world);
-		if(overlap){
-			return true;
-		}
-	}
-	for(int i = 0; i < mundo->getCantidadPersonajes(); i++){
-		personaje_aux = personajes[i];
-		forma_world = personaje_aux->getBody()->GetFixtureList()->GetShape();
-		index_world = 0;
-		transf_world = personaje_aux->getBody()->GetTransform();
-		overlap = b2TestOverlap(forma_ins, index_ins, forma_world, index_world, transf_ins, transf_world);
-		if(overlap){
-			personaje_aux->quitarEnergia(this->danio);
-			return true;
-		}
-	}
-	return false;
-
-}
-*/
-
 class QueryCheckImpacto : public b2QueryCallback {
  public:
      std::vector<b2Shape*> foundShapes;
@@ -122,40 +68,16 @@ class QueryCheckImpacto : public b2QueryCallback {
  };
 
 bool Dinamita::checkImpacto(Mundo* mundo){
-	printf(" Entra acaaaaaaaaaaa \n");
 	int resultado = SDL_GetTicks() - reloj_comienzo;
-	if (resultado >= 3000) return true;
+	if (resultado >= 4000) return true;
 	else return false;
-
-//	float32 radio = this->shape_proy->m_radius;
-//	b2Vec2 pos = this->proyectil->GetPosition();
-//	QueryCheckImpacto query;
-//	b2AABB aabb;
-//	aabb.upperBound = pos + b2Vec2(radio,radio);
-//	aabb.lowerBound = pos - b2Vec2(radio,radio);
-//
-//	b2World* world = mundo->devolver_world();
-//	world->QueryAABB(&query, aabb);
-//
-//	std::vector<b2Shape*> res = query.foundShapes;
-//
-//	if (res.size() > 0) {
-//		printf(" DEVUELVE TRUEEEE\n");
-//		return true;
-//	}
-//
-//
-//	return false;
 }
 
 int Dinamita::getContadorSegundos(){
-	if (SDL_GetTicks() - reloj_comienzo > 3000)
+	if (SDL_GetTicks() - reloj_comienzo > 4000)
 		return 0;
 	else{
-		int retorno = 0;
-		retorno =((int) ( (3000 - (SDL_GetTicks() - reloj_comienzo)) / 1000 ));
-		printf ( "Dinamita - retorno: %i \n", retorno);
-		return retorno;
+		return  ((4000 - (SDL_GetTicks() - reloj_comienzo)) / 1000 ) + 1;
 	}
 }
 
@@ -194,7 +116,7 @@ void Dinamita::setAngulo(int un_angulo, int direc){
 }
 
 void Dinamita::setTipo(int tipo_arma){
-	this->tipo = (type_arma) tipo_arma;
+	this->tipo = (type_arma) 3;
 }
 
 void Dinamita::setDireccion(b2Vec2 una_direccion){
@@ -212,11 +134,8 @@ b2Body* Dinamita::getProyectil(){
 	return proyectil;
 }
 
-int Dinamita::getAngulo(){
-	b2Vec2 velocidad = proyectil->GetLinearVelocity();
-	float32 angulo_aux = atan2( velocidad.y, velocidad.x);
-	this->angulo = (int) angulo_aux;
-	return angulo;
+double Dinamita::getAngulo(){
+	return angulo = 0;
 }
 
 int Dinamita::getTipo(){

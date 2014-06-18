@@ -1,7 +1,6 @@
 #include "Suicida.h"
 
 Suicida::Suicida(Personaje *un_personaje) {
-	this->dir_imagen = NULL;
 	this->danio = DANIO_SUICIDA;
 	this->fuerza = 0;
 	this->tipo = 5;
@@ -173,11 +172,8 @@ b2Body* Suicida::getProyectil(){
 	return proyectil;
 }
 
-int Suicida::getAngulo(){
-	b2Vec2 velocidad = proyectil->GetLinearVelocity();
-	float32 angulo_aux = atan2( velocidad.y, velocidad.x);
-	this->angulo = (int) angulo_aux;
-	return angulo;
+double Suicida::getAngulo(){
+	return angulo=0;
 }
 
 int Suicida::getTipo(){

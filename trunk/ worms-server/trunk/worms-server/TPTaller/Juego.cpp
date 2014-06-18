@@ -386,7 +386,6 @@ void Juego::setArma(int tipo_arma, b2Vec2 posicion, int angulo, int direccion){
 }
 
 void Juego::setArmaVacia(){
-	this->arma_actual->setTipo(0);
 	this->arma_actual->setAngulo(0, 0);
 }
 
@@ -405,7 +404,6 @@ void Juego::checkColisionProyectil(structPaquete* paquete){
 		if(arma_actual->checkImpacto(this->mundo)){
 			printf(" ENTROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO \n");
 			proj_in_air = false;
-			this->arma_actual->setTipo(0);
 			if (this->arma_actual->getTipo() != 6 ) this->mundo->destruir_cuerpo(arma_actual->getProyectil());
 			this->arma_actual->aplicarExplosion(this->manejador);
 			manejador->resetDaniadoTurnoActual();
@@ -413,7 +411,6 @@ void Juego::checkColisionProyectil(structPaquete* paquete){
 			paquete->posicion_proyectil=arma_actual->getProyectil()->GetPosition();
 			printf(" LE MANDO LA POSICION %f, %f \n", paquete->posicion_proyectil.x, paquete->posicion_proyectil.y);
 			if (this->arma_actual->getTipo() != 6 ) this->explotarBomba(paquete->posicion_proyectil, paquete->radio_explosion);
-			this->setArmaVacia();
 			Jugador* jugador_actual=this->jugadores[this->jugador_actual];
 			Personaje* personaje_sel = jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()];
 			personaje_sel->setArmaSeleccionada(0);
@@ -437,10 +434,13 @@ void Juego::setPaqueteProyectil(structPaquete *pack){
 		pack->direccion_proyectil = this->arma_actual->getDireccion();
 		pack->tamanio_proyectil = this->arma_actual->getTamanio();
 		pack->potencia = arma_actual->getFuerza();
-		if(pack->tipo_proyectil == 3)
-			pack->contador_segundos = ((Dinamita*)(this->arma_actual))->getContadorSegundos();
-		else
+		if((pack->tipo_proyectil == granada) || (pack->tipo_proyectil == dinamita) || (pack->tipo_proyectil == granada_holy)){
+			pack->contador_segundos = this->arma_actual->getContadorSegundos();
+			pack->angulo = this->arma_actual->getAngulo();
+		}else{
 			pack->contador_segundos = -1;
+			pack->angulo = 0;
+		}
 	} else{
 		pack->tipo_proyectil = 0;
 		pack->posicion_proyectil = b2Vec2(0,0);

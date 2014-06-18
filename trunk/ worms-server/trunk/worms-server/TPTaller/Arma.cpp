@@ -11,11 +11,6 @@ Arma::~Arma(){
 }
 
 void Arma::disparar(Mundo* mundo){
-	dir_imagen = "TPTaller/imagenes/misil_bazooka.png";
-//	printf("DISPARAR \n ");
-//	printf("posicion: x- %f y- %f \n", posicion_proyectil.x, posicion_proyectil.y);
-//	printf("Direccion: x- %f y- %f \n", direccion_proyectil.x, direccion_proyectil.y);
-//	printf("Tamanio: x- %f y- %f \n", tamanio_proyectil.x, tamanio_proyectil.y);
 	printf(" LLEGA HASTA ACA \n");
 	b2Vec2 escalas = mundo->GetEscalas();
 	tamanio_proyectil.x = escalas.x / 60;
@@ -173,17 +168,6 @@ void Arma::setAngulo(int un_angulo, int direc){
 	this->setDireccion(direccion);
 }
 
-void Arma::setTipo(int tipo_arma){
-	this->tipo = (type_arma) tipo_arma;
-	switch (tipo){
-		case ninguno: break;
-		case bazooka: {
-//			danio = 100;
-		}
-		default: break;
-	}
-}
-
 void Arma::setDireccion(b2Vec2 una_direccion){
 	this->direccion_proyectil.x = una_direccion.x;
 	this->direccion_proyectil.y = una_direccion.y;
@@ -197,13 +181,6 @@ void Arma::setPosicion(b2Vec2 una_posicion){
 
 b2Body* Arma::getProyectil(){
 	return proyectil;
-}
-
-int Arma::getAngulo(){
-	b2Vec2 velocidad = proyectil->GetLinearVelocity();
-	float32 angulo_aux = atan2( velocidad.y, velocidad.x);
-	this->angulo = (int) angulo_aux;
-	return angulo;
 }
 
 int Arma::getTipo(){
@@ -301,3 +278,11 @@ float Arma::getFuerza(){
 	return fuerza;
 }
 
+int Arma::getContadorSegundos(){
+	return 0;
+}
+
+double Arma::getAngulo(){
+	printf("Entra en el de ARMA");
+	return 0;
+}

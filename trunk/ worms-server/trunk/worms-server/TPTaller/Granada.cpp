@@ -1,13 +1,12 @@
-
 #include "Granada.h"
-#include "Arma.h"
 
 Granada::Granada(Personaje* personaje){
 	this->fuerza = 0;
-	this->tipo = 2;
-	this->personaje_duenio = personaje;
+	this->tipo = granada;
 	this->radio_explosion = 3;
-	this->danio = DANIO_GRANADA_HOLY;
+	this->personaje_duenio = personaje;
+	this->reloj_comienzo = 0;
+	this->danio = DANIO_GRANADA;
 }
 
 Granada::~Granada(){
@@ -15,11 +14,6 @@ Granada::~Granada(){
 }
 
 void Granada::disparar(Mundo* mundo){
-	dir_imagen = "TPTaller/imagenes/misil_bazooka.png";
-//	printf("DISPARAR \n ");
-//	printf("posicion: x- %f y- %f \n", posicion_proyectil.x, posicion_proyectil.y);
-//	printf("Direccion: x- %f y- %f \n", direccion_proyectil.x, direccion_proyectil.y);
-//	printf("Tamanio: x- %f y- %f \n", tamanio_proyectil.x, tamanio_proyectil.y);
 
 	b2Vec2 escalas = mundo->GetEscalas();
 	tamanio_proyectil.x = escalas.x / 60;
@@ -36,9 +30,9 @@ void Granada::disparar(Mundo* mundo){
 	proyectil = world->CreateBody(&bodyDef);
 
 	b2MassData massData = b2MassData();
-	massData.mass = 0.1;
+	massData.mass = 0.5;
 	massData.center = b2Vec2(0, 0);
-	massData.I = RECT_INERCIA_ROT;
+	massData.I = 5.0f; //RECT_INERCIA_ROT;
 	proyectil->SetMassData(&massData);
 
 	shape_proy = new b2CircleShape();
@@ -48,17 +42,16 @@ void Granada::disparar(Mundo* mundo){
 
 	b2FixtureDef fd; // creo un fixture
 	fd.filter = filtro;
-	fd.restitution = 0;
-	fd.friction = 0.5;
+	fd.restitution = 0.5;
+	fd.friction = 1;
+	fd.density = 0.5;
 	fd.shape = shape_proy;
 	proyectil->CreateFixture(&fd); // al body le pongo la fixture creada
-//	proyectil->SetAwake(false);
 	b2Vec2 velocidad;
 	velocidad.x = direccion_proyectil.x*this->fuerza; // Multiplicar por Fuerza
 	velocidad.y = direccion_proyectil.y*this->fuerza; // Multiplicar por Fuerza
 	proyectil->SetLinearVelocity(velocidad);
-//	b2Vec2 antigravedad = b2Vec2(0,-9.8f);
-//	proyectil->ApplyForceToCenter(antigravedad, true );
+	this->reloj_comienzo = SDL_GetTicks();
 }
 
 b2Vec2* Granada::definirImpulso(b2Vec2 destino){
@@ -67,58 +60,6 @@ b2Vec2* Granada::definirImpulso(b2Vec2 destino){
 	impulso->y = (destino.y - this->proyectil->GetPosition().y) * this->fuerza;
 	return impulso;
 }
-
-//Retorna True si chocó con una figura.
-//Retorna True si chocó con un personaje.
-//Retorna False no hay choque.
-/*
-bool Arma::checkImpacto(Mundo *mundo){
-
-//	if (this->proyectil->GetContactList() && this->proyectil->GetContactList()->contact->IsTouching()){
-//		printf("BIINGOOOO: HAY IMPACTO \n");
-//		return true;
-//	} else{
-//		return false;
-//	}
-
-	Figura **figuras = mundo->getFiguras();
-	Figura *figura_aux;
-	Personaje **personajes = mundo->getPersonajes();
-	Personaje *personaje_aux;
-
-	b2Shape *forma_ins, *forma_world;
-	int index_ins, index_world;
-	b2Transform transf_ins, transf_world;
-
-	forma_ins = this->proyectil->GetFixtureList()->GetShape();
-	index_ins = 0;
-	transf_ins = this->proyectil->GetTransform();
-	bool overlap;
-	for(unsigned int i = 0; i < mundo->GetCantidadFiguras(); i++){
-		figura_aux = figuras[i];
-		forma_world = figura_aux->getBody()->GetFixtureList()->GetShape();
-		index_world = 0;
-		transf_world = figura_aux->getBody()->GetTransform();
-		overlap = b2TestOverlap(forma_ins, index_ins, forma_world, index_world, transf_ins, transf_world);
-		if(overlap){
-			return true;
-		}
-	}
-	for(int i = 0; i < mundo->getCantidadPersonajes(); i++){
-		personaje_aux = personajes[i];
-		forma_world = personaje_aux->getBody()->GetFixtureList()->GetShape();
-		index_world = 0;
-		transf_world = personaje_aux->getBody()->GetTransform();
-		overlap = b2TestOverlap(forma_ins, index_ins, forma_world, index_world, transf_ins, transf_world);
-		if(overlap){
-			personaje_aux->quitarEnergia(this->danio);
-			return true;
-		}
-	}
-	return false;
-
-}
-*/
 
 class QueryCheckImpacto : public b2QueryCallback {
  public:
@@ -138,26 +79,17 @@ class QueryCheckImpacto : public b2QueryCallback {
  };
 
 bool Granada::checkImpacto(Mundo* mundo){
-	printf(" Entra acaaaaaaaaaaa \n");
-	float32 radio = this->shape_proy->m_radius;
-	b2Vec2 pos = this->proyectil->GetPosition();
-	QueryCheckImpacto query;
-	b2AABB aabb;
-	aabb.upperBound = pos + b2Vec2(radio,radio);
-	aabb.lowerBound = pos - b2Vec2(radio,radio);
+	int resultado = SDL_GetTicks() - reloj_comienzo;
+	if (resultado >= 5000) return true;
+	else return false;
+}
 
-	b2World* world = mundo->devolver_world();
-	world->QueryAABB(&query, aabb);
-
-	std::vector<b2Shape*> res = query.foundShapes;
-
-	if (res.size() > 0) {
-		printf(" DEVUELVE TRUEEEE\n");
-		return true;
+int Granada::getContadorSegundos(){
+	if (SDL_GetTicks() - reloj_comienzo > 5000)
+		return 0;
+	else{
+		return  ((5000 - (SDL_GetTicks() - reloj_comienzo)) / 1000 ) + 1;
 	}
-
-
-	return false;
 }
 
 bool Granada::setFuerza(){
@@ -166,7 +98,7 @@ bool Granada::setFuerza(){
 		return false;
 	} else{
 		this->fuerza += (MAX_FUERZA/20);//todo poner algo inferior
-		printf("entra al setFuerza: %f \n", this->fuerza);
+//		printf("entra al setFuerza: %f \n", this->fuerza);
 		return true;
 	}
 }
@@ -192,12 +124,10 @@ void Granada::setAngulo(int un_angulo, int direc){
 		direccion.y = 1 * sin( angulo * PI / 180 );
 		this->setDireccion(direccion);
 	}
-
-
 }
 
 void Granada::setTipo(int tipo_arma){
-	this->tipo = 2;
+	this->tipo = (type_arma) 2;
 }
 
 void Granada::setDireccion(b2Vec2 una_direccion){
@@ -215,10 +145,9 @@ b2Body* Granada::getProyectil(){
 	return proyectil;
 }
 
-int Granada::getAngulo(){
-	b2Vec2 velocidad = proyectil->GetLinearVelocity();
-	float32 angulo_aux = atan2( velocidad.y, velocidad.x);
-	this->angulo = (int) angulo_aux;
+double Granada::getAngulo(){
+//	printf("Entra en el de Granada\n y el angulo es: %f\n en grados: %d\n", this->proyectil->GetAngle(), this->proyectil->GetAngle() * 180/PI );
+	angulo = this->proyectil->GetAngle()* 180/PI;
 	return angulo;
 }
 

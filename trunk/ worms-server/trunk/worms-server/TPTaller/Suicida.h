@@ -21,7 +21,7 @@ public:
 	void aplicarExplosion(ManejadorPersonajes *manejador);
 	int getRadioExplosion();
 
-	int getAngulo();
+	double getAngulo();
 	int getTipo();
 	b2Vec2 getDireccion();
 	b2Vec2 getPosicion();
