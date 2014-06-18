@@ -66,6 +66,7 @@ typedef struct structInicial{
 	int alto_unidades = 0;
 	float32 ancho_escenario = 0.0;
 	float32 alto_escenario = 0.0;
+	float32 viento = 0.0;
 } structInicial;
 
 typedef struct structEvento{

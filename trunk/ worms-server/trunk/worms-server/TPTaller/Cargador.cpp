@@ -561,3 +561,26 @@ int Cargador::cantidadLados(const Node nodo,size_t i,string tipo){
 structInicial* Cargador::getPaqueteInicial(){
 	return this->datos;
 }
+
+void Cargador::loadViento(Node nodo){
+	float32 wind;
+	Node nodoAux = nodo["viento"];
+	if(nodoAux){
+		try{
+			wind = nodoAux.as<float32>();
+		}catch(Exception &e){
+			wind = 0.0;
+			loguear();
+			logFile << "    Warning " <<"\t No se pudo cargar el viento. Por defecto lo seteamos en 0. " << endl;
+		}
+	}else{
+		wind = 0.0;
+		loguear();
+		logFile << "    Warning " <<"\t No se pudo cargar el viento. Por defecto lo seteamos en 0. " << endl;
+	}
+	datos->viento = wind;
+}
+
+float32 Cargador::getViento(){
+	return datos->viento;
+}
