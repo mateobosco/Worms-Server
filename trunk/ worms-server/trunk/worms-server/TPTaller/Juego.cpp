@@ -245,7 +245,7 @@ void Juego::aplicarPaquete(structEvento* evento, int comenzar){
 				}
 			}
 		}
-		if(evento->angulo_arma != 0){
+		if(evento->angulo_arma != 0 && arma_actual != NULL){
 			for (int j = 0; j < manejador->getCantidadPersonajes(); j++){ // TODO ver si es necesario cant actuales activos.
 				Personaje* personaje_actual = manejador->getPersonajes()[j];
 				if (! personaje_actual->getMuerto()){
