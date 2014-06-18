@@ -9,7 +9,6 @@ Bazooka::Bazooka(Personaje* personaje){
 	this->proyectil = NULL;
 	this->shape_proy = NULL;
 	this->angulo = 0;
-	this->dir_imagen = NULL;
 }
 
 Bazooka::~Bazooka(){
@@ -17,11 +16,6 @@ Bazooka::~Bazooka(){
 }
 
 void Bazooka::disparar(Mundo* mundo){
-	dir_imagen = "TPTaller/imagenes/misil_bazooka.png";
-//	printf("DISPARAR \n ");
-//	printf("posicion: x- %f y- %f \n", posicion_proyectil.x, posicion_proyectil.y);
-//	printf("Direccion: x- %f y- %f \n", direccion_proyectil.x, direccion_proyectil.y);
-//	printf("Tamanio: x- %f y- %f \n", tamanio_proyectil.x, tamanio_proyectil.y);
 
 	b2Vec2 escalas = mundo->GetEscalas();
 	tamanio_proyectil.x = escalas.x / 60;
@@ -220,10 +214,10 @@ b2Body* Bazooka::getProyectil(){
 	return proyectil;
 }
 
-int Bazooka::getAngulo(){
-	b2Vec2 velocidad = proyectil->GetLinearVelocity();
-	float32 angulo_aux = atan2( velocidad.y, velocidad.x);
-	this->angulo = (int) angulo_aux;
+double Bazooka::getAngulo(){
+	b2Vec2 direccion = this->getDireccion();
+	float32 angulo_aux = atan2( direccion.y, direccion.x);
+	this->angulo = angulo_aux;
 	return angulo;
 }
 

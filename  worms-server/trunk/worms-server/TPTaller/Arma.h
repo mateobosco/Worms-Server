@@ -7,12 +7,11 @@
 #include "ManejadorPersonajes.h"
 
 typedef enum tipo_de_arma{
-	ninguno, bazooka, etc
+	ninguno, bazooka, granada, dinamita, granada_holy, suicida, patada
 }type_arma;
 
 class Arma{
 	protected:
-		char* dir_imagen;
 		b2Vec2 posicion_proyectil;
 		b2Vec2 direccion_proyectil;
 		b2Vec2 tamanio_proyectil;
@@ -20,12 +19,13 @@ class Arma{
 		b2CircleShape* shape_proy;
 		int danio;
 		float fuerza;
-		int angulo;
+		double angulo;
 		int radio_explosion;
 		type_arma tipo;
 		b2Vec2* definirImpulso(b2Vec2 destino);
 		Personaje* personaje_duenio;
 		void checkPersonajeLastimado(b2Body *body, ManejadorPersonajes *manejador, int danio);
+		int reloj_comienzo;
 
 	public:
 		Arma();
@@ -34,13 +34,12 @@ class Arma{
 		virtual bool checkImpacto(Mundo *mundo);
 		virtual bool setFuerza();
 		virtual void setAngulo(int un_angulo, int direc);
-		virtual void setTipo(int tipo_arma);
 		virtual void setDireccion(b2Vec2 una_direccion);
 		virtual void setPosicion(b2Vec2 una_posicion);
 		virtual void aplicarExplosion(ManejadorPersonajes *manejador);
 		virtual int getRadioExplosion();
 
-		virtual int getAngulo();
+		virtual double getAngulo();
 		virtual int getTipo();
 		virtual b2Vec2 getDireccion();
 		virtual b2Vec2 getPosicion();
@@ -49,6 +48,7 @@ class Arma{
 		float getFuerza();
 
 		virtual b2Body* getProyectil();
+		virtual int getContadorSegundos();
 
 };
 

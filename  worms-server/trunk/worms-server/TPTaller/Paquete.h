@@ -50,6 +50,7 @@ typedef struct structPaquete{
 	int radio_explosion = -1;
 	int contador_segundos = 0;
 	int potencia = -1;
+	double angulo = 0;
 
 }structPaquete;
 

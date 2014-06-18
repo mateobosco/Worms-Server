@@ -1,10 +1,8 @@
-
 #ifndef GRANADA_H_
 #define GRANADA_H_
 
-
 #include "Arma.h"
-
+#include <ctime>
 
 class Granada: public Arma {
 private:
@@ -23,7 +21,8 @@ public:
 	void setPosicion(b2Vec2 una_posicion);
 	void aplicarExplosion(ManejadorPersonajes *manejador);
 	int getRadioExplosion();
-	int getAngulo();
+
+	double getAngulo();
 	int getTipo();
 	b2Vec2 getDireccion();
 	b2Vec2 getPosicion();
@@ -31,7 +30,7 @@ public:
 	void resetFuerza();
 
 	b2Body* getProyectil();
-
+	int getContadorSegundos();
 };
 
 #endif /* GRANADA_H_ */
