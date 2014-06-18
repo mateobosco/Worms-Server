@@ -652,31 +652,34 @@ int* Juego::jugadoresActivos(){
 	 return jugadores_vivos;
  }
 
-
 class QueryViento : public b2QueryCallback {
 	public:
     	bool tocando;
-
+    	std::vector<b2Shape*> foundShapes;
 
     	bool ReportFixture(b2Fixture* fixture) {
-    		tocando = true;
+    		b2Shape* shape = fixture->GetShape();
+    		tocando = false;
+    		if((shape->GetType() == 0) || (shape->GetType() == 3)){ // b2ChainShape == 3
+    			vector<b2Shape*>::iterator it = std::find(foundShapes.begin(), foundShapes.end(), shape);
+    			if(it==foundShapes.end()){
+    				foundShapes.push_back( shape );
+    				tocando = true;
+    			}
+    	   	}
     		return true;//keep going to find all fixtures in the query area
     	}
  };
-
-
 
 void Juego::aplicarViento(Arma *arma){
 	QueryViento query;
 	b2AABB aabb;
 	b2Body *proyectil = arma->getProyectil();
-	int radio = arma->getRadioExplosion();
-	aabb.upperBound = proyectil->GetPosition() - b2Vec2(radio, radio);
-	aabb.lowerBound = proyectil->GetPosition() + b2Vec2(radio, radio);
+	aabb.upperBound += proyectil->GetPosition();
+	aabb.lowerBound += proyectil->GetPosition();
 	b2World* world = this->getMundo()->devolver_world();
 	world->QueryAABB(&query, aabb);
 	b2Vec2 fuerza = {this->viento, 0};
 	if(!query.tocando)
 		proyectil->ApplyForceToCenter(fuerza, true);
 }
-

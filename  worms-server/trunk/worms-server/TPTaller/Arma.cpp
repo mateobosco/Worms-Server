@@ -283,6 +283,5 @@ int Arma::getContadorSegundos(){
 }
 
 double Arma::getAngulo(){
-	printf("Entra en el de ARMA");
-	return 0;
+	return this->angulo;
 }
