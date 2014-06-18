@@ -209,12 +209,12 @@ void GranadaHoly::aplicarExplosion(ManejadorPersonajes *manejador){
             b2Vec2 dir = posImpacto - pos;
             float32 distancia = dir.Normalize();
             if (distancia == 0 ) continue;
-            this->checkPersonajeLastimado(body, manejador, this->danio * (blastRadius/distancia) );
+            this->checkPersonajeLastimado(body, manejador, this->danio );
             //      float32 invDistancia = 1/distancia;
             //      float32 impulso = this->danio * invDistancia;//*10;
             //      impulso = b2Min(impulso, 500.0f); // estaba en el tutorial, no estoy seguro
             if((abs(body->GetLinearVelocity().x) < 10) && (abs(body->GetLinearVelocity().y) < 10)){
-                body->ApplyLinearImpulse(b2Vec2(dir.x* (blastRadius/distancia) ,dir.y* (blastRadius/distancia)), posImpacto, true);
+                body->ApplyLinearImpulse(b2Vec2(dir.x ,dir.y), posImpacto, true);
             }
             //printf("EL RAYCAST ENCONTRO UN CUERPO Y LE APLICA UN LINEAR IMPULSE DE %f \n",impulso);
             //FALTA SACARLE VIDA A LOS GUSANOS

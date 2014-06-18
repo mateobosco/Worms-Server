@@ -19,7 +19,6 @@ int aceptarConex(void* servidor){
 }
 
 int main_server(int argc,char* argv[]){
-//	int tiempo = SDL_GetTicks(); // TODO Valgrind
 	int retorno = 0;
 	Servidor *servidor = new Servidor(MAX_CANT_JUGADORES);
 	printf("Servidor corriendo\n");
@@ -35,10 +34,6 @@ int main_server(int argc,char* argv[]){
 	servidor->setThreadEscuchar(listener);
 	servidor->setThreadAceptar(aceptar);
 
-	if(listener == NULL){
-		//ver que hacer
-		//log error todo
-	}
 	int jugadores = servidor->getCantidadClientes();
 	while (jugadores<=0){
 		jugadores = servidor->getCantidadClientes();
@@ -48,12 +43,10 @@ int main_server(int argc,char* argv[]){
 	printf("-----------------------------------------EL SERVIDOR INICIA EL JUEGO-------------------------------------\n");
 	juego->getMundo()->setVectorPersonajes(manejador_personajes->getPersonajes(), manejador_personajes->getCantidadPersonajes(), manejador_personajes->getCantidadJugadores());
 	juego->getMundo()->setFiguras(juego->getFiguras(), juego->getCantidadFiguras());
-	//juego->getMundo()->step(0.1,1,1);
 	int jugadores_necesarios = 1; //4
 	SDL_Delay(2000);
 
 	int comenzar=0;
-	//TODO ACA ES DONDE TERMINA EL CODIGO INNECESARIO.
 
 	SDL_mutex *un_mutex = SDL_CreateMutex();
 	while(!servidor->getFinalizar()){
@@ -79,17 +72,8 @@ int main_server(int argc,char* argv[]){
 		int nro_jugador_actual = juego->getJugadorActual();
 		Jugador* jugador_actual = juego->getJugadores()[nro_jugador_actual];
 		char* nombre1 = jugador_actual->getNombre();
-		//printf(" MANDO EL NOMBRE %s \n", nombre1);
 		Arma* arma_actual=juego->getArmaActual();
-//		int nro_arma;
-//		if(arma_actual){
-//			printf(" ========================== \n");
-//			nro_arma=arma_actual->getTipo();
-//
-//		}
-//		else{
-//			nro_arma=0;
-//		}
+
 		int activos = 0;
 		int* jug = juego->jugadoresActivos();
 		for(int i = 0;i < 4; i++){
@@ -109,12 +93,6 @@ int main_server(int argc,char* argv[]){
 		servidor->actualizarPaquete((char*)paqueteCiclo);
 		destruirPaqueteCiclo(paqueteCiclo);
 
-		//if(juego->getCantidadJugadores()==1)
-//	    if(juego->getCantidadJugadores()==1){
-//	    	printf("PasarNivel\n");
-//	    	juego->resetNivel();
-//	    	juego->cargarSiguienteNivel();
-//	    }
 
 
 		structEvento* evento =NULL;
@@ -125,7 +103,6 @@ int main_server(int argc,char* argv[]){
 	    	juego->aplicarPaquete(evento, comenzar);
 	    	free(evento);
 	    }
-	    //printf(" TIMER: %d \n", juego->getRelojRonda());
 	    if(juego->getRelojRonda() > 60000 && comenzar==1){
 	    	printf(" RESETEO EL RELOJJJ \n");
 	    	printf(" TIMER: %d \n", juego->getRelojRonda()/1000);
@@ -142,7 +119,6 @@ int main_server(int argc,char* argv[]){
 		juego->getMundo()->comprobar_nivel_agua();
 
 		juego->getMundo()->step(0.025,100,100);
-//		if ( (SDL_GetTicks() - tiempo) > 75000) break; // TODO lo corto para poder pasarle el Valgrind.
 	}
 	logFile.close();
 	delete juego;

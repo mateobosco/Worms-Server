@@ -51,18 +51,18 @@ void Patada::aplicarExplosion(ManejadorPersonajes* manejador ){
 	RaycastPatear callback;
 	world->RayCast(&callback, pos, rayEnd);
 	if ( callback.body ){
-	b2Body* body = callback.body;
-	b2Vec2 posImpacto = callback.pos;
-	if ( body == this->personaje_duenio->getBody() || body->GetType() != b2_dynamicBody ) return;
-	b2Vec2 dir = posImpacto - pos;
-	float32 distancia = dir.Normalize();
-	if (distancia == 0 ) return;
-    this->checkPersonajeLastimado(body, manejador, this->danio );
-    if((abs(body->GetLinearVelocity().x) < 10) && (abs(body->GetLinearVelocity().y) < 10)){
+		b2Body* body = callback.body;
+		b2Vec2 posImpacto = callback.pos;
+		if ( body == this->personaje_duenio->getBody() || body->GetType() != b2_dynamicBody ) return;
+		b2Vec2 dir = posImpacto - pos;
+		float32 distancia = dir.Normalize();
+		if (distancia == 0 ) return;
+		this->checkPersonajeLastimado(body, manejador, this->danio );
+		if((abs(body->GetLinearVelocity().x) < 10) && (abs(body->GetLinearVelocity().y) < 10)){
 
-    	if (orientacion == 1 ) body->ApplyLinearImpulse(b2Vec2(1.5 ,-0.5), posImpacto, true);
-    	if (orientacion == -1) body->ApplyLinearImpulse(b2Vec2(-1.5 ,-0.5), posImpacto, true);
-    }
+			if (orientacion == 1 ) body->ApplyLinearImpulse(b2Vec2(1.5 ,-0.5), posImpacto, true);
+			if (orientacion == -1) body->ApplyLinearImpulse(b2Vec2(-1.5 ,-0.5), posImpacto, true);
+		}
 	}
 }
 
