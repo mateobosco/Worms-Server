@@ -405,7 +405,7 @@ void Juego::disparar(){
 
 void Juego::checkColisionProyectil(structPaquete* paquete){
 	if(proj_in_air){
-		this->aplicarViento(arma_actual->getProyectil());
+		this->aplicarViento(arma_actual);
 		if(arma_actual->checkImpacto(this->mundo)){
 			printf(" ENTROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO \n");
 			proj_in_air = false;
@@ -633,9 +633,26 @@ void Juego::cargarSiguienteNivel(){
 //Volver a enviar structInicial con la nueva info
 }
 
-void Juego::aplicarViento(b2Body *proyectil){
-	bool tocando = false;
+class QueryViento : public b2QueryCallback {
+	public:
+    	bool tocando;
+
+    	bool ReportFixture(b2Fixture* fixture) {
+    		tocando = true;
+    		return true;//keep going to find all fixtures in the query area
+    	}
+ };
+
+void Juego::aplicarViento(Arma *arma){
+	QueryViento query;
+	b2AABB aabb;
+	b2Body *proyectil = arma->getProyectil();
+	int radio = arma->getRadioExplosion();
+	aabb.upperBound = proyectil->GetPosition() - b2Vec2(radio, radio);
+	aabb.lowerBound = proyectil->GetPosition() + b2Vec2(radio, radio);
+	b2World* world = this->getMundo()->devolver_world();
+	world->QueryAABB(&query, aabb);
 	b2Vec2 fuerza = {this->viento, 0};
-	if(!tocando)
+	if(!query.tocando)
 		proyectil->ApplyForceToCenter(fuerza, true);
 }
