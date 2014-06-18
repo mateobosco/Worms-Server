@@ -159,7 +159,7 @@ bool Arma::setFuerza(){
 		//printf("entra al setFuerza: %f \n", this->fuerza);
 		return false;
 	} else{
-		this->fuerza += (MAX_FUERZA/20);//todo poner algo inferior
+		this->fuerza += (MAX_FUERZA/20);
 		printf("entra al setFuerza: %f \n", this->fuerza);
 		return true;
 	}

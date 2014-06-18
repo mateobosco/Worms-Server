@@ -41,11 +41,14 @@ public:
 void Patada::aplicarExplosion(ManejadorPersonajes* manejador ){
 	b2World* world = this->proyectil->GetWorld();
 	b2Vec2 pos = this->proyectil->GetPosition();
-	float32 blastRadius = (float) radio_explosion;
-	float angle = (float) angulo;
-	b2Vec2 rayDir( sinf(angle), cosf(angle) );
-	b2Vec2 rayEnd = pos + blastRadius * rayDir;
+	float32 blastRadius = 5;
+	Personaje* pers = this->personaje_duenio;
+	int orientacion = pers->getOrientacion();
 
+	b2Vec2 rayo;
+	if (orientacion == 1 )  rayo = b2Vec2(5,0);
+	if (orientacion == -1)  rayo = b2Vec2(-5,0);
+	b2Vec2 rayEnd = pos + rayo;
 	RaycastPatear callback;
 	world->RayCast(&callback, pos, rayEnd);
 	if ( callback.body ){
@@ -55,9 +58,11 @@ void Patada::aplicarExplosion(ManejadorPersonajes* manejador ){
 	b2Vec2 dir = posImpacto - pos;
 	float32 distancia = dir.Normalize();
 	if (distancia == 0 ) return;
-    this->checkPersonajeLastimado(body, manejador, this->danio * (blastRadius/distancia) );
+    this->checkPersonajeLastimado(body, manejador, this->danio );
     if((abs(body->GetLinearVelocity().x) < 10) && (abs(body->GetLinearVelocity().y) < 10)){
-        body->ApplyLinearImpulse(b2Vec2(dir.x* (blastRadius/distancia) ,dir.y* (blastRadius/distancia)), posImpacto, true);
+
+    	if (orientacion == 1 ) body->ApplyLinearImpulse(b2Vec2(3 ,-1), posImpacto, true);
+    	if (orientacion == -1) body->ApplyLinearImpulse(b2Vec2(-3 ,-1), posImpacto, true);
     }
 	}
 }
