@@ -23,16 +23,19 @@ int main_server(int argc,char* argv[]){
 	Servidor *servidor = new Servidor(MAX_CANT_JUGADORES);
 	printf("Servidor corriendo\n");
 
-	Juego *juego = new Juego();
-	ManejadorPersonajes* manejador_personajes = juego->getManejadorPersonajes();
-	structInicial* paqueteInicial = juego->getPaqueteInicial();
-	servidor->setPaqueteInicial((char*) paqueteInicial);
 
 	SDL_Thread* listener =  SDL_CreateThread(runServidor,"listener",(void*)servidor);
 	SDL_Thread* aceptar = SDL_CreateThread(aceptarConex,"aceptar",(void*)servidor);
 
 	servidor->setThreadEscuchar(listener);
 	servidor->setThreadAceptar(aceptar);
+	SDL_mutex *un_mutex = SDL_CreateMutex();
+
+	Juego *juego = new Juego();
+	ManejadorPersonajes* manejador_personajes = juego->getManejadorPersonajes();
+	structInicial* paqueteInicial = juego->getPaqueteInicial();
+	servidor->setPaqueteInicial((char*) paqueteInicial);
+
 
 	int jugadores = servidor->getCantidadClientes();
 	while (jugadores<=0){
@@ -48,7 +51,7 @@ int main_server(int argc,char* argv[]){
 
 	int comenzar=0;
 
-	SDL_mutex *un_mutex = SDL_CreateMutex();
+
 	char winner[20];
 	winner[0] = '\0';
 	int numero_winner = -1;
@@ -56,7 +59,7 @@ int main_server(int argc,char* argv[]){
 		for (int i=0 ; i < servidor->getCantidadClientes() ; i++){
 			int* clientes = servidor->getVectorClientes();
 			if (clientes[i] != -1 && juego->getJugadores()[i] == NULL){
-//				SDL_Delay(100);
+				SDL_Delay(1000);
 				Cliente* clienteActual = servidor->getClientes()[i];
 				char* nombre = clienteActual->getNombre();
 				Jugador* jug = juego->agregarJugador(i, nombre);
@@ -84,7 +87,8 @@ int main_server(int argc,char* argv[]){
 			if(jug[i] == 1) activos++;
 		}
 
-		structPaquete* paqueteCiclo = crearPaqueteCiclo(juego->getMundo(), servidor->getMensajeMostrar(), nro_jugador_actual, comenzar, juego->getRelojRonda(), nombre1, winner);
+		structPaquete* paqueteCiclo = crearPaqueteCiclo(juego->getMundo(), servidor->getMensajeMostrar(), nro_jugador_actual, comenzar, juego->getRelojRonda(), nombre1, winner, juego->getResetear());
+		juego->setResetear(false);
 		juego->setPaqueteProyectil(paqueteCiclo);
 		//printf(" EL TAMANIO DEL STACK PROYECTIL ES %d \n", servidor->getTamanioColaExplosion());
 		juego->checkColisionProyectil(paqueteCiclo);
@@ -124,8 +128,8 @@ int main_server(int argc,char* argv[]){
 		juego->getMundo()->step(0.025,100,100);
 		numero_winner = juego->checkGanador();
 		if(numero_winner != -1){
-			strcpy(winner, juego->getJugadores()[numero_winner]->getNombre());
-			//todo falta reiniciar el nivel
+//			strcpy(winner, juego->getJugadores()[numero_winner]->getNombre());
+//			juego->resetNivel();
 		}
 	}
 	logFile.close();

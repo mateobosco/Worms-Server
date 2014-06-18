@@ -27,6 +27,7 @@ Juego::Juego(){
 	indice_jugador_turno = 0;
 	arma_actual = 0;
 	proj_in_air = false;
+	resetear = false;
 }
 
 Juego::~Juego(){
@@ -609,22 +610,21 @@ void Juego::setPaqueteProyectil(structPaquete *pack){
 }
 
 void Juego::resetNivel(){
-	this->mundo->resetMundo();
-	delete this->arma_actual;
+	this->resetear = true;
+	mundo->reiniciarTierra();
+	this->generarTierra();
+	if (arma_actual != NULL) delete this->arma_actual;
 	this->arma_actual = NULL;
-	for(int i = 0; i < this->cantidad_figuras ; i++){
-	this->figuras[i] = NULL;
-	}
+
+
 	this->cantidad_figuras = 0;
-	this->cantidad_jugadores = 0;
-	this->indice_jugador_turno = 0;
-	this->jugador_actual = 0;
-	this->reloj_ronda=0;
-	this->arma_actual = 0;
+
+	this->reloj_ronda=60;
 	this->proj_in_air = false;
-	this->manejador->resetManejador();
 	for (int i =0; i< 4; i++){
-		this->jugadores[i]=NULL;
+		if( this->jugadores[i] != NULL ){
+			this->jugadores[i]->reiniciarJugador(this->manejador, this->mundo);
+		}
 	}
 }
 
@@ -694,15 +694,28 @@ void Juego::aplicarViento(Arma *arma){
 //Retorna el número del jugador ganador.
 //Si no hay ganador, retorna -1.
 int Juego::checkGanador(){
-	int cantidad_jugando = 0;
-	int ganador = -1;
-	for(int i = 0; i < this->cantidad_jugadores; i++){
-		if(this->jugadores[i]->tienePersonajesVivos(this->cantidad_jugadores)){
-			cantidad_jugando++;
-			ganador = i;
-		}
+	if(this->jugadores_jugando.size()==1){
+		Jugador* ganador = jugadores_jugando[0];
+		return ganador->getNumero();
 	}
-	if(cantidad_jugando > 1)
-		return -1;
-	return ganador;
+	return -1;
+//
+//	int cantidad_jugando = 0;
+//	int ganador = -1;
+//	for(int i = 0; i < this->cantidad_jugadores; i++){
+//		if(this->jugadores[i]->tienePersonajesVivos(this->cantidad_jugadores)){
+//			cantidad_jugando++;
+//			ganador = i;
+//		}
+//	}
+//	if(cantidad_jugando > 1)
+//		return -1;
+//	return ganador;
+}
+void Juego::setResetear(bool valor){
+	this->resetear = valor;
+}
+
+bool Juego::getResetear(){
+	return resetear;
 }

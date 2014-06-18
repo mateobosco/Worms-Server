@@ -48,6 +48,7 @@ class Juego{
 
 		bool proj_in_air;
 		Arma *arma_actual;
+		bool resetear;
 
 	public:
 		Juego();
@@ -88,6 +89,9 @@ class Juego{
 
 		void aplicarViento(Arma *arma);
 		int checkGanador();
+		void setResetear(bool valor);
+		bool getResetear();
+
 };
 
 #endif /* JUEGO_H_ */

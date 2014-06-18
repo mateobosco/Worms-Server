@@ -38,6 +38,7 @@ class Mundo {
 		void CrearTierraPoligono1(b2Vec2* tierra, float32 pixelesX, Escalador* escalador);
 		b2ChainShape* getChainShape();
 		void resetMundo();
+		void reiniciarTierra();
 
 
 
@@ -55,6 +56,7 @@ class Mundo {
 		Figura** figuras;
 		Personaje** vector_personajes;
 		b2ChainShape* shapeTierra;
+		b2Body* bodyTierra;
 };
 
 #endif
