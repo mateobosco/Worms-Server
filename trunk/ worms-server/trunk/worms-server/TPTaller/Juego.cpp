@@ -427,12 +427,18 @@ void Juego::checkColisionProyectil(structPaquete* paquete){
 
 void Juego::setPaqueteProyectil(structPaquete *pack){
 	pack->show_proyectil = this->proj_in_air;
+	if (arma_actual != NULL){
+		printf("LE PONGO ESTA POTENCIA AL PAQUETE %d --------------------------------------------------\n",(int) arma_actual->getFuerza());
+		pack->potencia = (int) arma_actual->getFuerza();
+	}
+
+
 	if (proj_in_air){
 		pack->tipo_proyectil = this->arma_actual->getTipo();
 		pack->posicion_proyectil = this->arma_actual->getPosicion();
 		pack->direccion_proyectil = this->arma_actual->getDireccion();
 		pack->tamanio_proyectil = this->arma_actual->getTamanio();
-		pack->potencia = arma_actual->getFuerza();
+
 		if((pack->tipo_proyectil == granada) || (pack->tipo_proyectil == dinamita) || (pack->tipo_proyectil == granada_holy)){
 			pack->contador_segundos = this->arma_actual->getContadorSegundos();
 			pack->angulo = this->arma_actual->getAngulo();
