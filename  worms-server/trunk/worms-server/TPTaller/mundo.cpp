@@ -84,6 +84,7 @@ void Mundo::Crear_Chains(b2Vec2* tierra, float32 pixelesX){
 	this->cantidad_vertices_tierra = cantidad+3;
 	delete[] tierra;
 	this->shapeTierra = shape;
+	this->bodyTierra = body;
 	//delete[] vs;
 }
 
@@ -448,4 +449,10 @@ void Mundo::resetMundo(){
 	this->cantidad_personajes = 0;
 	this->figuras = NULL; //todo
 	this->vector_personajes = NULL; //todo
+}
+
+
+void Mundo::reiniciarTierra(){
+	b2Body* bodyTierra = this->bodyTierra;
+	this->my_world->DestroyBody(bodyTierra);
 }

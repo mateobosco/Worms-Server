@@ -38,6 +38,7 @@ structFigura* crearPaqueteFigura(Figura* figura){
 }
 
 structPersonaje* crearPaquetePersonaje(Personaje* personaje){
+	if (personaje == NULL) return NULL;
 	structPersonaje* paquete = new structPersonaje;
 	b2Vec2 pos = personaje->getPosition();
 	int dir;
@@ -134,10 +135,10 @@ structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, i
 	return paquete;
 }
 
-structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje, int jugador_actual, int empezar_juego, int tiempo_ronda, char* nombre, char* winner){
+structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje, int jugador_actual, int empezar_juego, int tiempo_ronda, char* nombre, char* winner, bool boolReset){
 	structPaquete* paquete = (structPaquete*) malloc(MAX_PACK);
 	paquete->tipo = 1;
-
+	paquete->ganador[0]='\0';
 	Personaje** vector_personajes = mundo->getPersonajes();
 	int cantidad_personajes = mundo->getCantidadPersonajes();
 	for (int i=0 ; i<cantidad_personajes; i++){
@@ -157,6 +158,8 @@ structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje, int jugador_actual
 	paquete->turno_jugador = jugador_actual;
 	paquete->comenzar = empezar_juego; // 1 si el juego debe comenzar, 0  si se debe esperar a mas jugadores a que se conecten
 	paquete->reloj = tiempo_ronda;
+	paquete->resetear = boolReset;
+
 	strcpy(paquete->nombre_jugador_actual, nombre);
 	if (mensaje != NULL){
 		strcpy(paquete->mensaje_mostrar, mensaje);
