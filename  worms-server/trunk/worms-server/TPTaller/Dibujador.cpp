@@ -298,6 +298,16 @@ void Dibujador::iniciarFondo(Agua* agua, std::string pathCielo, std::string path
   };
 
 
+ class QueryViento : public b2QueryCallback {
+  public:
+      bool tocando;
+
+      bool ReportFixture(b2Fixture* fixture) {
+		  tocando = true;
+          return true;//keep going to find all fixtures in the query area
+      }
+  };
+
 void Dibujador::dibujarFondo(Agua* agua, Juego* juego){
 	this->renderTexture(textureCielo, renderizador,0 , 0, escalador->getPixelX(), escalador->getPixelY() );
 	this->renderTexture(textureAgua, renderizador, 0, agua->GetNivel()*(escalador->getPixelY()/escalador->getEscalaY()) , escalador->getPixelX(), escalador->getPixelY());

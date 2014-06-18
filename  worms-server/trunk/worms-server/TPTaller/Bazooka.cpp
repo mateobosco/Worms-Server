@@ -119,28 +119,34 @@ bool Arma::checkImpacto(Mundo *mundo){
 }
 */
 
+
 class QueryCheckImpacto : public b2QueryCallback {
  public:
-     std::vector<b2Shape*> foundShapes;
+     std::vector<b2Body*> foundBodies;
+     b2Body* llamador;
 
      bool ReportFixture(b2Fixture* fixture) {
    	  b2Shape* shape= fixture->GetShape();
+    	 b2Body* body = fixture->GetBody();
 
    	  if (shape->GetType() == 3){ // b2ChainShape == 3
-		  vector<b2Shape*>::iterator it = std::find(foundShapes.begin(), foundShapes.end(), shape);
-		  if(it==foundShapes.end()){
-			  foundShapes.push_back( shape );
-		  }
+//	 if (body != llamador){
+		  vector<b2Body*>::iterator it = std::find(foundBodies.begin(), foundBodies.end(), body);
+		  if(it==foundBodies.end()){
+			  foundBodies.push_back( body );
+		}
+//		  }
    	  }
       return true;//keep going to find all fixtures in the query area
      }
  };
 
+
 bool Bazooka::checkImpacto(Mundo* mundo){
-	printf(" Entra acaaaaaaaaaaa \n");
 	float32 radio = this->shape_proy->m_radius;
 	b2Vec2 pos = this->proyectil->GetPosition();
 	QueryCheckImpacto query;
+	query.llamador = this->personaje_duenio->getBody();
 	b2AABB aabb;
 	aabb.upperBound = pos + b2Vec2(radio,radio);
 	aabb.lowerBound = pos - b2Vec2(radio,radio);
@@ -148,10 +154,18 @@ bool Bazooka::checkImpacto(Mundo* mundo){
 	b2World* world = mundo->devolver_world();
 	world->QueryAABB(&query, aabb);
 
-	std::vector<b2Shape*> res = query.foundShapes;
+	std::vector<b2Body*> res = query.foundBodies;
+	b2Body* duenio = this->personaje_duenio->getBody();
+//	b2Shape* shapeDuenio = duenio->GetFixtureList()->GetShape();
+
 
 	if (res.size() > 0) {
-		printf(" DEVUELVE TRUEEEE\n");
+//		for (size_t i = 0 ; i<res.size(); i++){
+//			b2Body* actual = res[i];
+//			if (actual->GetPosition() == duenio->GetPosition()){
+//				return false;
+//			}
+//		}
 		return true;
 	}
 
