@@ -21,14 +21,15 @@ Juego::Juego(){
 	cielo.clear();
 	agua = NULL;
 	inicial = NULL;
+	viento = 0;
 	this->cargar();
 	manejador = new ManejadorPersonajes();
 	for (int i =0; i< 4; i++){
 		jugadores[i]=NULL;
 	}
 	jugador_actual = 0;
-	reloj_ronda=0;
-	indice_jugador_turno=0;
+	reloj_ronda = 0;
+	indice_jugador_turno = 0;
 	arma_actual = 0;
 	proj_in_air = false;
 }
@@ -98,6 +99,7 @@ void Juego::cargar() {
 	Cargador *cargador = new Cargador(pathEscTest.c_str());
 	Node *nodo_escenario = this->cargaInicial(cargador);
 	this->cargaPrincipal(cargador, *nodo_escenario);
+	this->viento = cargador->getViento();
 	inicial = cargador->getPaqueteInicial();
 	delete nodo_escenario;
 	delete cargador;
@@ -209,6 +211,7 @@ void Juego::cargaPrincipal(Cargador *cargador, Node nodo_escenario){
 	string tierra = cargarTierra(cargador, nodo_escenario);
 	cargarCielo(cargador, nodo_escenario);
 	cargarLector(tierra);
+	cargador->loadViento(nodo_escenario);
 	if(this->lector == NULL){
 		delete this->mundo;
 		this->mundo = NULL;
@@ -402,6 +405,7 @@ void Juego::disparar(){
 
 void Juego::checkColisionProyectil(structPaquete* paquete){
 	if(proj_in_air){
+		this->aplicarViento(arma_actual->getProyectil());
 		if(arma_actual->checkImpacto(this->mundo)){
 			printf(" ENTROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO \n");
 			proj_in_air = false;
@@ -619,15 +623,19 @@ void Juego::resetNivel(){
 	for (int i =0; i< 4; i++){
 		this->jugadores[i]=NULL;
 	}
-
 }
 
 Arma* Juego::getArmaActual(){
 	return arma_actual;
 }
 
+void Juego::cargarSiguienteNivel(){
+//Volver a enviar structInicial con la nueva info
+}
 
- void Juego::cargarSiguienteNivel(){
- //Volver a enviar structInicial con la nueva info
- }
-
+void Juego::aplicarViento(b2Body *proyectil){
+	bool tocando = false;
+	b2Vec2 fuerza = {this->viento, 0};
+	if(!tocando)
+		proyectil->ApplyForceToCenter(fuerza, true);
+}

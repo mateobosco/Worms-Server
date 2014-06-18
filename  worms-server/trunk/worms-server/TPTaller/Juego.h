@@ -19,6 +19,7 @@ class Juego{
 		uint8 cantidad_figuras;
 		string cielo;
 		Agua *agua;
+		float32 viento;
 
 		void abrirLog();
 		Node* cargaInicial(Cargador* cargador);
@@ -76,6 +77,7 @@ class Juego{
 		void setPaqueteProyectil(structPaquete *pack);
 		void explotarBomba(b2Vec2 posicion, float32 radio);
 		void cargarSiguienteNivel();
+		void aplicarViento(b2Body *proyectil);
 };
 
 #endif /* JUEGO_H_ */

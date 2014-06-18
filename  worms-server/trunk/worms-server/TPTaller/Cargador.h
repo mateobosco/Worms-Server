@@ -37,6 +37,8 @@ class Cargador{
 		bool getNodo(const Node nodoO,Node &nodoD, const char* clave);
 		ifstream* getStream();
 		structInicial* getPaqueteInicial();
+		void loadViento(Node nodo);
+		float32 getViento();
 
 	private:
 		ifstream f_input;
@@ -56,7 +58,6 @@ class Cargador{
 		float32 obtenerMasa(Node nodo,size_t i);
 		float32 obtenerAncho(Node nodo,size_t i);
 		float32 obtenerAlto(Node nodo,size_t i);
-
 };
 
 #endif /* CARGADOR_H_ */
