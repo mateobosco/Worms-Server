@@ -49,11 +49,14 @@ int main_server(int argc,char* argv[]){
 	int comenzar=0;
 
 	SDL_mutex *un_mutex = SDL_CreateMutex();
+	char winner[20];
+	winner[0] = '\0';
+	int numero_winner = -1;
 	while(!servidor->getFinalizar()){
 		for (int i=0 ; i < servidor->getCantidadClientes() ; i++){
 			int* clientes = servidor->getVectorClientes();
 			if (clientes[i] != -1 && juego->getJugadores()[i] == NULL){
-				SDL_Delay(500);
+//				SDL_Delay(100);
 				Cliente* clienteActual = servidor->getClientes()[i];
 				char* nombre = clienteActual->getNombre();
 				Jugador* jug = juego->agregarJugador(i, nombre);
@@ -61,7 +64,7 @@ int main_server(int argc,char* argv[]){
 			}
 		}
 		juego->getMundo()->setVectorPersonajes(manejador_personajes->getPersonajes(), manejador_personajes->getCantidadPersonajes(), manejador_personajes->getCantidadJugadores());
-		juego->getMundo()->setFiguras(juego->getFiguras(), juego->getCantidadFiguras());
+		//juego->getMundo()->setFiguras(juego->getFiguras(), juego->getCantidadFiguras());
 
 
 		if (jugadores_necesarios == servidor->getCantidadClientesActivos() && comenzar==0){
@@ -72,6 +75,7 @@ int main_server(int argc,char* argv[]){
 		int nro_jugador_actual = juego->getJugadorActual();
 		Jugador* jugador_actual = juego->getJugadores()[nro_jugador_actual];
 		char* nombre1 = jugador_actual->getNombre();
+
 		Arma* arma_actual=juego->getArmaActual();
 
 		int activos = 0;
@@ -80,7 +84,7 @@ int main_server(int argc,char* argv[]){
 			if(jug[i] == 1) activos++;
 		}
 
-		structPaquete* paqueteCiclo = crearPaqueteCiclo(juego->getMundo(), servidor->getMensajeMostrar(), nro_jugador_actual, comenzar, juego->getRelojRonda(), nombre1);
+		structPaquete* paqueteCiclo = crearPaqueteCiclo(juego->getMundo(), servidor->getMensajeMostrar(), nro_jugador_actual, comenzar, juego->getRelojRonda(), nombre1, winner);
 		juego->setPaqueteProyectil(paqueteCiclo);
 		//printf(" EL TAMANIO DEL STACK PROYECTIL ES %d \n", servidor->getTamanioColaExplosion());
 		juego->checkColisionProyectil(paqueteCiclo);
@@ -89,7 +93,6 @@ int main_server(int argc,char* argv[]){
 
 			servidor->encolarExplosion(paqueteCiclo);
 		}
-
 		servidor->actualizarPaquete((char*)paqueteCiclo);
 		destruirPaqueteCiclo(paqueteCiclo);
 
@@ -119,6 +122,11 @@ int main_server(int argc,char* argv[]){
 		juego->getMundo()->comprobar_nivel_agua();
 
 		juego->getMundo()->step(0.025,100,100);
+		numero_winner = juego->checkGanador();
+		if(numero_winner != -1){
+			strcpy(winner, juego->getJugadores()[numero_winner]->getNombre());
+			//todo falta reiniciar el nivel
+		}
 	}
 	logFile.close();
 	delete juego;

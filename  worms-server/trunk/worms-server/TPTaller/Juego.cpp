@@ -279,6 +279,7 @@ Jugador* Juego::agregarJugador(int id, char* nombre_cliente){
 	Personaje** pers = this->jugadores[id]->getPersonajes();
 	this->manejador->AgregarJugador(mundo,id, pers);
 	this->jugadores_jugando.push_back(this->jugadores[id]);
+	this->cantidad_jugadores++;
 	return this->jugadores[id];
 }
 
@@ -688,4 +689,20 @@ void Juego::aplicarViento(Arma *arma){
 	b2Vec2 fuerza = {this->viento, 0};
 	if(!query.tocando)
 		proyectil->ApplyForceToCenter(fuerza, true);
+}
+
+//Retorna el número del jugador ganador.
+//Si no hay ganador, retorna -1.
+int Juego::checkGanador(){
+	int cantidad_jugando = 0;
+	int ganador = -1;
+	for(int i = 0; i < this->cantidad_jugadores; i++){
+		if(this->jugadores[i]->tienePersonajesVivos(this->cantidad_jugadores)){
+			cantidad_jugando++;
+			ganador = i;
+		}
+	}
+	if(cantidad_jugando > 1)
+		return -1;
+	return ganador;
 }

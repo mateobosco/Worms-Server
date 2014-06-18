@@ -116,3 +116,12 @@ void Jugador::seleccionarSiguientePersonaje(){
 int Jugador::getPersonajeSeleccionado(){
 	return this->personaje_seleccionado;
 }
+
+bool Jugador::tienePersonajesVivos(uint8 cantidad_jugadores){
+	for(int i = 0; i < ((MAX_CANT_PERSONAJES * MAX_CANT_JUGADORES) - (MAX_CANT_PERSONAJES * (MAX_CANT_JUGADORES - cantidad_jugadores))); i++){
+		if(!this->personajes[i]->getMuerto()){
+			return true;
+		}
+	}
+	return false;
+}
