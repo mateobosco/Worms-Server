@@ -87,7 +87,7 @@ class Juego{
 		int* jugadoresActivos();
 
 		void aplicarViento(Arma *arma);
-
+		int checkGanador();
 };
 
 #endif /* JUEGO_H_ */

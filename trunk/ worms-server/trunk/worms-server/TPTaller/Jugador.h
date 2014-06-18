@@ -31,7 +31,7 @@ class Jugador{
 		char* getNombre();
 		void seleccionarSiguientePersonaje();
 		int getPersonajeSeleccionado();
-
+		bool tienePersonajesVivos(uint8 cantidad_jugadores);
 };
 
 #endif /* JUGADOR_H_ */

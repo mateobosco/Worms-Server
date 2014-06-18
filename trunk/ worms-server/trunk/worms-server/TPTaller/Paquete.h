@@ -49,10 +49,9 @@ typedef struct structPaquete{
 	b2Vec2 tamanio_proyectil;
 	int radio_explosion = -1;
 	int contador_segundos = 0;
-
-	double angulo = 0;
 	int potencia = -1;
-
+	double angulo = 0;
+	char ganador[20];
 }structPaquete;
 
 
@@ -86,7 +85,7 @@ typedef struct structEvento{
 
 structFigura* crearPaqueteFigura(Figura* figura);
 structPersonaje* crearPaquetePersonaje(Personaje* personaje, int nro_arma);
-structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje, int turno_jugador, int empezar_juego, int tiempo_ronda, char* nombre);
+structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje, int turno_jugador, int empezar_juego, int tiempo_ronda, char* nombre, char* winner);
 structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, int cliente);
 
 void destruirPaqueteFigura(structFigura* paquete);
