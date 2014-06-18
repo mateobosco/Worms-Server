@@ -10,7 +10,7 @@
 
 Patada::Patada(Personaje* personaje){
 	this->fuerza = 0;
-	this->danio = 10;
+	this->danio = DANIO_PATADA;
 	this->tipo = 6;
 	this->radio_explosion=3;
 	personaje_duenio=personaje;
@@ -41,11 +41,10 @@ public:
 void Patada::aplicarExplosion(ManejadorPersonajes* manejador ){
 	b2World* world = this->proyectil->GetWorld();
 	b2Vec2 pos = this->proyectil->GetPosition();
-	float32 blastRadius = 5;
 	Personaje* pers = this->personaje_duenio;
 	int orientacion = pers->getOrientacion();
 
-	b2Vec2 rayo;
+	b2Vec2 rayo = b2Vec2(0,-1);
 	if (orientacion == 1 )  rayo = b2Vec2(5,0);
 	if (orientacion == -1)  rayo = b2Vec2(-5,0);
 	b2Vec2 rayEnd = pos + rayo;
@@ -61,8 +60,8 @@ void Patada::aplicarExplosion(ManejadorPersonajes* manejador ){
     this->checkPersonajeLastimado(body, manejador, this->danio );
     if((abs(body->GetLinearVelocity().x) < 10) && (abs(body->GetLinearVelocity().y) < 10)){
 
-    	if (orientacion == 1 ) body->ApplyLinearImpulse(b2Vec2(3 ,-1), posImpacto, true);
-    	if (orientacion == -1) body->ApplyLinearImpulse(b2Vec2(-3 ,-1), posImpacto, true);
+    	if (orientacion == 1 ) body->ApplyLinearImpulse(b2Vec2(1.5 ,-0.5), posImpacto, true);
+    	if (orientacion == -1) body->ApplyLinearImpulse(b2Vec2(-1.5 ,-0.5), posImpacto, true);
     }
 	}
 }
