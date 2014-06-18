@@ -4,6 +4,12 @@
 #include "Cargador.h"
 #include "Jugador.h"
 #include "Arma.h"
+#include "Bazooka.h"
+#include "Granada.h"
+#include "Dinamita.h"
+#include "GranadaHoly.h"
+#include "Suicida.h"
+#include "Patada.h"
 
 class Juego{
 	private:
@@ -77,7 +83,11 @@ class Juego{
 		void setPaqueteProyectil(structPaquete *pack);
 		void explotarBomba(b2Vec2 posicion, float32 radio);
 		void cargarSiguienteNivel();
+
+		int* jugadoresActivos();
+
 		void aplicarViento(Arma *arma);
+
 };
 
 #endif /* JUEGO_H_ */

@@ -1,11 +1,6 @@
 #include "Juego.h"
 
-#include "Bazooka.h"
-#include "Granada.h"
-#include "Dinamita.h"
-#include "GranadaHoly.h"
-#include "Suicida.h"
-#include "Patada.h"
+
 
 #include <boost/geometry/geometry.hpp>
 #include <boost/geometry/geometries/register/point.hpp>
@@ -267,9 +262,10 @@ void Juego::aplicarPaquete(structEvento* evento, int comenzar){
 				this->disparar();
 				arma_actual->resetFuerza();
 			}
-	    if(evento->reset == 1) {
-	    	this->resetNivel();
-	    }
+//	    if(evento->reset == 1) {
+//	    	printf("Reset == 1\n");
+//	    	this->resetNivel();
+//	    }
 
 //	if(evento->fuerza == 2){
 //		printf("Dejó de disparar\n");
@@ -633,15 +629,42 @@ void Juego::cargarSiguienteNivel(){
 //Volver a enviar structInicial con la nueva info
 }
 
+int* Juego::jugadoresActivos(){
+	 int i;
+	 int vivo = 0; //1 Vivo / 0 muerto
+	 int jugadores_vivos[4];
+	 for(i = 0; i < this->cantidad_jugadores ;i++){
+		 Jugador* jugador_actual = this->jugadores[i];
+		 int j;
+		 for(j = 0; j < 4 ; j++){
+			 Personaje* personaje_actual = jugador_actual->getPersonajes()[j];
+			 if(!personaje_actual->getMuerto()){ //si esta vivo setea en 1
+				 vivo = 1;
+			 }
+		 }
+		 if(vivo == 1){
+			 jugadores_vivos[i] = 1;
+		 }else{
+			 jugadores_vivos[i] = 0;
+		 }
+
+	 }
+	 return jugadores_vivos;
+ }
+
+
 class QueryViento : public b2QueryCallback {
 	public:
     	bool tocando;
+
 
     	bool ReportFixture(b2Fixture* fixture) {
     		tocando = true;
     		return true;//keep going to find all fixtures in the query area
     	}
  };
+
+
 
 void Juego::aplicarViento(Arma *arma){
 	QueryViento query;
@@ -656,3 +679,4 @@ void Juego::aplicarViento(Arma *arma){
 	if(!query.tocando)
 		proyectil->ApplyForceToCenter(fuerza, true);
 }
+
