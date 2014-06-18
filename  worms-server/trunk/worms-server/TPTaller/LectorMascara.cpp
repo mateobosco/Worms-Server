@@ -18,6 +18,7 @@ LectorMascara::LectorMascara(string& path) {
 }
 
 LectorMascara::~LectorMascara() {
+	SDL_FreeSurface(this->superficie);
 }
 
 Uint32 getpixel2(SDL_Surface *surface, int x, int y){

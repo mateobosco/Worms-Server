@@ -59,7 +59,7 @@ Rectangulo::~Rectangulo() {
 }
 
 b2Vec2* Rectangulo::getVertices(){
-	b2Vec2* vertices = new b2Vec2[sizeof(b2Vec2)*4];
+	b2Vec2* vertices = new b2Vec2[4];
 	float32 complemento = 90 - anguloRec;
 	b2Transform transformada = body->GetTransform();
 	b2Rot rotacion = transformada.q;

@@ -16,6 +16,8 @@ Mundo::Mundo(b2Vec2 gravedad, Agua* el_agua, b2Vec2 las_escalas){
 }
 
 Mundo::~Mundo(){
+	if(this->shapeTierra) delete this->shapeTierra;
+	if(this->vertices_tierra) delete[] this->vertices_tierra;
 	delete this->my_world;
 }
 

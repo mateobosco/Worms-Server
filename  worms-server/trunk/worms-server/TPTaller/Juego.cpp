@@ -419,7 +419,6 @@ void Juego::checkColisionProyectil(structPaquete* paquete){
 				delete this->arma_actual;
 				this->arma_actual = NULL;
 			}
-
 		}
 	} else{
 		paquete->radio_explosion=-1;
@@ -596,6 +595,7 @@ void Juego::setPaqueteProyectil(structPaquete *pack){
 			b2FixtureDef fd;
 			fd.shape = &shape;
 			body->CreateFixture(&fd);
+			delete[] verticesNuevo;
 		}
 	}
     return;

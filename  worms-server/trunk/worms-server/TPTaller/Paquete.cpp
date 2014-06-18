@@ -14,9 +14,12 @@ structFigura* crearPaqueteFigura(Figura* figura){
 	}
 	if (tipo == 1){ //ES UN RECTANGULO
 		Rectangulo* rectangulo = (Rectangulo*) figura;
+		b2Vec2* vertices = rectangulo->getVertices();
 		for (int i = 0 ; i<4; i++){
-			paquete->vector_vertices[i] = rectangulo->getVertices()[i];
+			paquete->vector_vertices[i].x = vertices[i].x;
+			paquete->vector_vertices[i].y = vertices[i].y;
 		}
+		delete[] vertices;
 		paquete->cantidad = 4;
 
 	}
@@ -24,9 +27,12 @@ structFigura* crearPaqueteFigura(Figura* figura){
 		Poligono* poligono = (Poligono*) figura;
 		int lados = poligono->getCantVertices();
 		paquete->cantidad = lados;
+		b2Vec2* vertices = poligono->getVertices();
 		for (int i = 0 ; i<lados; i++){
-			paquete->vector_vertices[i] = poligono->getVertices()[i];
+			paquete->vector_vertices[i].x = vertices[i].x;
+			paquete->vector_vertices[i].y = vertices[i].y;
 		}
+		delete[] vertices;
 	}
 	return paquete;
 }
