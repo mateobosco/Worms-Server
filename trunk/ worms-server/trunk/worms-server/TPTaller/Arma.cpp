@@ -27,7 +27,7 @@ void Arma::disparar(Mundo* mundo){
 	bodyDef.position.y = posicion_proyectil.y /*+ 4*direccion_proyectil.y*/;
 	bodyDef.userData = this; // no se si funciona bien esto,
 	bodyDef.type = b2_dynamicBody;
-	proyectil = world->CreateBody(&bodyDef);
+//	proyectil = world->CreateBody(&bodyDef);
 
 	b2MassData massData = b2MassData();
 	massData.mass = 0.1;
