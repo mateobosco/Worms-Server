@@ -89,6 +89,12 @@ int main_server(int argc,char* argv[]){
 //		else{
 //			nro_arma=0;
 //		}
+		int activos = 0;
+		int* jug = juego->jugadoresActivos();
+		for(int i = 0;i < 4; i++){
+			if(jug[i] == 1) activos++;
+		}
+
 		structPaquete* paqueteCiclo = crearPaqueteCiclo(juego->getMundo(), servidor->getMensajeMostrar(), nro_jugador_actual, comenzar, juego->getRelojRonda(), nombre1);
 		juego->setPaqueteProyectil(paqueteCiclo);
 		//printf(" EL TAMANIO DEL STACK PROYECTIL ES %d \n", servidor->getTamanioColaExplosion());

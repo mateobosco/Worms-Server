@@ -36,6 +36,7 @@ typedef struct structPaquete{
 	structPersonaje vector_personajes[20];
 	int cantidad_personajes = 0;
 	int id;
+	int id_ganador;
 	char mensaje_mostrar[MAX_MENSAJE];
 	int turno_jugador;
 	int reloj;
