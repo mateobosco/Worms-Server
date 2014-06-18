@@ -10,7 +10,7 @@ Dinamita::Dinamita(Personaje *personaje) {
 }
 
 Dinamita::~Dinamita() {
-	// TODO Auto-generated destructor stub
+	if (this->shape_proy) delete this->shape_proy;
 }
 
 void Dinamita::disparar(Mundo* mundo){

@@ -44,6 +44,7 @@ Cliente::Cliente(const char *name, const char *ip_sv, const char *puerto){
 }
 
 Cliente::~Cliente(){
+	delete this->paqueteInicial;
 	this->activo = false;
 	delete this->socket_cl;
 	SDL_DestroyMutex(mutex);

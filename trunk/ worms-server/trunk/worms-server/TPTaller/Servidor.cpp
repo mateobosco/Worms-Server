@@ -25,9 +25,12 @@ Servidor::Servidor(int maxCon){
 }
 
 Servidor::~Servidor() {
+	for (int i=0; i < MAX_CANT_JUGADORES; i++){
+			if (this->clientes[i] != NULL) delete this->clientes[i];
+	}
 	this->finalizar = true;
-	SDL_WaitThread(this->escuchar, 0);
-	SDL_WaitThread(this->aceptar, 0);
+//	SDL_WaitThread(this->escuchar, 0);
+//	SDL_WaitThread(this->aceptar, 0);
 	delete this->listener;
 	SDL_DestroyMutex(mutex);
 }
@@ -193,7 +196,7 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 		structPaquete* paqueteCiclo = (structPaquete*) envio;
 		if( this->paquetesExplosion.size()==1 ){
 			structPaquete* paquete_explosion = this->paquetesExplosion.front();
-			memcpy(envio, paquete_explosion, MAX_PACK );
+			memcpy(envio, paquete_explosion, MAX_PACK ); // todo creo que va sizeof(structPaquete) NO MAX_PACK
 			this->paquetesExplosion.pop();
 		}
 		if(paqueteCiclo->radio_explosion==3){
@@ -253,7 +256,7 @@ int Servidor::runEnviarInfoInicial(Cliente* cliente){
 
 int Servidor::runRecibirInfo(void* cliente){
 	struct timeval timeout;
-	timeout.tv_sec = 10;
+	timeout.tv_sec = 10; // todo cambiado de 10 a 15 (o 20) para valgrinear el client
 	timeout.tv_usec = 0;
 	Cliente* client = (Cliente*) cliente;
 

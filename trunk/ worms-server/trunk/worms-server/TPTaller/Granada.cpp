@@ -10,7 +10,7 @@ Granada::Granada(Personaje* personaje){
 }
 
 Granada::~Granada(){
-
+	if (this->shape_proy) delete this->shape_proy;
 }
 
 void Granada::disparar(Mundo* mundo){

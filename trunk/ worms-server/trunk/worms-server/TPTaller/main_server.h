@@ -19,6 +19,7 @@ int aceptarConex(void* servidor){
 }
 
 int main_server(int argc,char* argv[]){
+//	int tiempo = SDL_GetTicks(); // TODO Valgrind
 	int retorno = 0;
 	Servidor *servidor = new Servidor(MAX_CANT_JUGADORES);
 	printf("Servidor corriendo\n");
@@ -106,6 +107,7 @@ int main_server(int argc,char* argv[]){
 		}
 
 		servidor->actualizarPaquete((char*)paqueteCiclo);
+		destruirPaqueteCiclo(paqueteCiclo);
 
 		//if(juego->getCantidadJugadores()==1)
 //	    if(juego->getCantidadJugadores()==1){
@@ -113,7 +115,7 @@ int main_server(int argc,char* argv[]){
 //	    	juego->resetNivel();
 //	    	juego->cargarSiguienteNivel();
 //	    }
-		destruirPaqueteCiclo(paqueteCiclo);
+
 
 		structEvento* evento =NULL;
 	    evento = (structEvento*) servidor->desencolarPaquete();
@@ -140,7 +142,7 @@ int main_server(int argc,char* argv[]){
 		juego->getMundo()->comprobar_nivel_agua();
 
 		juego->getMundo()->step(0.025,100,100);
-
+//		if ( (SDL_GetTicks() - tiempo) > 75000) break; // TODO lo corto para poder pasarle el Valgrind.
 	}
 	logFile.close();
 	delete juego;
