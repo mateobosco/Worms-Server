@@ -222,9 +222,8 @@ structInicial* Juego::getPaqueteInicial(){
 
 void Juego::aplicarPaquete(structEvento* evento, int comenzar){
 	if (evento == NULL) return;
-//	if (!proj_in_air){ // TODO MODIFICAR PARA ARMAR QUE PERMITEN MOVERSE 3 SEG DESPUES DE DISPARADAS
 		if (evento->click_mouse.x != -1){ // recibio un click
-			manejador->seleccionarPersonaje(evento->click_mouse, evento->nro_jugador);
+//			manejador->seleccionarPersonaje(evento->click_mouse, evento->nro_jugador);
 		}
 		if ((evento->direccion > 0) && (evento->nro_jugador == this->getJugadorActual()) && comenzar ==1){ // PROCESO EL MOVIMIENTO SOLO SI ES SU TURNO
 			manejador->moverPersonaje(evento->direccion , evento->nro_jugador);
@@ -235,7 +234,6 @@ void Juego::aplicarPaquete(structEvento* evento, int comenzar){
 				Personaje* personaje_actual = manejador->getPersonajes()[j];
 				if (! personaje_actual->getMuerto()){
 					if( personaje_actual->getSeleccion()[evento->nro_jugador] ){
-						printf( " SE LE ASIGNO EL PERSONAJE SELECCIONADO EL ARMA %d \n", evento->arma_seleccionada);
 						personaje_actual->setArmaSeleccionada(evento->arma_seleccionada);
 						personaje_actual->setAnguloArma(evento->angulo_arma);
 
@@ -302,7 +300,7 @@ void Juego::pasarTurno(){
 	Jugador* jugador_anterior = this->jugadores[this->jugador_actual];
 	jugador_anterior->seleccionarSiguientePersonaje();
 	indice_jugador_turno++;
-	if(indice_jugador_turno == 1){
+	if(indice_jugador_turno == 2){
 		indice_jugador_turno = 0;
 	}
 	printf(" LLEGA HASTA ACA 1  indice jugador turno es %d \n", indice_jugador_turno);

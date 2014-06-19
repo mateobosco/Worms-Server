@@ -13,6 +13,11 @@ typedef struct structFigura{
 	SDL_Color color;
 } structFigura;
 
+typedef struct structExplosion{
+	b2Vec2 posicion = b2Vec2(-1,-1);
+	float32 radio = 0;
+}structExplosion;
+
 
 typedef struct structPersonaje{
 	char nombre_cliente[20];
@@ -70,6 +75,8 @@ typedef struct structInicial{
 	float32 ancho_escenario = 0.0;
 	float32 alto_escenario = 0.0;
 	float32 viento = 0.0;
+	structExplosion explosiones[50];
+	int cantidadExplosiones = 0;
 } structInicial;
 
 typedef struct structEvento{

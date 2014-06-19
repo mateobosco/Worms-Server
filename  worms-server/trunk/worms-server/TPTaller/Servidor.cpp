@@ -439,3 +439,12 @@ void Servidor::encolarExplosion(structPaquete* paquete){
 size_t Servidor::getTamanioColaExplosion(){
 	return this->paquetesExplosion.size();
 }
+
+void Servidor::agregarExplosion(b2Vec2 posicion, float32 radio){
+	structInicial* paqueteInicial = (structInicial*) this->paqueteInicial;
+	structExplosion explosion;
+	explosion.posicion = posicion;
+	explosion.radio = radio;
+	paqueteInicial->explosiones[paqueteInicial->cantidadExplosiones] = explosion;
+	paqueteInicial->cantidadExplosiones += 1;
+}

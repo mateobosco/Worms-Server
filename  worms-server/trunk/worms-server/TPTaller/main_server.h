@@ -46,7 +46,7 @@ int main_server(int argc,char* argv[]){
 	printf("-----------------------------------------EL SERVIDOR INICIA EL JUEGO-------------------------------------\n");
 	juego->getMundo()->setVectorPersonajes(manejador_personajes->getPersonajes(), manejador_personajes->getCantidadPersonajes(), manejador_personajes->getCantidadJugadores());
 	juego->getMundo()->setFiguras(juego->getFiguras(), juego->getCantidadFiguras());
-	int jugadores_necesarios = 1; //4
+	int jugadores_necesarios = 2; //4
 	SDL_Delay(2000);
 
 	int comenzar=0;
@@ -96,6 +96,7 @@ int main_server(int argc,char* argv[]){
 			printf(" LO encolo y el radio es %d \n", paqueteCiclo->radio_explosion);
 
 			servidor->encolarExplosion(paqueteCiclo);
+			servidor->agregarExplosion(paqueteCiclo->posicion_proyectil ,paqueteCiclo->radio_explosion);
 		}
 		servidor->actualizarPaquete((char*)paqueteCiclo);
 		destruirPaqueteCiclo(paqueteCiclo);
@@ -106,7 +107,7 @@ int main_server(int argc,char* argv[]){
 	    evento = (structEvento*) servidor->desencolarPaquete();
 
 
-	    if(evento!=NULL) {
+	    if(evento!=NULL && comenzar==1) {
 	    	juego->aplicarPaquete(evento, comenzar);
 	    	free(evento);
 	    }
