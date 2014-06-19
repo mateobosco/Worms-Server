@@ -64,6 +64,7 @@ public:
 	void setMensajeMostrar(char* mensaje);
 	void encolarExplosion(structPaquete* paquete);
 	size_t getTamanioColaExplosion();
+	void agregarExplosion(b2Vec2 posicion, float32 radio);
 
 private:
 	char paqueteEnviar[MAX_PACK];
