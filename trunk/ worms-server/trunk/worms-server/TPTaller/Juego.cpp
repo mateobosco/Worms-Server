@@ -646,13 +646,13 @@ class QueryViento : public b2QueryCallback {
     	bool ReportFixture(b2Fixture* fixture) {
     		b2Shape* shape = fixture->GetShape();
     		tocando = false;
-    		if((shape->GetType() == 0) || (shape->GetType() == 3)){ // b2ChainShape == 3
-    			vector<b2Shape*>::iterator it = std::find(foundShapes.begin(), foundShapes.end(), shape);
-    			if(it==foundShapes.end()){
-    				foundShapes.push_back( shape );
-    				tocando = true;
-    			}
-    	   	}
+    		//if((shape->GetType() == 0) || (shape->GetType() == 3)){ // b2ChainShape == 3
+			vector<b2Shape*>::iterator it = std::find(foundShapes.begin(), foundShapes.end(), shape);
+			if(it==foundShapes.end()){
+				foundShapes.push_back( shape );
+				tocando = true;
+			}
+    	   	//}
     		return true;//keep going to find all fixtures in the query area
     	}
  };
@@ -662,7 +662,8 @@ void Juego::aplicarViento(Arma *arma){
 	b2AABB aabb;
 	b2Body *proyectil = arma->getProyectil();
 	aabb.upperBound += proyectil->GetPosition();
-	aabb.lowerBound += proyectil->GetPosition();
+	b2Vec2 arreglo = {0,-1};
+	aabb.lowerBound += (proyectil->GetPosition() + arreglo);
 	b2World* world = this->getMundo()->devolver_world();
 	world->QueryAABB(&query, aabb);
 	b2Vec2 fuerza = {this->viento, 0};
