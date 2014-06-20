@@ -385,7 +385,7 @@ void Juego::disparar(){
 void Juego::checkColisionProyectil(structPaquete* paquete){
 	if(proj_in_air){
 		this->aplicarViento(arma_actual);
-		if(arma_actual->checkImpacto(this->mundo)){
+		if(arma_actual->checkImpacto(this->mundo) ){
 			proj_in_air = false;
 			if (this->arma_actual->getTipo() != 6 ) this->mundo->destruir_cuerpo(arma_actual->getProyectil());
 			this->arma_actual->aplicarExplosion(this->manejador);
@@ -646,13 +646,13 @@ class QueryViento : public b2QueryCallback {
     	bool ReportFixture(b2Fixture* fixture) {
     		b2Shape* shape = fixture->GetShape();
     		tocando = false;
-    		//if((shape->GetType() == 0) || (shape->GetType() == 3)){ // b2ChainShape == 3
+    		if((shape->GetType() == 0) || (shape->GetType() == 3)){ // b2ChainShape == 3
 			vector<b2Shape*>::iterator it = std::find(foundShapes.begin(), foundShapes.end(), shape);
 			if(it==foundShapes.end()){
 				foundShapes.push_back( shape );
 				tocando = true;
 			}
-    	   	//}
+    	   	}
     		return true;//keep going to find all fixtures in the query area
     	}
  };
