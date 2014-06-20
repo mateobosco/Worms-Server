@@ -583,7 +583,6 @@ void Dibujador::close(){
 void Dibujador::dibujarMensaje(){
 	char mensaje[90];
 	sprintf (mensaje, "Se cerro el server, la ventana se cerrara en: %d segundos", this->contador_cerrarse);
-	printf( " MENSAJE ES %s \n", mensaje);
 	this->contador_cerrarse--;
 	SDL_Delay(1000);
 	SDL_Color color = {0,0,0};
@@ -712,7 +711,6 @@ void Dibujador::borrarExplosion(b2Vec2 posicion, float32 radio){
 
 			float32 x = (( ((float32) i*i) / ((float32) rad[0]*rad[0])));
 			float32 y = (( ((float32) j*j) / ((float32) rad[1]*rad[1])));
-			printf(" LOS PUNTOS SON %d, %d y %d,%d y dan x=%f y=%f x+y = %f \n", i,j,rad[0],rad[1],x,y,x+y);
 			if ( (x+y) <= 1) {
 				putpixel(surfaceTierra,pixel[0],pixel[1],0);
 			}

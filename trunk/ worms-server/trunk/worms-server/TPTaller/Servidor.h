@@ -65,6 +65,8 @@ public:
 	void encolarExplosion(structPaquete* paquete);
 	size_t getTamanioColaExplosion();
 	void agregarExplosion(b2Vec2 posicion, float32 radio);
+	bool getHayClienteNuevo();
+	void clienteNuevoCargado();
 
 private:
 	char paqueteEnviar[MAX_PACK];
@@ -86,6 +88,7 @@ private:
 	SDL_Thread *escuchar;
 	SDL_Thread *aceptar;
 	char mensaje_mostrar[MAX_MENSAJE];
+	bool hay_cliente_nuevo;
 };
 
 #endif /* SERVIDOR_H_ */

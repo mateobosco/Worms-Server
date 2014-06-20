@@ -11,7 +11,6 @@ Arma::~Arma(){
 }
 
 void Arma::disparar(Mundo* mundo){
-	printf(" LLEGA HASTA ACA \n");
 	b2Vec2 escalas = mundo->GetEscalas();
 	tamanio_proyectil.x = escalas.x / 60;
 	tamanio_proyectil.y = escalas.y / 50;
@@ -64,7 +63,6 @@ b2Vec2* Arma::definirImpulso(b2Vec2 destino){
 bool Arma::checkImpacto(Mundo *mundo){
 
 //	if (this->proyectil->GetContactList() && this->proyectil->GetContactList()->contact->IsTouching()){
-//		printf("BIINGOOOO: HAY IMPACTO \n");
 //		return true;
 //	} else{
 //		return false;
@@ -164,11 +162,9 @@ bool Arma::checkImpacto(Mundo* mundo){
 
 bool Arma::setFuerza(){
 	if(this->fuerza >= MAX_FUERZA){
-		//printf("entra al setFuerza: %f \n", this->fuerza);
 		return false;
 	} else{
 		this->fuerza += (MAX_FUERZA/20);
-		printf("entra al setFuerza: %f \n", this->fuerza);
 		return true;
 	}
 }
@@ -187,7 +183,6 @@ void Arma::setDireccion(b2Vec2 una_direccion){
 }
 
 void Arma::setPosicion(b2Vec2 una_posicion){
-	printf("UBICO LA BOMBA EN (%f,%f) \n",una_posicion.x,una_posicion.y);
 	this->posicion_proyectil.x = una_posicion.x;
 	this->posicion_proyectil.y = una_posicion.y;
 }
@@ -242,7 +237,6 @@ void Arma::checkPersonajeLastimado(b2Body *body, ManejadorPersonajes *manejador,
 	for(int i = 0; i < manejador->getCantidadPersonajes(); i++){
 		Personaje *personaje = manejador->getPersonajes()[i];
 		if((!personaje->getMuerto()) && (personaje->getBody() == body)){
-			printf("Daño: %i\n", danio);
 			manejador->quitarVidaPersonaje(personaje,danio);
 			return;
 		}
@@ -251,7 +245,6 @@ void Arma::checkPersonajeLastimado(b2Body *body, ManejadorPersonajes *manejador,
 void Arma::aplicarExplosion(ManejadorPersonajes *manejador){
     b2World* world = this->proyectil->GetWorld();
     b2Vec2 pos = this->proyectil->GetPosition();
-    //printf("UBICO LA BOMBA EN (%f,%f) \n",pos.x,pos.y);
     float32 blastRadius = 25;
     int numRays = 20;
     for (int i = 0; i < numRays; i++) {
@@ -259,10 +252,8 @@ void Arma::aplicarExplosion(ManejadorPersonajes *manejador){
         b2Vec2 rayDir( sinf(angle), cosf(angle) );
         rayDir *= blastRadius;
         b2Vec2 rayEnd = pos + /*blastRadius * */rayDir;
-        //printf("ANGULOS %f \n",angle);
 
         RayCastMasCercano callback;
-        //printf("HAGO UN RAYCAST ENTRE LAS POSICIONES (%f,%f) y (%f,%f) \n",pos.x,pos.y,rayEnd.x,rayEnd.y);
         world->RayCast(&callback, pos, rayEnd);
         if ( callback.body ){
             b2Body* body = callback.body;
@@ -278,7 +269,6 @@ void Arma::aplicarExplosion(ManejadorPersonajes *manejador){
             if((abs(body->GetLinearVelocity().x) < 10) && (abs(body->GetLinearVelocity().y) < 10)){
                 body->ApplyLinearImpulse(b2Vec2(dir.x* (blastRadius/distancia) ,dir.y* (blastRadius/distancia)), posImpacto, true);
             }
-            //printf("EL RAYCAST ENCONTRO UN CUERPO Y LE APLICA UN LINEAR IMPULSE DE %f \n",impulso);
             //FALTA SACARLE VIDA A LOS GUSANOS
         }
     }

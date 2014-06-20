@@ -88,18 +88,15 @@ int GranadaHoly::getContadorSegundos(){
 	if (SDL_GetTicks() - reloj_comienzo > 3000)
 		return 0;
 	else{
-//		printf("Comienzo: %i \t Actual: %i \t DIF: %i \n", reloj_comienzo, SDL_GetTicks(), (SDL_GetTicks() - reloj_comienzo));
 		return  ((3000 - (SDL_GetTicks() - reloj_comienzo)) / 1000 ) + 1;
 	}
 }
 
 bool GranadaHoly::setFuerza(){
 	if(this->fuerza >= MAX_FUERZA){
-		//printf("entra al setFuerza: %f \n", this->fuerza);
 		return false;
 	} else{
 		this->fuerza += (MAX_FUERZA/20);//todo poner algo inferior
-		printf("entra al setFuerza: %f \n", this->fuerza);
 		return true;
 	}
 }
@@ -107,7 +104,6 @@ bool GranadaHoly::setFuerza(){
 void GranadaHoly::setAngulo(int un_angulo, int direc){
 	this->angulo = un_angulo;
 	b2Vec2 direccion;
-	printf(" ENTRA EN ESTE ANGULO3 Y RECIBE DE DIRECCION ESTO : %d \n", direc);
 	//direccion.x = 1 * cos( angulo * PI / 180 ); //Orientacion Derecha
 	//direccion.y = 1 * sin( angulo * PI / 180 );
 	if(direc == 1){
@@ -133,7 +129,6 @@ void GranadaHoly::setDireccion(b2Vec2 una_direccion){
 }
 
 void GranadaHoly::setPosicion(b2Vec2 una_posicion){
-	printf("UBICO LA BOMBA EN (%f,%f) \n",una_posicion.x,una_posicion.y);
 	this->posicion_proyectil.x = una_posicion.x;
 	this->posicion_proyectil.y = una_posicion.y;
 }
@@ -189,7 +184,6 @@ public:
 void GranadaHoly::aplicarExplosion(ManejadorPersonajes *manejador){
     b2World* world = this->proyectil->GetWorld();
     b2Vec2 pos = this->proyectil->GetPosition();
-    //printf("UBICO LA BOMBA EN (%f,%f) \n",pos.x,pos.y);
     float32 blastRadius = 40;
     int numRays = 20;
     for (int i = 0; i < numRays; i++) {
@@ -197,10 +191,8 @@ void GranadaHoly::aplicarExplosion(ManejadorPersonajes *manejador){
         b2Vec2 rayDir( sinf(angle), cosf(angle) );
         rayDir *= blastRadius;
         b2Vec2 rayEnd = pos + /*blastRadius * */rayDir;
-        //printf("ANGULOS %f \n",angle);
 
         RayCastMasCercano callback;
-        //printf("HAGO UN RAYCAST ENTRE LAS POSICIONES (%f,%f) y (%f,%f) \n",pos.x,pos.y,rayEnd.x,rayEnd.y);
         world->RayCast(&callback, pos, rayEnd);
         if ( callback.body ){
             b2Body* body = callback.body;
@@ -216,7 +208,6 @@ void GranadaHoly::aplicarExplosion(ManejadorPersonajes *manejador){
             if((abs(body->GetLinearVelocity().x) < 10) && (abs(body->GetLinearVelocity().y) < 10)){
                 body->ApplyLinearImpulse(b2Vec2(dir.x ,dir.y), posImpacto, true);
             }
-            //printf("EL RAYCAST ENCONTRO UN CUERPO Y LE APLICA UN LINEAR IMPULSE DE %f \n",impulso);
             //FALTA SACARLE VIDA A LOS GUSANOS
         }
     }
