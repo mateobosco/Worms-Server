@@ -62,7 +62,7 @@ int main_server(int argc,char* argv[]){
 	printf("-----------------------------------------EL SERVIDOR INICIA EL JUEGO-------------------------------------\n");
 	juego->getMundo()->setVectorPersonajes(manejador_personajes->getPersonajes(), manejador_personajes->getCantidadPersonajes(), manejador_personajes->getCantidadJugadores());
 	juego->getMundo()->setFiguras(juego->getFiguras(), juego->getCantidadFiguras());
-	int jugadores_necesarios = 2; //4
+	int jugadores_necesarios = 1; //4
 	SDL_Delay(2000);
 
 	int comenzar=0;
@@ -112,6 +112,7 @@ int main_server(int argc,char* argv[]){
 	    	juego->aplicarPaquete(evento, comenzar);
 	    	free(evento);
 	    }
+
 
 
 	    if(juego->getRelojRonda() > 60000 && comenzar==1){
