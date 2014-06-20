@@ -289,45 +289,45 @@ int Juego::getJugadorActual(){
 
 void Juego::pasarTurno(){
 //	//reloj_ronda = SDL_GetTicks();
-//	this->resetearRelojRonda();
-//	//jugador_actual++;
-//	Jugador* jugador_anterior = this->jugadores[this->jugador_actual];
-//	jugador_anterior->seleccionarSiguientePersonaje();
-//	indice_jugador_turno++;
-//	if(indice_jugador_turno == 2){
-//		indice_jugador_turno = 0;
-//	}
-//	Jugador* jugador_actual = jugadores_jugando.at(indice_jugador_turno);
-//	while(jugador_actual->getConectado() == false){
+	this->resetearRelojRonda();
+	//jugador_actual++;
+	Jugador* jugador_anterior = this->jugadores[this->jugador_actual];
+	jugador_anterior->seleccionarSiguientePersonaje();
+	indice_jugador_turno++;
+	if(indice_jugador_turno == 1){
+		indice_jugador_turno = 0;
+	}
+	Jugador* jugador_actual = jugadores_jugando.at(indice_jugador_turno);
+	while(jugador_actual->getConectado() == false){
 ////		indice_jugador_turno++;
-//
-//		jugador_actual = jugadores_jugando.at(indice_jugador_turno);
-//		if (indice_jugador_turno > jugadores_jugando.size()){
-//			indice_jugador_turno=0;
-//		}
-//	}
-//	//if(jugador_actual == 2){
-//	//	jugador_actual =0;
-//	//}
-//
-//
-//	if (indice_jugador_turno > jugadores_jugando.size()){
-//		indice_jugador_turno = 0;
-//	}
-//	for(int i = 0; i < jugadores_jugando.size(); i++){
-//		Jugador* jugador_actual = jugadores_jugando.at(i);
-//		//Cliente* clienteActual = servidor->getClientes()[i];
-//		Personaje** vector_personajes = jugador_actual->getPersonajes();
-//		for (int i = 0; i < 4; i++){
-//			Personaje* personaje_actual = vector_personajes[i];
-//			if (personaje_actual->getEnergia() == 0){
-//				personaje_actual->setMuerto();
-//			}
-//		}
-//		if(jugador_actual->getPerdio()){
-//			//jugadores_jugando.erase(jugadores_jugando.begin() + i);
-//		}
-//	}
+
+		jugador_actual = jugadores_jugando.at(indice_jugador_turno);
+		if (indice_jugador_turno > jugadores_jugando.size()){
+			indice_jugador_turno=0;
+		}
+	}
+	//if(jugador_actual == 2){
+	//	jugador_actual =0;
+	//}
+
+
+	if (indice_jugador_turno > jugadores_jugando.size()){
+		indice_jugador_turno = 0;
+	}
+	for(int i = 0; i < jugadores_jugando.size(); i++){
+		Jugador* jugador_actual = jugadores_jugando.at(i);
+		//Cliente* clienteActual = servidor->getClientes()[i];
+		Personaje** vector_personajes = jugador_actual->getPersonajes();
+		for (int i = 0; i < 4; i++){
+			Personaje* personaje_actual = vector_personajes[i];
+			if (personaje_actual->getEnergia() == 0){
+				personaje_actual->setMuerto();
+			}
+		}
+		if(jugador_actual->getPerdio()){
+			//jugadores_jugando.erase(jugadores_jugando.begin() + i);
+		}
+	}
 }
 
 int Juego::getRelojRonda(){
