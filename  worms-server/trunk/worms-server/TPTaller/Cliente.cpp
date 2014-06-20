@@ -152,7 +152,6 @@ int Cliente::runEnviarInfo(){
 				this->servidor_conectado = false;
 				loguear();
 				logFile << "\t Error al enviar información del cliente "<< this->name_client <<" al servidor. " << endl;
-				printf("Tiró -1 en enviar\n");
 				this->desactivar();
 			}
 		}
@@ -191,7 +190,6 @@ int Cliente::runRecibirInfo(){
 			this->servidor_conectado = false;
 			loguear();
 			logFile << "\t Error al recibir información" << endl;
-			printf("Tiró -1 en recibir\n");
 			this->desactivar();
 		}
 	}

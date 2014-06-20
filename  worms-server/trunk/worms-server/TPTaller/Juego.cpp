@@ -227,7 +227,6 @@ void Juego::aplicarPaquete(structEvento* evento, int comenzar){
 		}
 		if ((evento->direccion > 0) && (evento->nro_jugador == this->getJugadorActual()) && comenzar ==1){ // PROCESO EL MOVIMIENTO SOLO SI ES SU TURNO
 			manejador->moverPersonaje(evento->direccion , evento->nro_jugador);
-
 		}
 		if (evento->arma_seleccionada != 0 ){
 			for (int j = 0; j < manejador->getCantidadPersonajes(); j++){ // TODO ver si es necesario cant actuales activos.
@@ -254,7 +253,7 @@ void Juego::aplicarPaquete(structEvento* evento, int comenzar){
 				}
 			}
 		}
-		if((evento->fuerza == 1) && arma_actual!= NULL){
+		if((evento->fuerza == 1) && arma_actual != NULL){
 			arma_actual->setFuerza();
 		} else
 			if((evento->fuerza == 2) && arma_actual != NULL) {
@@ -262,12 +261,10 @@ void Juego::aplicarPaquete(structEvento* evento, int comenzar){
 				arma_actual->resetFuerza();
 			}
 //	    if(evento->reset == 1) {
-//	    	printf("Reset == 1\n");
 //	    	this->resetNivel();
 //	    }
 
 //	if(evento->fuerza == 2){
-//		printf("Dejó de disparar\n");
 //	}
 	//else return;
 //	}
@@ -286,57 +283,51 @@ ManejadorPersonajes* Juego::getManejadorPersonajes(){
 	return this->manejador;
 }
 
-
-
-
 int Juego::getJugadorActual(){
 	return indice_jugador_turno;
 }
 
 void Juego::pasarTurno(){
-	//reloj_ronda = SDL_GetTicks();
-	this->resetearRelojRonda();
-	//jugador_actual++;
-	Jugador* jugador_anterior = this->jugadores[this->jugador_actual];
-	jugador_anterior->seleccionarSiguientePersonaje();
-	indice_jugador_turno++;
-	if(indice_jugador_turno == 2){
-		indice_jugador_turno = 0;
-	}
-	printf(" LLEGA HASTA ACA 1  indice jugador turno es %d \n", indice_jugador_turno);
-	Jugador* jugador_actual = jugadores_jugando.at(indice_jugador_turno);
-	while(jugador_actual->getConectado() == false){
-		//printf(" ENTRA ACAAAAA \n");
-		indice_jugador_turno++;
-
-		jugador_actual = jugadores_jugando.at(indice_jugador_turno);
-		if (indice_jugador_turno > jugadores_jugando.size()){
-			indice_jugador_turno=0;
-		}
-	}
-	//printf(" LLEGA HASTA ACA 2 \n");
-	//if(jugador_actual == 2){
-	//	jugador_actual =0;
-	//}
-
-
-	if (indice_jugador_turno > jugadores_jugando.size()){
-		indice_jugador_turno = 0;
-	}
-	for(int i = 0; i < jugadores_jugando.size(); i++){
-		Jugador* jugador_actual = jugadores_jugando.at(i);
-		//Cliente* clienteActual = servidor->getClientes()[i];
-		Personaje** vector_personajes = jugador_actual->getPersonajes();
-		for (int i = 0; i < 4; i++){
-			Personaje* personaje_actual = vector_personajes[i];
-			if (personaje_actual->getEnergia() == 0){
-				personaje_actual->setMuerto();
-			}
-		}
-		if(jugador_actual->getPerdio()){
-			//jugadores_jugando.erase(jugadores_jugando.begin() + i);
-		}
-	}
+//	//reloj_ronda = SDL_GetTicks();
+//	this->resetearRelojRonda();
+//	//jugador_actual++;
+//	Jugador* jugador_anterior = this->jugadores[this->jugador_actual];
+//	jugador_anterior->seleccionarSiguientePersonaje();
+//	indice_jugador_turno++;
+//	if(indice_jugador_turno == 2){
+//		indice_jugador_turno = 0;
+//	}
+//	Jugador* jugador_actual = jugadores_jugando.at(indice_jugador_turno);
+//	while(jugador_actual->getConectado() == false){
+////		indice_jugador_turno++;
+//
+//		jugador_actual = jugadores_jugando.at(indice_jugador_turno);
+//		if (indice_jugador_turno > jugadores_jugando.size()){
+//			indice_jugador_turno=0;
+//		}
+//	}
+//	//if(jugador_actual == 2){
+//	//	jugador_actual =0;
+//	//}
+//
+//
+//	if (indice_jugador_turno > jugadores_jugando.size()){
+//		indice_jugador_turno = 0;
+//	}
+//	for(int i = 0; i < jugadores_jugando.size(); i++){
+//		Jugador* jugador_actual = jugadores_jugando.at(i);
+//		//Cliente* clienteActual = servidor->getClientes()[i];
+//		Personaje** vector_personajes = jugador_actual->getPersonajes();
+//		for (int i = 0; i < 4; i++){
+//			Personaje* personaje_actual = vector_personajes[i];
+//			if (personaje_actual->getEnergia() == 0){
+//				personaje_actual->setMuerto();
+//			}
+//		}
+//		if(jugador_actual->getPerdio()){
+//			//jugadores_jugando.erase(jugadores_jugando.begin() + i);
+//		}
+//	}
 }
 
 int Juego::getRelojRonda(){
@@ -350,32 +341,26 @@ void Juego::resetearRelojRonda(){
 void Juego::setArma(int tipo_arma, b2Vec2 posicion, int angulo, int direccion){
 	Jugador* jugador_actual;
 	if(tipo_arma ==1 ){
-		printf(" Creo una Bazooka \n");
 		jugador_actual = this->jugadores[this->jugador_actual];
 		this->arma_actual = new Bazooka(jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()]);
 	}
 	if(tipo_arma ==2 ){
-		printf(" Creo una Granada \n");
 		jugador_actual = this->jugadores[this->jugador_actual];
 		this->arma_actual = new Granada(jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()]);
 	}
 	if(tipo_arma ==3 ){
-		printf(" Creo una Dinamita \n");
 		jugador_actual = this->jugadores[this->jugador_actual];
 		this->arma_actual = new Dinamita(jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()]);
 	}
 	if(tipo_arma ==4 ){
-		printf(" Creo una Granada Holy \n");
 		jugador_actual = this->jugadores[this->jugador_actual];
 		this->arma_actual = new GranadaHoly(jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()]);
 	}
 	if(tipo_arma ==5 ){
-		printf(" Suicida \n");
 		jugador_actual = this->jugadores[this->jugador_actual];
 		this->arma_actual = new Suicida(jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()]);
 	}
 	if(tipo_arma ==6 ){
-		printf(" Patada \n");
 		jugador_actual = this->jugadores[this->jugador_actual];
 		Personaje* personaje = jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()];
 		this->arma_actual = new Patada(personaje);
@@ -394,7 +379,6 @@ void Juego::disparar(){
 		arma_actual->disparar(this->mundo);
 		proj_in_air = true;
 	} else{
-//		printf("No hay arma seleccionada \n");
 	}
 }
 
@@ -402,14 +386,12 @@ void Juego::checkColisionProyectil(structPaquete* paquete){
 	if(proj_in_air){
 		this->aplicarViento(arma_actual);
 		if(arma_actual->checkImpacto(this->mundo)){
-			printf(" ENTROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO \n");
 			proj_in_air = false;
 			if (this->arma_actual->getTipo() != 6 ) this->mundo->destruir_cuerpo(arma_actual->getProyectil());
 			this->arma_actual->aplicarExplosion(this->manejador);
 			manejador->resetDaniadoTurnoActual();
 			paquete->radio_explosion=this->arma_actual->getRadioExplosion();
 			paquete->posicion_proyectil=arma_actual->getProyectil()->GetPosition();
-			printf(" LE MANDO LA POSICION %f, %f \n", paquete->posicion_proyectil.x, paquete->posicion_proyectil.y);
 			if (this->arma_actual->getTipo() != 6 ) this->explotarBomba(paquete->posicion_proyectil, paquete->radio_explosion);
 			Jugador* jugador_actual=this->jugadores[this->jugador_actual];
 			Personaje* personaje_sel = jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()];
@@ -428,7 +410,6 @@ void Juego::checkColisionProyectil(structPaquete* paquete){
 void Juego::setPaqueteProyectil(structPaquete *pack){
 	pack->show_proyectil = this->proj_in_air;
 	if (arma_actual != NULL){
-		printf("LE PONGO ESTA POTENCIA AL PAQUETE %d --------------------------------------------------\n",(int) arma_actual->getFuerza());
 		pack->potencia = (int) arma_actual->getFuerza();
 	}
 
@@ -692,12 +673,11 @@ void Juego::aplicarViento(Arma *arma){
 //Retorna el número del jugador ganador.
 //Si no hay ganador, retorna -1.
 int Juego::checkGanador(){
-	if(this->jugadores_jugando.size()==1){
-		Jugador* ganador = jugadores_jugando[0];
-		return ganador->getNumero();
+	if((this->jugadores_jugando.size() == 1) && (this->cantidad_jugadores >= CANTIDAD_JUGADORES_NECESARIOS_LVL1)){
+		return ((int) jugadores_jugando.front()->getNumero());
+	} else{
+		return -1;
 	}
-	return -1;
-//
 //	int cantidad_jugando = 0;
 //	int ganador = -1;
 //	for(int i = 0; i < this->cantidad_jugadores; i++){
@@ -706,10 +686,11 @@ int Juego::checkGanador(){
 //			ganador = i;
 //		}
 //	}
-//	if(cantidad_jugando > 1)
+//	if((cantidad_jugando > 1) || (this->cantidad_jugadores < CANTIDAD_JUGADORES_NECESARIOS_LVL1))
 //		return -1;
-//	return ganador;
+	//return ganador;
 }
+
 void Juego::setResetear(bool valor){
 	this->resetear = valor;
 }

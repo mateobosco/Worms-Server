@@ -22,6 +22,7 @@ Servidor::Servidor(int maxCon){
 	}
 	this->escuchar = NULL;
 	this->aceptar = NULL;
+	this->hay_cliente_nuevo = false;
 }
 
 Servidor::~Servidor() {
@@ -45,7 +46,9 @@ void Servidor::setPaqueteInicial(char paquete[MAX_PACK]){
 
 void Servidor::actualizarPaquete(char paquete[MAX_PACK]){
 	this->enviar=true;
+	SDL_LockMutex(this->mutex);
 	memcpy(this->paqueteEnviar, paquete, MAX_PACK);
+	SDL_UnlockMutex(this->mutex);
 }
 
 void* Servidor::desencolarPaquete(){
@@ -60,6 +63,7 @@ void* Servidor::desencolarPaquete(){
 }
 
 int Servidor::escucharConexiones(){
+	SDL_Delay(5000);
 	int es = this->listener->escuchar(this->cantidadMaxConexiones);
 	return es;
 }
@@ -93,6 +97,7 @@ int Servidor::validarSocket(int sock){
 }
 
 int Servidor::aceptarConexiones(){
+	SDL_Delay(5000);
 	int sockCliente = this->listener->aceptar();
 	//Se crea un cliente y un thread asociado a el y se invoca el método run.
 	if(sockCliente > 0){
@@ -143,6 +148,7 @@ int Servidor::aceptarConexiones(){
 					cliente->setHilos(hilosCliente);
 
 					this->clientes[posicion] = cliente;
+					this->hay_cliente_nuevo = true;
 					this->vector_clientes[posicion] = cliente->getID(); // TODO ponerle un nombre / id de jugador
 					printf("Cantidad de clientes aceptados: %d\n",this->cantClientes);
 					return EXIT_SUCCESS;
@@ -190,23 +196,23 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 		SDL_Delay(15);
 		char envio[MAX_PACK];
 		memset(envio,0,MAX_PACK);
-		char envio2[MAX_PACK];
-		memset(envio2,0,MAX_PACK);
+
+		SDL_LockMutex(this->mutex);
 		memcpy(envio, this->paqueteEnviar, MAX_PACK);
+		SDL_UnlockMutex(this->mutex);
+
 		structPaquete* paqueteCiclo = (structPaquete*) envio;
-		if( this->paquetesExplosion.size()==1 ){
+
+		if( this->paquetesExplosion.size()>=1 ){
 			structPaquete* paquete_explosion = this->paquetesExplosion.front();
 			memcpy(envio, paquete_explosion, MAX_PACK ); // todo creo que va sizeof(structPaquete) NO MAX_PACK
 			this->paquetesExplosion.pop();
 		}
-		if(paqueteCiclo->radio_explosion==3){
-			printf(" DESDE EL MANDAR LO MADNOOOO -------------------------------- \n");
-		}
 		paqueteCiclo->id=cliente->getID();
-		memcpy(envio2, paqueteCiclo, MAX_PACK);
+
 		if (setsockopt (cliente->getSocket()->getFD(), SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout,
 			sizeof(timeout)) < 0) return ERROR;
-		int enviados = cliente->getSocket()->enviar(envio2, MAX_PACK);
+		int enviados = cliente->getSocket()->enviar(envio, MAX_PACK);
 		if (enviados > 0){
 			this->enviar = false;
 		}
@@ -259,8 +265,8 @@ int Servidor::runRecibirInfo(void* cliente){
 	timeout.tv_sec = 10; // todo cambiado de 10 a 15 (o 20) para valgrinear el client
 	timeout.tv_usec = 0;
 	Cliente* client = (Cliente*) cliente;
-
 	while(!client->getNombre()) printf("Falta Nombre");
+
 	while(client->getActivo()){
 		SDL_Delay(15);
 		char paquete[MAX_PACK];
@@ -276,11 +282,7 @@ int Servidor::runRecibirInfo(void* cliente){
 			SDL_LockMutex(this->mutex);
 			memcpy(novedad, paquete, MAX_PACK);
 			SDL_UnlockMutex(this->mutex);
-			if (this->paquetesRecibir.empty()){
-				this->paquetesRecibir.push(novedad);
-			} else{
-				continue;
-			}
+			this->paquetesRecibir.push(novedad);
 			structEvento* anterior = (structEvento*) this->paquetesRecibir.front();
 			if (anterior == NULL) continue;
 			if (anterior->aleatorio != evento->aleatorio){
@@ -447,4 +449,12 @@ void Servidor::agregarExplosion(b2Vec2 posicion, float32 radio){
 	explosion.radio = radio;
 	paqueteInicial->explosiones[paqueteInicial->cantidadExplosiones] = explosion;
 	paqueteInicial->cantidadExplosiones += 1;
+}
+
+bool Servidor::getHayClienteNuevo(){
+	return this->hay_cliente_nuevo;
+}
+
+void Servidor::clienteNuevoCargado(){
+	this->hay_cliente_nuevo = false;
 }

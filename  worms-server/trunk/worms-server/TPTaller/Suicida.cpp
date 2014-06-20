@@ -61,7 +61,6 @@ b2Vec2* Suicida::definirImpulso(b2Vec2 destino){
 bool Arma::checkImpacto(Mundo *mundo){
 
 //	if (this->proyectil->GetContactList() && this->proyectil->GetContactList()->contact->IsTouching()){
-//		printf("BIINGOOOO: HAY IMPACTO \n");
 //		return true;
 //	} else{
 //		return false;
@@ -129,11 +128,9 @@ bool Suicida::checkImpacto(Mundo* mundo){
 
 bool Suicida::setFuerza(){
 	if(this->fuerza >= MAX_FUERZA){
-		//printf("entra al setFuerza: %f \n", this->fuerza);
 		return false;
 	} else{
 		this->fuerza += (MAX_FUERZA/20);//todo poner algo inferior
-		printf("entra al setFuerza: %f \n", this->fuerza);
 		return true;
 	}
 }
@@ -163,7 +160,6 @@ void Suicida::setDireccion(b2Vec2 una_direccion){
 }
 
 void Suicida::setPosicion(b2Vec2 una_posicion){
-	printf("UBICO LA BOMBA EN (%f,%f) \n",una_posicion.x,una_posicion.y);
 	this->posicion_proyectil.x = una_posicion.x;
 	this->posicion_proyectil.y = una_posicion.y;
 }
@@ -177,7 +173,6 @@ double Suicida::getAngulo(){
 }
 
 int Suicida::getTipo(){
-	printf(" ENTRA EN EL GET TIPO DE BAZOOOOKAAA ****************\n");
 	return this->tipo;
 }
 
@@ -220,7 +215,6 @@ public:
 //void Suicida::aplicarExplosion(){
 //	b2World* world = this->proyectil->GetWorld();
 //	b2Vec2 pos = this->proyectil->GetPosition();
-//	//printf("UBICO LA BOMBA EN (%f,%f) \n",pos.x,pos.y);
 //	float32 blastRadius = 30;
 //	int numRays = 20;
 //	b2Body *auxiliar = NULL;
@@ -228,10 +222,8 @@ public:
 //	  float angle = (i / (float)numRays) * PI;
 //	  b2Vec2 rayDir( sinf(angle), cosf(angle) );
 //	  b2Vec2 rayEnd = pos + blastRadius * rayDir;
-//	  //printf("ANGULOS %f \n",angle);
 //
 //	  RayCastMasCercano callback;
-//	  //printf("HAGO UN RAYCAST ENTRE LAS POSICIONES (%f,%f) y (%f,%f) \n",pos.x,pos.y,rayEnd.x,rayEnd.y);
 //	  world->RayCast(&callback, pos, rayEnd);
 //	  if ( callback.body ){
 //
@@ -245,11 +237,9 @@ public:
 //		//if (distancia == 0 ) continue;
 //		float32 invDistancia = 1/distancia;
 //		float32 impulso = this->danio * invDistancia;//*10;
-//		printf("Distancia invertida: %f\n",invDistancia);
 ////		impulso = b2Min(impulso, 500.0f); // estaba en el tutorial, no estoy seguro
 //		b2Vec2 aux = {dir.x/distancia, dir.y/distancia};
 //		body->ApplyLinearImpulse(/*impulso * */aux, posImpacto, true);
-//		//printf("EL RAYCAST ENCONTRO UN CUERPO Y LE APLICA UN LINEAR IMPULSE DE %f \n",impulso);
 //		//FALTA SACARLE VIDA A LOS GUSANOS
 //	  }
 //	}
@@ -258,7 +248,6 @@ public:
 void Suicida::aplicarExplosion(ManejadorPersonajes *manejador){
     b2World* world = this->proyectil->GetWorld();
     b2Vec2 pos = this->proyectil->GetPosition();
-    //printf("UBICO LA BOMBA EN (%f,%f) \n",pos.x,pos.y);
     float32 blastRadius = 25;
     int numRays = 20;
     for (int i = 0; i < numRays; i++) {
@@ -266,10 +255,8 @@ void Suicida::aplicarExplosion(ManejadorPersonajes *manejador){
         b2Vec2 rayDir( sinf(angle), cosf(angle) );
         rayDir *= blastRadius;
         b2Vec2 rayEnd = pos + /*blastRadius * */rayDir;
-        //printf("ANGULOS %f \n",angle);
 
         RayCastMasCercano callback;
-        //printf("HAGO UN RAYCAST ENTRE LAS POSICIONES (%f,%f) y (%f,%f) \n",pos.x,pos.y,rayEnd.x,rayEnd.y);
         world->RayCast(&callback, pos, rayEnd);
         if ( callback.body ){
             b2Body* body = callback.body;
@@ -285,7 +272,6 @@ void Suicida::aplicarExplosion(ManejadorPersonajes *manejador){
             if((abs(body->GetLinearVelocity().x) < 10) && (abs(body->GetLinearVelocity().y) < 10)){
                 body->ApplyLinearImpulse(b2Vec2(dir.x ,dir.y), posImpacto, true);
             }
-            //printf("EL RAYCAST ENCONTRO UN CUERPO Y LE APLICA UN LINEAR IMPULSE DE %f \n",impulso);
             //FALTA SACARLE VIDA A LOS GUSANOS
         }
     }

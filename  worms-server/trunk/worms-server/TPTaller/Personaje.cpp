@@ -24,10 +24,6 @@ Personaje::Personaje(Mundo* mundo, Uint8 numero_jugador, char* nombre_client) {
 	bool posicion_correcta = false;
 	b2Vec2 posicion;
 	//b2Vec2 aux=b2Vec2(10, 10);
-	for (int w=0; w < mundo->GetCantVerticesTierra(); w++){
-		printf( "%f , %f \n", vertices_tierra[w].x, vertices_tierra[w].y);
-	}
-	printf(" -------------- \n");
 	while (!posicion_correcta){
 		posicion.x+=10;
 		//aux+=10;
@@ -40,12 +36,10 @@ Personaje::Personaje(Mundo* mundo, Uint8 numero_jugador, char* nombre_client) {
 	b2World* world = mundo->devolver_world();
 	b2BodyDef bodyDef = b2BodyDef(); // creo el body def
 	bodyDef.position = posicion; // le asigno una posicion
-	printf(" LO VOY A PONER EN ESTA POSICION: (%f, %f) \n", posicion.x, posicion.y);
 	bodyDef.userData = this; // no se si funciona bien esto,
 	bodyDef.type = b2_dynamicBody;
 
 	body = world->CreateBody(&bodyDef);
-	printf(" ************ \n");
 	b2MassData massData = b2MassData();
 	massData.mass = 0.1;
 	massData.center = b2Vec2(0, 0);
@@ -168,9 +162,7 @@ void Personaje::leermovimiento(int direccion, int id_jugador){
 			this->mover(b2Vec2(0,-3));
 			return;
 		}
-		//printf( " LA VELOCIDAD EN Y ES : %f \n", body->GetLinearVelocity().y);
 		if ( (direccion == 4  && body->GetLinearVelocity().x <0.7 ) && (body->GetContactList() != NULL) ){ // para arriba a la derecha
-			printf(" APLICO UN PAQUETE movimiento en la direccion  4");
 			this->mover(b2Vec2(2,-3));
 //			if(body->GetLinearVelocity().y == 0)
 //				this->mover(b2Vec2(2,-3));
@@ -179,7 +171,6 @@ void Personaje::leermovimiento(int direccion, int id_jugador){
 //					return;
 		}
 		if ( (direccion == 5 && body->GetLinearVelocity().x >-0.7 ) && (body->GetContactList() != NULL)){ // para arriba a la izq
-			printf(" APLICO UN PAQUETE movimiento en la direccion 5 \n");
 			this->mover(b2Vec2(-2,-3));
 //			if(body->GetLinearVelocity().y == 0)
 //				this->mover(b2Vec2(-2,-3));
