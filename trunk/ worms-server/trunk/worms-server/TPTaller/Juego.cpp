@@ -407,7 +407,7 @@ void Juego::checkColisionProyectil(structPaquete* paquete){
 				this->arma_actual = NULL;
 			}
 		}
-		if(this->getArmaActual()->getProyectil()->GetPosition().x > this->getEscalador()->getEscalaX() || this->getArmaActual()->getProyectil()->GetPosition().x < 0 ){
+		else if(this->getArmaActual()->getProyectil()->GetPosition().x > this->getEscalador()->getEscalaX() || this->getArmaActual()->getProyectil()->GetPosition().x < 0 ){
 			proj_in_air = false;
 			if (this->arma_actual->getTipo() != 6 ) this->mundo->destruir_cuerpo(arma_actual->getProyectil());
 			//this->arma_actual->aplicarExplosion(this->manejador);
