@@ -390,7 +390,6 @@ void Juego::disparar(){
 void Juego::checkColisionProyectil(structPaquete* paquete){
 	if(proj_in_air){
 		this->aplicarViento(arma_actual);
-		printf("LA POSICION EN X ES %f \n",this->getArmaActual()->getProyectil()->GetPosition().x );
 		if(arma_actual->checkImpacto(this->mundo) ){
 			proj_in_air = false;
 			if (this->arma_actual->getTipo() != 6 ) this->mundo->destruir_cuerpo(arma_actual->getProyectil());
