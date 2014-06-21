@@ -16,7 +16,7 @@ GranadaHoly::~GranadaHoly(){
 void GranadaHoly::disparar(Mundo* mundo){
 
 	b2Vec2 escalas = mundo->GetEscalas();
-	tamanio_proyectil.x = escalas.x / 200;
+	tamanio_proyectil.x = escalas.x / 60;
 	tamanio_proyectil.y = escalas.y / 50;
 
 	b2World* world = mundo->devolver_world();
