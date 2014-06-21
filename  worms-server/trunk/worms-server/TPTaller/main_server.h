@@ -114,6 +114,7 @@ int main_server(int argc,char* argv[]){
 	    }
 
 
+
 	    if(juego->getRelojRonda() > 60000 && comenzar==1){
 	    	//juego->resetearRelojRonda();
 	    	juego->pasarTurno();

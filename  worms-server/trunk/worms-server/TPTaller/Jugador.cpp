@@ -96,6 +96,9 @@ char* Jugador::getNombre(){
 
 void Jugador::seleccionarSiguientePersonaje(){
 	// agregar qe si el jugador perdio no cambie nada aca
+	if(this->getPerdio()){
+		return;
+	}
 	this->personaje_seleccionado++;
 	if(this->personaje_seleccionado == 4){
 		this->personaje_seleccionado=0;

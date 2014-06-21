@@ -229,18 +229,23 @@ void Juego::aplicarPaquete(structEvento* evento, int comenzar){
 			manejador->moverPersonaje(evento->direccion , evento->nro_jugador);
 		}
 		if (evento->arma_seleccionada != 0 ){
-			for (int j = 0; j < manejador->getCantidadPersonajes(); j++){ // TODO ver si es necesario cant actuales activos.
-				Personaje* personaje_actual = manejador->getPersonajes()[j];
-				if (! personaje_actual->getMuerto()){
-					if( personaje_actual->getSeleccion()[evento->nro_jugador] ){
-						personaje_actual->setArmaSeleccionada(evento->arma_seleccionada);
-						personaje_actual->setAnguloArma(evento->angulo_arma);
-
-						this->setArma(evento->arma_seleccionada, personaje_actual->getPosition(), personaje_actual->getAnguloArma(), evento->direccion );
-					}
-				}
-			}
+//			for (int j = 0; j < manejador->getCantidadPersonajes(); j++){ // TODO ver si es necesario cant actuales activos.
+//				Personaje* personaje_actual = manejador->getPersonajes()[j];
+//				if (! personaje_actual->getMuerto()){
+//					if( personaje_actual->getSeleccion()[evento->nro_jugador] ){
+//						personaje_actual->setArmaSeleccionada(evento->arma_seleccionada);
+//						personaje_actual->setAnguloArma(evento->angulo_arma);
+//
+//						this->setArma(evento->arma_seleccionada, personaje_actual->getPosition(), personaje_actual->getAnguloArma(), evento->direccion );
+//					}
+//				}
+			Jugador* jugador_actual = this->getJugadores()[this->jugador_actual];
+			Personaje* personaje_actual = jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()];
+			personaje_actual->setArmaSeleccionada(evento->arma_seleccionada);
+			personaje_actual->setAnguloArma(evento->angulo_arma);
+			this->setArma(evento->arma_seleccionada, personaje_actual->getPosition(), personaje_actual->getAnguloArma(), evento->direccion );
 		}
+
 		if(evento->angulo_arma != 0 && arma_actual != NULL){
 			for (int j = 0; j < manejador->getCantidadPersonajes(); j++){ // TODO ver si es necesario cant actuales activos.
 				Personaje* personaje_actual = manejador->getPersonajes()[j];
@@ -297,15 +302,15 @@ void Juego::pasarTurno(){
 	if(indice_jugador_turno == 1){
 		indice_jugador_turno = 0;
 	}
-	Jugador* jugador_actual = jugadores_jugando.at(indice_jugador_turno);
-	while(jugador_actual->getConectado() == false){
-////		indice_jugador_turno++;
-
-		jugador_actual = jugadores_jugando.at(indice_jugador_turno);
-		if (indice_jugador_turno > jugadores_jugando.size()){
-			indice_jugador_turno=0;
-		}
-	}
+//	Jugador* jugador_actual = jugadores_jugando.at(indice_jugador_turno);
+//	while(jugador_actual->getConectado() == false){
+//////		indice_jugador_turno++;
+//
+//		jugador_actual = jugadores_jugando.at(indice_jugador_turno);
+//		if (indice_jugador_turno > jugadores_jugando.size()){
+//			indice_jugador_turno=0;
+//		}
+//	}
 	//if(jugador_actual == 2){
 	//	jugador_actual =0;
 	//}
@@ -385,6 +390,7 @@ void Juego::disparar(){
 void Juego::checkColisionProyectil(structPaquete* paquete){
 	if(proj_in_air){
 		this->aplicarViento(arma_actual);
+		printf("LA POSICION EN X ES %f \n",this->getArmaActual()->getProyectil()->GetPosition().x );
 		if(arma_actual->checkImpacto(this->mundo) ){
 			proj_in_air = false;
 			if (this->arma_actual->getTipo() != 6 ) this->mundo->destruir_cuerpo(arma_actual->getProyectil());
@@ -393,6 +399,23 @@ void Juego::checkColisionProyectil(structPaquete* paquete){
 			paquete->radio_explosion=this->arma_actual->getRadioExplosion();
 			paquete->posicion_proyectil=arma_actual->getProyectil()->GetPosition();
 			if (this->arma_actual->getTipo() != 6 ) this->explotarBomba(paquete->posicion_proyectil, paquete->radio_explosion);
+			Jugador* jugador_actual=this->jugadores[this->jugador_actual];
+			Personaje* personaje_sel = jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()];
+			personaje_sel->setArmaSeleccionada(0);
+			this->pasarTurno();
+			if(this->arma_actual){
+				delete this->arma_actual;
+				this->arma_actual = NULL;
+			}
+		}
+		if(this->getArmaActual()->getProyectil()->GetPosition().x > this->getEscalador()->getEscalaX() || this->getArmaActual()->getProyectil()->GetPosition().x < 0 ){
+			proj_in_air = false;
+			if (this->arma_actual->getTipo() != 6 ) this->mundo->destruir_cuerpo(arma_actual->getProyectil());
+			//this->arma_actual->aplicarExplosion(this->manejador);
+			//manejador->resetDaniadoTurnoActual();
+			//paquete->radio_explosion=this->arma_actual->getRadioExplosion();
+			//paquete->posicion_proyectil=arma_actual->getProyectil()->GetPosition();
+			//if (this->arma_actual->getTipo() != 6 ) this->explotarBomba(paquete->posicion_proyectil, paquete->radio_explosion);
 			Jugador* jugador_actual=this->jugadores[this->jugador_actual];
 			Personaje* personaje_sel = jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()];
 			personaje_sel->setArmaSeleccionada(0);
