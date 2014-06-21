@@ -658,17 +658,19 @@ class QueryViento : public b2QueryCallback {
  };
 
 void Juego::aplicarViento(Arma *arma){
-	QueryViento query;
-	b2AABB aabb;
-	b2Body *proyectil = arma->getProyectil();
-	aabb.upperBound += proyectil->GetPosition();
-	b2Vec2 arreglo = {0,-1};
-	aabb.lowerBound += (proyectil->GetPosition() + arreglo);
-	b2World* world = this->getMundo()->devolver_world();
-	world->QueryAABB(&query, aabb);
-	b2Vec2 fuerza = {this->viento, 0};
-	if(!query.tocando)
-		proyectil->ApplyForceToCenter(fuerza, true);
+	if(arma->getTipo() != 3){//Dinamita
+		QueryViento query;
+		b2AABB aabb;
+		b2Body *proyectil = arma->getProyectil();
+		aabb.upperBound += proyectil->GetPosition();
+		b2Vec2 arreglo = {0, -0.1};
+		aabb.lowerBound += (proyectil->GetPosition() + arreglo);
+		b2World* world = this->getMundo()->devolver_world();
+		world->QueryAABB(&query, aabb);
+		b2Vec2 fuerza = {this->viento, 0};
+		if(!query.tocando)
+			proyectil->ApplyForceToCenter(fuerza, true);
+	}
 }
 
 //Retorna el número del jugador ganador.
