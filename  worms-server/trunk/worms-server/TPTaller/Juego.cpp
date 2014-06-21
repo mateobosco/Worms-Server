@@ -228,7 +228,7 @@ void Juego::aplicarPaquete(structEvento* evento, int comenzar){
 		if ((evento->direccion > 0) && (evento->nro_jugador == this->getJugadorActual()) && comenzar ==1){ // PROCESO EL MOVIMIENTO SOLO SI ES SU TURNO
 			manejador->moverPersonaje(evento->direccion , evento->nro_jugador);
 		}
-		if (evento->arma_seleccionada != 0 ){
+		if (evento->arma_seleccionada != 0 && evento->nro_jugador == this->indice_jugador_turno){
 //			for (int j = 0; j < manejador->getCantidadPersonajes(); j++){ // TODO ver si es necesario cant actuales activos.
 //				Personaje* personaje_actual = manejador->getPersonajes()[j];
 //				if (! personaje_actual->getMuerto()){
@@ -239,8 +239,11 @@ void Juego::aplicarPaquete(structEvento* evento, int comenzar){
 //						this->setArma(evento->arma_seleccionada, personaje_actual->getPosition(), personaje_actual->getAnguloArma(), evento->direccion );
 //					}
 //				}
-			printf(" SELECCIONA UNA ARMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA \n");
-			Jugador* jugador_actual = this->getJugadores()[this->jugador_actual];
+//			}
+			printf(" LE PONE EL ARMA AL JUGADOR %d \n", indice_jugador_turno);
+			Jugador* jugador_actual = this->getJugadores()[this->indice_jugador_turno];
+			printf(" OSEA A %s \n", jugador_actual->getNombre());
+
 			Personaje* personaje_actual = jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()];
 			personaje_actual->setArmaSeleccionada(evento->arma_seleccionada);
 			personaje_actual->setAnguloArma(evento->angulo_arma);
@@ -297,12 +300,15 @@ void Juego::pasarTurno(){
 //	//reloj_ronda = SDL_GetTicks();
 	this->resetearRelojRonda();
 	//jugador_actual++;
-	Jugador* jugador_anterior = this->jugadores[this->jugador_actual];
+	Jugador* jugador_anterior = this->jugadores[this->indice_jugador_turno];
 	jugador_anterior->seleccionarSiguientePersonaje();
+	printf(" PASA DE TURNO \n");
 	indice_jugador_turno++;
-	if(indice_jugador_turno == 1){
+
+	if(indice_jugador_turno == 2){
 		indice_jugador_turno = 0;
 	}
+	printf(" AHORA ES EL TURNO DE %d \n", indice_jugador_turno);
 //	Jugador* jugador_actual = jugadores_jugando.at(indice_jugador_turno);
 //	while(jugador_actual->getConectado() == false){
 //////		indice_jugador_turno++;
@@ -316,10 +322,10 @@ void Juego::pasarTurno(){
 	//	jugador_actual =0;
 	//}
 
-
-	if (indice_jugador_turno > jugadores_jugando.size()){
-		indice_jugador_turno = 0;
-	}
+//
+//	if (indice_jugador_turno > jugadores_jugando.size()){
+//		indice_jugador_turno = 0;
+//	}
 	for(int i = 0; i < jugadores_jugando.size(); i++){
 		Jugador* jugador_actual = jugadores_jugando.at(i);
 		//Cliente* clienteActual = servidor->getClientes()[i];
@@ -345,29 +351,30 @@ void Juego::resetearRelojRonda(){
 }
 
 void Juego::setArma(int tipo_arma, b2Vec2 posicion, int angulo, int direccion){
-	Jugador* jugador_actual;
+	Jugador* jugador_actual = this->getJugadores()[this->indice_jugador_turno];
+	printf(" DENTRO DEL SET ARMA SE LA PONE AL %d \n", indice_jugador_turno);
 	if(tipo_arma ==1 ){
-		jugador_actual = this->jugadores[this->jugador_actual];
+		//jugador_actual = this->jugadores[this->jugador_actual];
 		this->arma_actual = new Bazooka(jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()]);
 	}
 	if(tipo_arma ==2 ){
-		jugador_actual = this->jugadores[this->jugador_actual];
+		//jugador_actual = this->jugadores[this->jugador_actual];
 		this->arma_actual = new Granada(jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()]);
 	}
 	if(tipo_arma ==3 ){
-		jugador_actual = this->jugadores[this->jugador_actual];
+		//jugador_actual = this->jugadores[this->jugador_actual];
 		this->arma_actual = new Dinamita(jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()]);
 	}
 	if(tipo_arma ==4 ){
-		jugador_actual = this->jugadores[this->jugador_actual];
+		//jugador_actual = this->jugadores[this->jugador_actual];
 		this->arma_actual = new GranadaHoly(jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()]);
 	}
 	if(tipo_arma ==5 ){
-		jugador_actual = this->jugadores[this->jugador_actual];
+		//jugador_actual = this->jugadores[this->jugador_actual];
 		this->arma_actual = new Suicida(jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()]);
 	}
 	if(tipo_arma ==6 ){
-		jugador_actual = this->jugadores[this->jugador_actual];
+		//jugador_actual = this->jugadores[this->jugador_actual];
 		Personaje* personaje = jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()];
 		this->arma_actual = new Patada(personaje);
 	}
