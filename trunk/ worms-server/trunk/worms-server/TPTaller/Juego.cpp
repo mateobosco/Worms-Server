@@ -406,7 +406,7 @@ void Juego::checkColisionProyectil(structPaquete* paquete){
 			paquete->radio_explosion=this->arma_actual->getRadioExplosion();
 			paquete->posicion_proyectil=arma_actual->getProyectil()->GetPosition();
 			if (this->arma_actual->getTipo() != 6 ) this->explotarBomba(paquete->posicion_proyectil, paquete->radio_explosion);
-			Jugador* jugador_actual=this->jugadores[this->jugador_actual];
+			Jugador* jugador_actual=this->jugadores[this->indice_jugador_turno];
 			Personaje* personaje_sel = jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()];
 			personaje_sel->setArmaSeleccionada(0);
 			this->pasarTurno();
@@ -423,7 +423,7 @@ void Juego::checkColisionProyectil(structPaquete* paquete){
 			//paquete->radio_explosion=this->arma_actual->getRadioExplosion();
 			//paquete->posicion_proyectil=arma_actual->getProyectil()->GetPosition();
 			//if (this->arma_actual->getTipo() != 6 ) this->explotarBomba(paquete->posicion_proyectil, paquete->radio_explosion);
-			Jugador* jugador_actual=this->jugadores[this->jugador_actual];
+			Jugador* jugador_actual=this->jugadores[this->indice_jugador_turno];
 			Personaje* personaje_sel = jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()];
 			personaje_sel->setArmaSeleccionada(0);
 			this->pasarTurno();

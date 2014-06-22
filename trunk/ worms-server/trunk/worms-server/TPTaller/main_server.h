@@ -89,48 +89,32 @@ int main_server(int argc,char* argv[]){
 		int nro_jugador_actual = juego->getJugadorActual();
 		Jugador* jugador_actual = juego->getJugadores()[nro_jugador_actual];
 		char* nombre1 = jugador_actual->getNombre();
-
-
 		structPaquete* paqueteCiclo = crearPaqueteCiclo(juego->getMundo(), servidor->getMensajeMostrar(), nro_jugador_actual, comenzar, juego->getRelojRonda(), nombre1, winner, juego->getResetear());
-
 
 		juego->setPaqueteProyectil(paqueteCiclo);
 		juego->checkColisionProyectil(paqueteCiclo);
-
-
 		if(paqueteCiclo->radio_explosion != 0 && paqueteCiclo->radio_explosion != -1 && servidor->getTamanioColaExplosion()==0){
-
 			servidor->encolarExplosion(paqueteCiclo);
 			servidor->agregarExplosion(paqueteCiclo->posicion_proyectil ,paqueteCiclo->radio_explosion);
 		}
-
 		servidor->actualizarPaquete((char*)paqueteCiclo);
 		destruirPaqueteCiclo(paqueteCiclo);
 		structEvento* evento =NULL;
 	    evento = (structEvento*) servidor->desencolarPaquete();
-
 	    if(evento!=NULL) {
 	    	juego->aplicarPaquete(evento, comenzar);
 	    	free(evento);
 	    }
-
-
-
 	    if(juego->getRelojRonda() > 60000 && comenzar==1){
 	    	//juego->resetearRelojRonda();
 	    	juego->pasarTurno();
 	    }
-
 	    Jugador* jugador_actual2 = juego->getJugadores()[juego->getJugadorActual()];
 	    if(jugador_actual2->getPersonajes()[jugador_actual2->getPersonajeSeleccionado()]->getMuerto()){
 	    	for(int i = 0; i <= juego->getCantidadJugadores(); i++)
 	    		juego->pasarTurno();
 	    }
-
 		juego->getMundo()->comprobar_nivel_agua();
-
-
-
 		numero_winner = juego->checkGanador();
 		if(numero_winner != -1){
 			strcpy(winner, juego->getJugadores()[numero_winner]->getNombre());
