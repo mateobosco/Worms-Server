@@ -28,7 +28,7 @@ typedef struct structPersonaje{
 	b2Vec2 tamano;
 	int direccion; // 0 derecha, 1 izquierda
 	int energia;
-	int arma_seleccionada;
+	int arma_seleccionada = -1;
 	int angulo_arma;
 }structPersonaje;
 
