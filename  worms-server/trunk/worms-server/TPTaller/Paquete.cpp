@@ -160,6 +160,7 @@ structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje, int jugador_actual
 	paquete->reloj = tiempo_ronda;
 	paquete->resetear = boolReset;
 
+
 	strcpy(paquete->nombre_jugador_actual, nombre);
 	if (mensaje != NULL){
 		strcpy(paquete->mensaje_mostrar, mensaje);
