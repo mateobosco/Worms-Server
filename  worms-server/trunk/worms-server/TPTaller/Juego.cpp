@@ -734,9 +734,8 @@ int Juego::checkGanador(){
 			return 0;//EMPATE
 		if(cant_perdedores == (CANT_NECESARIA_JUGADORES - 1))
 			return 1;//Hay ganador
-	} else{
-		return -1;//No ha terminado el juego
 	}
+	return -1;//No ha terminado el juego
 //	int cantidad_jugando = 0;
 //	int ganador = -1;
 //	for(int i = 0; i < this->cantidad_jugadores; i++){

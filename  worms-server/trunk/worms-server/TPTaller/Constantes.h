@@ -75,6 +75,7 @@ const string pathDefCielo = "TPTaller/imagenes/cieloN.jpg";
 #define DANIO_SUICIDA 70
 #define DANIO_DINAMITA 20
 #define DANIO_PATADA 35
-#define CANT_NECESARIA_JUGADORES 1
+#define CANT_NECESARIA_JUGADORES 2
+#define LONGITUD_WINNERS (MAX_NAME_USER * MAX_CANT_JUGADORES + MAX_CANT_JUGADORES + 1)
 
 #endif /* CONSTANTES_H_ */
