@@ -68,9 +68,10 @@ int main_server(int argc,char* argv[]){
 	int comenzar=0;
 	bool stop = true;
 	SDL_mutex *un_mutex = SDL_CreateMutex();
-	char winner[20];
-	winner[0] = '\0';
-	int numero_winner = -1;
+	char winners[LONGITUD_WINNERS];
+	winners[0] = '\0';
+	int check_winner = -1;
+	int cant_winners = -1;
 	while(!servidor->getFinalizar()){
 
 		cargarNuevoCliente(servidor, juego, manejador_personajes);
@@ -89,7 +90,7 @@ int main_server(int argc,char* argv[]){
 		int nro_jugador_actual = juego->getJugadorActual();
 		Jugador* jugador_actual = juego->getJugadores()[nro_jugador_actual];
 		char* nombre1 = jugador_actual->getNombre();
-		structPaquete* paqueteCiclo = crearPaqueteCiclo(juego->getMundo(), servidor->getMensajeMostrar(), nro_jugador_actual, comenzar, juego->getRelojRonda(), nombre1, winner, juego->getResetear());
+		structPaquete* paqueteCiclo = crearPaqueteCiclo(juego->getMundo(), servidor->getMensajeMostrar(), nro_jugador_actual, comenzar, juego->getRelojRonda(), nombre1, winners, cant_winners, juego->getResetear());
 
 		juego->setPaqueteProyectil(paqueteCiclo);
 		juego->checkColisionProyectil(paqueteCiclo);
@@ -115,23 +116,33 @@ int main_server(int argc,char* argv[]){
 	    		juego->pasarTurno();
 	    }
 		juego->getMundo()->comprobar_nivel_agua();
-		numero_winner = juego->checkGanador();
-		switch(numero_winner){
-		case -1: break;
-		case 0: break; //hay empate
-		case 1: for(int i = 0; i < MAX_CANT_JUGADORES; i++){
-					int j;
-					for(j = 0; j < juego->getTotalPerdedores(); j++){
-						if(juego->getPerdedores()[j] == i){
+		check_winner = juego->checkGanador();
+		switch(check_winner){
+			case -1: //No hay ganador
+					break;
+			case 0: //Hay empate
+					for(int i = juego->getTotalPerdedores(); i < juego->getCantidadJugadores(); i++){
+						sprintf(winners, "%s,", juego->getJugadores()[i]->getNombre());
+						strcpy(winners, juego->getJugadores()[i]->getNombre());
+					}
+					cant_winners = (juego->getCantidadJugadores() - juego->getTotalPerdedores());
+					break;
+			case 1: //Hay ganador
+					for(int i = 0; i < MAX_CANT_JUGADORES; i++){
+						int j;
+						for(j = 0; j < juego->getTotalPerdedores(); j++){
+							if(juego->getPerdedores()[j] == i){
+								break;
+							}
+						}
+						if(j == juego->getTotalPerdedores()){
+							check_winner = i;
+							strcpy(winners, juego->getJugadores()[check_winner]->getNombre());
 							break;
 						}
 					}
-					if(j == juego->getTotalPerdedores()){
-						numero_winner = i;
-						strcpy(winner, juego->getJugadores()[numero_winner]->getNombre());
-						break;
-					}
-				}
+					cant_winners = 1;
+					break;
 		}
 //		if(numero_winner != -1){
 //			strcpy(winner, juego->getJugadores()[numero_winner]->getNombre());

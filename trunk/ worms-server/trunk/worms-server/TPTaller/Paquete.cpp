@@ -135,7 +135,7 @@ structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, i
 	return paquete;
 }
 
-structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje, int jugador_actual, int empezar_juego, int tiempo_ronda, char* nombre, char* winner, bool boolReset){
+structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje, int jugador_actual, int empezar_juego, int tiempo_ronda, char* nombre, char* winner, int cant_winners, bool boolReset){
 	structPaquete* paquete = (structPaquete*) malloc(MAX_PACK);
 	paquete->tipo = 1;
 	paquete->ganador[0]='\0';
@@ -171,6 +171,7 @@ structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje, int jugador_actual
 	paquete->radio_explosion=-1;
 	if(winner[0] != '\0')
 		strcpy(paquete->ganador, winner);
+	paquete->cant_ganadores = cant_winners;
 	return paquete;
 }
 
