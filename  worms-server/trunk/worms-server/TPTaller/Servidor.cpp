@@ -439,7 +439,7 @@ void Servidor::setMensajeMostrar(char* mensaje){
 
 
 void Servidor::encolarExplosion(structPaquete* paquete){
-	this->paquetesExplosion.push(paquete);
+	if(paquete!=NULL)this->paquetesExplosion.push(paquete);
 }
 
 size_t Servidor::getTamanioColaExplosion(){
