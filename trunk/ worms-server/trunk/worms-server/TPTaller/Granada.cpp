@@ -106,19 +106,14 @@ void Granada::setAngulo(int un_angulo, int direc){
 	b2Vec2 direccion;
 	//direccion.x = 1 * cos( angulo * PI / 180 ); //Orientacion Derecha
 	//direccion.y = 1 * sin( angulo * PI / 180 );
-	if(direc == 1){
-		direccion.x = 1 * cos( angulo * PI / 180 ); //Orientacion Derecha
-		direccion.y = 1 * sin( angulo * PI / 180 );
-		this->setDireccion(direccion);
-	}
 	if(direc == -1){
-		direccion.x = -1 * cos( angulo * PI / 180 ); //Orientacion IZQ
-		direccion.y = -1 * sin( angulo * PI / 180 );
+		int angulo_aux = (180 - angulo);
+		direccion.x = cos(angulo_aux * PI / 180 ); //Orientacion IZQ
+		direccion.y = sin(angulo_aux * PI / 180 );
 		this->setDireccion(direccion);
-	}
-	if(direc == 0){
-		direccion.x = 1 * cos( angulo * PI / 180 ); //Orientacion IZQ
-		direccion.y = 1 * sin( angulo * PI / 180 );
+	} else{
+		direccion.x = cos( angulo * PI / 180 ); //Orientacion DER
+		direccion.y = sin( angulo * PI / 180 );
 		this->setDireccion(direccion);
 	}
 }

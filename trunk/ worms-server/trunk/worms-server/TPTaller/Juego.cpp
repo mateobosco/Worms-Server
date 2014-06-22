@@ -28,6 +28,7 @@ Juego::Juego(){
 	arma_actual = 0;
 	proj_in_air = false;
 	resetear = false;
+	total_perdedores = 0;
 }
 
 Juego::~Juego(){
@@ -305,7 +306,7 @@ void Juego::pasarTurno(){
 	printf(" PASA DE TURNO \n");
 	indice_jugador_turno++;
 
-	if(indice_jugador_turno == 1){
+	if(indice_jugador_turno == CANT_NECESARIA_JUGADORES){
 		indice_jugador_turno = 0;
 	}
 	printf(" AHORA ES EL TURNO DE %d \n", indice_jugador_turno);
@@ -676,12 +677,12 @@ class QueryViento : public b2QueryCallback {
     	bool ReportFixture(b2Fixture* fixture) {
     		b2Shape* shape = fixture->GetShape();
     		tocando = false;
-    		if((shape->GetType() == 0) || (shape->GetType() == 3)){ // b2ChainShape == 3
-			vector<b2Shape*>::iterator it = std::find(foundShapes.begin(), foundShapes.end(), shape);
-			if(it==foundShapes.end()){
-				foundShapes.push_back( shape );
-				tocando = true;
-			}
+    		if(shape->GetType() == 3){ // b2ChainShape == 3
+				vector<b2Shape*>::iterator it = std::find(foundShapes.begin(), foundShapes.end(), shape);
+				if(it==foundShapes.end()){
+					foundShapes.push_back( shape );
+					tocando = true;
+				}
     	   	}
     		return true;//keep going to find all fixtures in the query area
     	}
@@ -706,10 +707,35 @@ void Juego::aplicarViento(Arma *arma){
 //Retorna el número del jugador ganador.
 //Si no hay ganador, retorna -1.
 int Juego::checkGanador(){
-	if((this->jugadores_jugando.size() == 1) && (this->cantidad_jugadores >= CANTIDAD_JUGADORES_NECESARIOS_LVL1)){
-		return ((int) jugadores_jugando.front()->getNumero());
+	int i;
+	for(i = 0; i < CANT_NECESARIA_JUGADORES; i++){
+		if(!this->perdedores[i])
+			break;
+	}
+	this->total_perdedores = i;
+	if(this->cantidad_jugadores >= CANT_NECESARIA_JUGADORES){
+		int cant_perdedores = 0;
+		for(int i = 0; i < CANT_NECESARIA_JUGADORES; i++){
+			if(this->jugadores[i]->getPerdio()){
+				cant_perdedores++;
+				bool encontrado = false;
+				int contador = 0;
+				while((!encontrado) && (contador < this->total_perdedores)){
+					if(this->perdedores[contador] == this->jugadores[i]->getNumero())
+						encontrado = true;
+					contador++;
+				}
+				if(!encontrado){
+					this->perdedores[contador] = this->jugadores[i]->getNumero();
+				}
+			}
+		}
+		if(cant_perdedores == CANT_NECESARIA_JUGADORES)
+			return 0;//EMPATE
+		if(cant_perdedores == (CANT_NECESARIA_JUGADORES - 1))
+			return 1;//Hay ganador
 	} else{
-		return -1;
+		return -1;//No ha terminado el juego
 	}
 //	int cantidad_jugando = 0;
 //	int ganador = -1;
@@ -730,4 +756,12 @@ void Juego::setResetear(bool valor){
 
 bool Juego::getResetear(){
 	return resetear;
+}
+
+int* Juego::getPerdedores(){
+	return this->perdedores;
+}
+
+int Juego::getTotalPerdedores(){
+	return total_perdedores;
 }

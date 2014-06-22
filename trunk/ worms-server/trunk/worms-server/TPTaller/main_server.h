@@ -62,7 +62,7 @@ int main_server(int argc,char* argv[]){
 	printf("-----------------------------------------EL SERVIDOR INICIA EL JUEGO-------------------------------------\n");
 	juego->getMundo()->setVectorPersonajes(manejador_personajes->getPersonajes(), manejador_personajes->getCantidadPersonajes(), manejador_personajes->getCantidadJugadores());
 	juego->getMundo()->setFiguras(juego->getFiguras(), juego->getCantidadFiguras());
-	int jugadores_necesarios = 1; //4
+	int jugadores_necesarios = CANT_NECESARIA_JUGADORES; //4
 	SDL_Delay(2000);
 
 	int comenzar=0;
@@ -116,11 +116,29 @@ int main_server(int argc,char* argv[]){
 	    }
 		juego->getMundo()->comprobar_nivel_agua();
 		numero_winner = juego->checkGanador();
-		if(numero_winner != -1){
-			strcpy(winner, juego->getJugadores()[numero_winner]->getNombre());
-			//todo falta reiniciar el nivel
-			//juego->resetNivel();
+		switch(numero_winner){
+		case -1: break;
+		case 0: break; //hay empate
+		case 1: for(int i = 0; i < MAX_CANT_JUGADORES; i++){
+					int j;
+					for(j = 0; j < juego->getTotalPerdedores(); j++){
+						if(juego->getPerdedores()[j] == i){
+							break;
+						}
+					}
+					if(j == juego->getTotalPerdedores()){
+						numero_winner = i;
+						strcpy(winner, juego->getJugadores()[numero_winner]->getNombre());
+						break;
+					}
+				}
 		}
+//		if(numero_winner != -1){
+//			strcpy(winner, juego->getJugadores()[numero_winner]->getNombre());
+//			printf("Ganó el jugador: %s\n", winner);
+//			//todo falta reiniciar el nivel
+//			//juego->resetNivel();
+//		}
 
 		SDL_Delay(10);
 		juego->getMundo()->step(0.025, 4, 2);
