@@ -49,6 +49,8 @@ class Juego{
 		bool proj_in_air;
 		Arma *arma_actual;
 		bool resetear;
+		int perdedores[MAX_CANT_JUGADORES];
+		int total_perdedores;
 
 	public:
 		Juego();
@@ -91,7 +93,8 @@ class Juego{
 		int checkGanador();
 		void setResetear(bool valor);
 		bool getResetear();
-
+		int* getPerdedores();
+		int getTotalPerdedores();
 };
 
 #endif /* JUEGO_H_ */
