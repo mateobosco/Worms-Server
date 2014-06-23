@@ -302,6 +302,7 @@ void Juego::pasarTurno(){
 	this->resetearRelojRonda();
 	//jugador_actual++;
 	Jugador* jugador_anterior = this->jugadores[this->indice_jugador_turno];
+	jugador_anterior->getPersonajes()[jugador_anterior->getPersonajeSeleccionado()]->setArmaSeleccionada(0);
 	jugador_anterior->seleccionarSiguientePersonaje();
 	printf(" PASA DE TURNO \n");
 	indice_jugador_turno++;
@@ -416,7 +417,7 @@ void Juego::checkColisionProyectil(structPaquete* paquete){
 				this->arma_actual = NULL;
 			}
 		}
-		else if(this->getArmaActual()->getProyectil()->GetPosition().x > this->getEscalador()->getEscalaX() || this->getArmaActual()->getProyectil()->GetPosition().x < 0 || this->getArmaActual()->getProyectil()->GetPosition().y > this->getMundo()->getAgua()->GetNivel()){
+		else if(this->getArmaActual()->getProyectil()->GetPosition().x > this->getEscalador()->getEscalaX() || this->getArmaActual()->getProyectil()->GetPosition().x < 0 || this->getArmaActual()->getProyectil()->GetPosition().y > this->getEscalador()->getEscalaY()  ){
 			proj_in_air = false;
 			if (this->arma_actual->getTipo() != 6 ) this->mundo->destruir_cuerpo(arma_actual->getProyectil());
 			//this->arma_actual->aplicarExplosion(this->manejador);
