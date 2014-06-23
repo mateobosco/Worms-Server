@@ -6,6 +6,9 @@
 
 #include "figura.h"
 
+
+class Arma;
+
 using namespace std;
 
 class Mundo {
@@ -18,7 +21,7 @@ class Mundo {
 		b2World* devolver_world();
 		void step(float32 timeStep, int32 velocityIterations, int32 positionIterations);
 		void Crear_Chains(b2Vec2* tierra, float32 pixelesX);
-		void comprobar_nivel_agua();
+		void comprobar_nivel_agua(Arma* arma);
 		size_t GetCantidadFiguras();
 		void despertar_figuras(Figura** figuras);
 		void dormir_figuras(Figura** figuras);

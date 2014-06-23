@@ -1,5 +1,6 @@
 #include "mundo.h"
 #include "Personaje.h"
+#include "Arma.h"
 
 Mundo::Mundo(b2Vec2 gravedad, Agua* el_agua, b2Vec2 las_escalas){
 	this->escalas = las_escalas;
@@ -274,7 +275,7 @@ void Mundo::CrearTierraPoligono1(b2Vec2* tierra, float32 pixelesX,Escalador* esc
 
 }
 
-void Mundo::comprobar_nivel_agua(){
+void Mundo::comprobar_nivel_agua(Arma* arma_actual){
 	for (int i = 0; i < (int) cantidad_figuras; i++){
 		Figura* figura_actual = this->figuras[i];
 		b2Body* body_actual = figura_actual->getBody();
@@ -303,6 +304,19 @@ void Mundo::comprobar_nivel_agua(){
 			personaje_actual->setMuerto();
 		}
 	}
+	if (arma_actual == NULL ) return;
+	if (arma_actual->getTipo()!= 6 || arma_actual->getTipo() != 5){
+		b2Body* body = arma_actual->getProyectil();
+		if (body == NULL) return;
+		b2Vec2 pos = body->GetPosition();
+		if (pos.y >= agua->GetNivel()){
+			b2Vec2 fuerza;
+			fuerza.x = 0;
+			fuerza.y = -grav.y /10 ;
+			body->ApplyForceToCenter(fuerza, true);
+		}
+	}
+
 }
 
 void Mundo::dormir_figuras(Figura** figuras){

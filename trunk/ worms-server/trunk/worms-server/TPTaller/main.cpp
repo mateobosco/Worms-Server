@@ -51,7 +51,7 @@ int mainPrueba(int argc,char* argv[]){
 		juego->getMundo()->setFiguras(juego->getFiguras(), juego->getCantidadFiguras());
 
 		juego->getMundo()->step(0.05,100,100);
-		juego->getMundo()->comprobar_nivel_agua();
+//		juego->getMundo()->comprobar_nivel_agua();
 		//dibujador->actualizar();
 		posicion_mouse_scroll[2] = 0;
 
