@@ -124,12 +124,15 @@ int Jugador::getPersonajeSeleccionado(){
 void Jugador::reiniciarJugador(ManejadorPersonajes* manejador, Mundo* mundo){
 	for (int i = 0; i<4;i++){
 		if (this->personajes[i]) delete this->personajes[i];
+		this->personajes[i] = NULL;
 	}
 	for(int i = 0; i < MAX_CANT_PERSONAJES; i++){
 		this->personajes[i] = new Personaje(mundo, this->numero, this->nombre);
 		manejador->agregarPersonaje(this->personajes[i], this->numero);
 	}
-	this->personajes[personaje_seleccionado]->setSeleccionado(false, numero);
+	//this->personajes[personaje_seleccionado]->setSeleccionado(false, numero);
+	this->personaje_seleccionado = 0;
+	this->personajes[personaje_seleccionado]->setSeleccionado(true, numero);
 }
 
 bool Jugador::tienePersonajesVivos(uint8 cantidad_jugadores){
