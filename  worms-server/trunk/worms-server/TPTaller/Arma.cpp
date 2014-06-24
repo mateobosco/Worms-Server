@@ -107,7 +107,7 @@ bool Arma::checkImpacto(Mundo *mundo){
 }
 */
 
-class QueryCheckImpacto : public b2QueryCallback {
+class QueryCheckImpactoBazooka : public b2QueryCallback {
  public:
      std::vector<b2Body*> foundBodies;
      b2Body* llamador;
@@ -132,7 +132,7 @@ class QueryCheckImpacto : public b2QueryCallback {
 bool Arma::checkImpacto(Mundo* mundo){
 	float32 radio = this->shape_proy->m_radius;
 	b2Vec2 pos = this->proyectil->GetPosition();
-	QueryCheckImpacto query;
+	QueryCheckImpactoBazooka query;
 	query.llamador = this->personaje_duenio->getBody();
 	b2AABB aabb;
 	aabb.upperBound = pos + b2Vec2(radio,radio);

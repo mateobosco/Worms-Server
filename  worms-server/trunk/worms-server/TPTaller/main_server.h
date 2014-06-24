@@ -72,6 +72,9 @@ int main_server(int argc,char* argv[]){
 	winners[0] = '\0';
 	int check_winner = -1;
 	int cant_winners = -1;
+	bool empezo_explosion = false;
+	bool termino_explosion = false;
+	uint32 inicio, diferencia;
 	while(!servidor->getFinalizar()){
 
 		cargarNuevoCliente(servidor, juego, manejador_personajes);
@@ -111,46 +114,78 @@ int main_server(int argc,char* argv[]){
 	    	juego->aplicarPaquete(evento, comenzar);
 	    	free(evento);
 	    }
-	    if(juego->getRelojRonda() > 60000 && comenzar==1){
-	    	//juego->resetearRelojRonda();
-	    	juego->pasarTurno();
-	    }
-	    Jugador* jugador_actual2 = juego->getJugadores()[juego->getJugadorActual()];
-	    if(jugador_actual2->getPersonajes()[jugador_actual2->getPersonajeSeleccionado()]->getMuerto()){
-	    	for(int i = 0; i <= juego->getCantidadJugadores(); i++)
-	    		juego->pasarTurno();
-	    }
-	    juego->getMundo()->comprobar_nivel_agua(juego->getArmaActual(), juego->getProjInAir());
-	    //juego->getMundo()->comprobar_nivel_agua(juego->getArmaActual());
-
-		check_winner = juego->checkGanador();
-		switch(check_winner){
-			case -1: //No hay ganador
-					break;
-			case 0: //Hay empate
-					for(int i = juego->getTotalPerdedores(); i < juego->getCantidadJugadores(); i++){
-						sprintf(winners, "%s,", juego->getJugadores()[i]->getNombre());
-						strcpy(winners, juego->getJugadores()[i]->getNombre());
-					}
-					cant_winners = (juego->getCantidadJugadores() - juego->getTotalPerdedores());
-					break;
-			case 1: //Hay ganador
-					for(int i = 0; i < MAX_CANT_JUGADORES; i++){
-						int j;
-						for(j = 0; j < juego->getTotalPerdedores(); j++){
-							if(juego->getPerdedores()[j] == i){
+	    if((!empezo_explosion) && (!termino_explosion)){
+//	    	if(!servidor->getRecibir()){
+//				printf("Está en el volver de recibir.\n");
+//	    		servidor->volverARecibir();
+//	    	}
+			if(juego->getRelojRonda() > 60000 && comenzar==1){
+				//juego->resetearRelojRonda();
+				juego->pasarTurno();
+			}
+			Jugador* jugador_actual2 = juego->getJugadores()[juego->getJugadorActual()];
+			if(jugador_actual2->getPersonajes()[jugador_actual2->getPersonajeSeleccionado()]->getMuerto()){
+				for(int i = 0; i <= juego->getCantidadJugadores(); i++)
+					juego->pasarTurno();
+			}
+			 juego->getMundo()->comprobar_nivel_agua(juego->getArmaActual(), juego->getProjInAir());
+			check_winner = juego->checkGanador();
+			switch(check_winner){
+				case -1: //No hay ganador
+						break;
+				case 0: //Hay empate
+						for(int i = juego->getTotalPerdedores(); i < juego->getCantidadJugadores(); i++){
+							char auxiliar[MAX_NAME_USER + 1];
+							sprintf(auxiliar, "%s,", juego->getJugadores()[juego->getPerdedores()[i]]->getNombre());
+//							int longitud = strlen(auxiliar);
+//							auxiliar[longitud] = ',';
+//							auxiliar[longitud + 1] = '\0';
+							//strcpy(auxiliar, juego->getJugadores()[juego->getPerdedores()[i]]->getNombre());
+							strcat(winners, auxiliar);
+							printf("Entró al for: %i", i);
+							printf("Winners dentro del for: %s", winners);
+						}
+						winners[strlen(winners) - 1] = '\0';
+						cant_winners = (juego->getCantidadJugadores() - juego->getTotalPerdedores());
+//						printf("Cant_Jugadores: %i\nCant_Perdedores: %i\n", winners);
+						printf("Cant_winners: %i\nWinners: %s\n", cant_winners,winners);
+						SDL_Delay(10000);
+						break;
+				case 1: //Hay ganador
+						for(int i = 0; i < MAX_CANT_JUGADORES; i++){
+							int j;
+							for(j = 0; j < juego->getTotalPerdedores(); j++){
+								if(juego->getPerdedores()[j] == i){
+									break;
+								}
+							}
+							if(j == juego->getTotalPerdedores()){
+								check_winner = i;
+								strcpy(winners, juego->getJugadores()[check_winner]->getNombre());
 								break;
 							}
 						}
-						if(j == juego->getTotalPerdedores()){
-							check_winner = i;
-							strcpy(winners, juego->getJugadores()[check_winner]->getNombre());
-							break;
-						}
-					}
-					cant_winners = 1;
-					break;
-		}
+						cant_winners = 1;
+						break;
+			}
+	    } else{
+//	    	if(servidor->getRecibir()){
+//	    		printf("Está en el dejar de recibir.\n");
+//	    		inicio = SDL_GetTicks();
+//	    		servidor->dejarDeRecibir();
+//	    	}
+	    	if(termino_explosion){
+//				diferencia = SDL_GetTicks() - inicio;
+//				if(diferencia >= 7000){
+//					printf("Está en el if antes.\n");
+					empezo_explosion = false;
+					termino_explosion = false;
+//					SDL_Delay(1000);
+//					printf("Está en el if después.\n");
+//				}
+	    	}
+	    }
+
 
 		if ((check_winner != -1 && servidor->getCantidadClientesActivos() >= CANT_NECESARIA_JUGADORES)/*|| reiniciar*/){
 //			strcpy(winner, juego->getJugadores()[numero_winner]->getNombre());	153				printf("RESETEA EL NIVEL EL SERVER, en maim server \n");

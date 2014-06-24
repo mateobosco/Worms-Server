@@ -23,13 +23,25 @@ void Bazooka::disparar(Mundo* mundo){
 
 	b2World* world = mundo->devolver_world();
 	b2BodyDef bodyDef = b2BodyDef(); // creo el body def
-//	bodyDef.position.x = posicion_proyectil.x /*+ 4*direccion_proyectil.x*/; // le asigno una posicion
-//	bodyDef.position.y = posicion_proyectil.y /*+ 4*direccion_proyectil.y*/;
-	if(this->personaje_duenio->getOrientacion() == 1)
-		bodyDef.position.x = this->personaje_duenio->getPosition().x + 1; // le asigno una posicion
-	else
-		bodyDef.position.x = this->personaje_duenio->getPosition().x - 1;
-	bodyDef.position.y = this->personaje_duenio->getPosition().y-1;
+	b2Vec2 direccion;
+	if(this->personaje_duenio->getOrientacion() == -1){
+		int angulo_aux = (180 - angulo);
+		direccion.x = cos(angulo_aux * PI / 180 ); //Orientacion IZQ
+		direccion.y = sin(angulo_aux * PI / 180 );
+	} else{
+		direccion.x = cos( angulo * PI / 180 ); //Orientacion DER
+		direccion.y = sin( angulo * PI / 180 );
+	}
+	float32 modulo = sqrt((direccion.x * direccion.x) + (direccion.y * direccion.y) );
+	bodyDef.position.x = 2 * (direccion.x / modulo) + this->personaje_duenio->getPosition().x;
+	bodyDef.position.y = 2 * (direccion.y / modulo) + this->personaje_duenio->getPosition().y;
+
+	posicion_proyectil.x = bodyDef.position.x;
+	posicion_proyectil.y = bodyDef.position.y;
+
+	printf( "POS_CENTRAL_X_Y: x:%f y:%f\t RADIO_X: %f\t RADIO_Y: %f\n",this->personaje_duenio->getPosition().x,
+			this->personaje_duenio->getPosition().y, posicion_proyectil.x, posicion_proyectil.y );
+
 	bodyDef.userData = this; // no se si funciona bien esto,
 	bodyDef.type = b2_dynamicBody;
 	proyectil = world->CreateBody(&bodyDef);
@@ -128,13 +140,14 @@ class QueryCheckImpacto : public b2QueryCallback {
    	  b2Shape* shape= fixture->GetShape();
     	 b2Body* body = fixture->GetBody();
 
-   	  if (shape->GetType() == 3){ // b2ChainShape == 3
-//	 if (body != llamador){
-		  vector<b2Body*>::iterator it = std::find(foundBodies.begin(), foundBodies.end(), body);
-		  if(it==foundBodies.end()){
-			  foundBodies.push_back( body );
-		}
-//		  }
+   	  if ((shape->GetType() == 3) || (shape->GetType() == 0)){ // b2ChainShape == 3
+   		  if (body != llamador){
+   			  vector<b2Body*>::iterator it = std::find(foundBodies.begin(), foundBodies.end(), body);
+   			  if(it==foundBodies.end()){
+   				  foundBodies.push_back( body );
+//		}
+   			  }
+   		  }
    	  }
       return true;//keep going to find all fixtures in the query area
      }
@@ -143,10 +156,12 @@ class QueryCheckImpacto : public b2QueryCallback {
 
 bool Bazooka::checkImpacto(Mundo* mundo){
 	float32 radio = this->shape_proy->m_radius;
+	float32 radioPersonaje = this->personaje_duenio->getBody()->GetFixtureList()->GetShape()->m_radius;
 	b2Vec2 pos = this->proyectil->GetPosition();
 	QueryCheckImpacto query;
-	query.llamador = this->personaje_duenio->getBody();
+	query.llamador = this->proyectil;
 	b2AABB aabb;
+//	printf("Radio:%f\n", radioPersonaje);
 	aabb.upperBound = pos + b2Vec2(radio,radio);
 	aabb.lowerBound = pos - b2Vec2(radio,radio);
 

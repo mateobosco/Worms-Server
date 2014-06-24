@@ -720,45 +720,35 @@ void Juego::aplicarViento(Arma *arma){
 //Si no hay ganador, retorna -1.
 int Juego::checkGanador(){
 	int i;
-	for(i = 0; i < CANT_NECESARIA_JUGADORES; i++){
+	for(i = 0; i < this->cantidad_jugadores; i++){
 		if(!this->perdedores[i])
 			break;
 	}
 	this->total_perdedores = i;
+//	printf("Total perdedores: %i\n", total_perdedores);
+	int cant_perdedores = 0;
 	if(this->cantidad_jugadores >= CANT_NECESARIA_JUGADORES){
-		int cant_perdedores = 0;
-		for(int i = 0; i < CANT_NECESARIA_JUGADORES; i++){
-			if(this->jugadores[i]->getPerdio()){
+		for(int j = 0; j < this->cantidad_jugadores; j++){
+			if(this->jugadores[j]->getPerdio()){
 				cant_perdedores++;
 				bool encontrado = false;
 				int contador = 0;
 				while((!encontrado) && (contador < this->total_perdedores)){
-					if(this->perdedores[contador] == this->jugadores[i]->getNumero())
+					if(this->perdedores[contador] == this->jugadores[j]->getNumero())
 						encontrado = true;
 					contador++;
 				}
 				if(!encontrado){
-					this->perdedores[contador] = this->jugadores[i]->getNumero();
+					this->perdedores[contador] = this->jugadores[j]->getNumero();
 				}
 			}
 		}
-		if(cant_perdedores == CANT_NECESARIA_JUGADORES)
-			return 0;//EMPATE
-		if(cant_perdedores == (CANT_NECESARIA_JUGADORES - 1))
+		if(cant_perdedores == this->cantidad_jugadores)
+			return 0;//Empate
+		if(cant_perdedores == (this->cantidad_jugadores - 1))
 			return 1;//Hay ganador
 	}
 	return -1;//No ha terminado el juego
-//	int cantidad_jugando = 0;
-//	int ganador = -1;
-//	for(int i = 0; i < this->cantidad_jugadores; i++){
-//		if(this->jugadores[i]->tienePersonajesVivos(this->cantidad_jugadores)){
-//			cantidad_jugando++;
-//			ganador = i;
-//		}
-//	}
-//	if((cantidad_jugando > 1) || (this->cantidad_jugadores < CANTIDAD_JUGADORES_NECESARIOS_LVL1))
-//		return -1;
-	//return ganador;
 }
 
 void Juego::setResetear(bool valor){
