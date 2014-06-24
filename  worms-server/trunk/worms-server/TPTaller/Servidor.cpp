@@ -203,9 +203,13 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 
 		structPaquete* paqueteCiclo = (structPaquete*) envio;
 
+
 		if( this->paquetesExplosion.size()>=1 ){
+			printf(" ////////////////////////////////////////////////////////////////////////////////////////// \n");
 			structPaquete* paquete_explosion = this->paquetesExplosion.front();
+			if (paquete_explosion->resetear) printf("ENVIO UN REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEESET \n");
 			memcpy(envio, paquete_explosion, MAX_PACK ); // todo creo que va sizeof(structPaquete) NO MAX_PACK
+			delete paquete_explosion;
 			this->paquetesExplosion.pop();
 		}
 		paqueteCiclo->id=cliente->getID();
@@ -423,6 +427,7 @@ int Servidor::getCantidadClientesActivos(){
 	}
 	this->clientesActivos = activos;
 	return activos;
+//	return 2;
 }
 
 void Servidor::setFinalizar(bool condicion){
@@ -439,7 +444,11 @@ void Servidor::setMensajeMostrar(char* mensaje){
 
 
 void Servidor::encolarExplosion(structPaquete* paquete){
-	if(paquete!=NULL)this->paquetesExplosion.push(paquete);
+	if(paquete!=NULL){
+		structPaquete* nuevo = new structPaquete;
+		memcpy(nuevo, paquete, sizeof(structPaquete));
+		this->paquetesExplosion.push(nuevo);
+	}
 }
 
 size_t Servidor::getTamanioColaExplosion(){
