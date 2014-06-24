@@ -3,7 +3,7 @@
 Bazooka::Bazooka(Personaje* personaje){
 	this->fuerza = 0;
 	this->tipo = 1;
-	this->radio_explosion = 3;
+	this->radio_explosion = 5;
 	this->danio = DANIO_BAZOOKA;
 	this->personaje_duenio = personaje;
 	this->proyectil = NULL;

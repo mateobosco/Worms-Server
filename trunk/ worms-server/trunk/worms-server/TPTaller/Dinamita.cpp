@@ -3,7 +3,7 @@
 Dinamita::Dinamita(Personaje *personaje) {
 	this->fuerza = 0;
 	this->tipo = (type_arma) 3;
-	this->radio_explosion = 3;
+	this->radio_explosion = 5;
 	this->personaje_duenio = personaje;
 	this->reloj_comienzo = 0;
 	this->danio = DANIO_DINAMITA;
