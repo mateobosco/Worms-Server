@@ -131,7 +131,11 @@ int Servidor::aceptarConexiones(){
 					}
 					this->setAceptado(true);
 					cliente->activar();
-					if (this->runEnviarInfoInicial(cliente) <= 0 ){} /*log Error todo */
+					printf("%s activado \n", cliente->getNombre());
+					if (this->runEnviarInfoInicial(cliente) <= 0 ){
+						loguear();
+						logFile << " Error \t No se pudo enviar paquete incial." << endl;
+					}
 					conexion_t par;
 					par.cliente = cliente;
 					par.servidor = this;
@@ -139,11 +143,13 @@ int Servidor::aceptarConexiones(){
 					comThreads hilosCliente;
 					hilosCliente.enviar = SDL_CreateThread(runSendInfo,"enviar",(void*)&par);
 					if(hilosCliente.enviar ==NULL){
-						//log error todo
+						loguear();
+						logFile << " Error al crear thread para enviar información al cliente. " << endl;
 					}
 					hilosCliente.recibir = SDL_CreateThread(runRecvInfo,"recibir",(void*)&par);
 					if(hilosCliente.recibir == NULL){
-						//log error todo
+						loguear();
+						logFile << " Error al crear thread para recibir información al cliente. " << endl;
 					}
 					cliente->setHilos(hilosCliente);
 
@@ -155,7 +161,10 @@ int Servidor::aceptarConexiones(){
 				}else {
 					this->setAceptado(false);
 					printf("Cliente Rechazado\n");
-					if (this->runEnviarInfoInicial(cliente) <= 0){} /*log Error todo */
+					if (this->runEnviarInfoInicial(cliente) <= 0){
+						loguear();
+						logFile << " Cliente: "<< cliente->getNombre()  << "rechazado." << endl;
+					}
 					delete cliente;
 					return EXIT_FAILURE;
 				}
@@ -205,12 +214,14 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 
 
 		if( this->paquetesExplosion.size()>=1 ){
-			printf(" ////////////////////////////////////////////////////////////////////////////////////////// \n");
+			//printf(" ///////paquetesExplosion.size()>=1/////////////// \n");
 			structPaquete* paquete_explosion = this->paquetesExplosion.front();
-			if (paquete_explosion->resetear) printf("ENVIO UN REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEESET \n");
-			memcpy(envio, paquete_explosion, MAX_PACK ); // todo creo que va sizeof(structPaquete) NO MAX_PACK
-			delete paquete_explosion;
-			this->paquetesExplosion.pop();
+			if(paquete_explosion!=NULL){
+				if (paquete_explosion->resetear) printf("ENVIO UN RESET \n");
+				memcpy(envio, paquete_explosion, MAX_PACK ); // todo creo que va sizeof(structPaquete) NO MAX_PACK
+				this->paquetesExplosion.pop();
+				//delete paquete_explosion; //todo
+			}
 		}
 		paqueteCiclo->id=cliente->getID();
 
