@@ -5,7 +5,7 @@ Suicida::Suicida(Personaje *un_personaje) {
 	this->fuerza = 0;
 	this->tipo = 5;
 	this->personaje_duenio = un_personaje;
-	this->radio_explosion = 4;
+	this->radio_explosion = 7;
 }
 
 Suicida::~Suicida() {
