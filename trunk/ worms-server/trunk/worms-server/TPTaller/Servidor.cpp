@@ -23,6 +23,7 @@ Servidor::Servidor(int maxCon){
 	this->escuchar = NULL;
 	this->aceptar = NULL;
 	this->hay_cliente_nuevo = false;
+	this->envios = 0;
 }
 
 Servidor::~Servidor() {
@@ -219,7 +220,8 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 			if(paquete_explosion!=NULL){
 				if (paquete_explosion->resetear) printf("ENVIO UN RESET \n");
 				memcpy(envio, paquete_explosion, MAX_PACK ); // todo creo que va sizeof(structPaquete) NO MAX_PACK
-				this->paquetesExplosion.pop();
+				this->envios ++;
+				if (envios >= this->clientesActivos) this->paquetesExplosion.pop();
 				//delete paquete_explosion; //todo
 			}
 		}
@@ -460,6 +462,7 @@ void Servidor::encolarExplosion(structPaquete* paquete){
 		memcpy(nuevo, paquete, sizeof(structPaquete));
 		this->paquetesExplosion.push(nuevo);
 	}
+	this->envios = 0;
 }
 
 size_t Servidor::getTamanioColaExplosion(){
@@ -481,4 +484,14 @@ bool Servidor::getHayClienteNuevo(){
 
 void Servidor::clienteNuevoCargado(){
 	this->hay_cliente_nuevo = false;
+}
+
+void Servidor::reiniciarExplosionesPaquete(){
+	structInicial* paquete = (structInicial*) this->paqueteInicial;
+	paquete->cantidadExplosiones = 0;
+	for (int k; k<50; k++){
+		structExplosion exp = paquete->explosiones[k];
+		exp.radio=0;
+		exp.posicion = b2Vec2(-1,-1);
+	}
 }

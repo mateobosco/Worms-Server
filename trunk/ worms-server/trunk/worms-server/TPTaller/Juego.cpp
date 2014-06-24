@@ -355,6 +355,7 @@ void Juego::resetearRelojRonda(){
 void Juego::setArma(int tipo_arma, b2Vec2 posicion, int angulo, int direccion){
 	Jugador* jugador_actual = this->getJugadores()[this->indice_jugador_turno];
 	printf(" DENTRO DEL SET ARMA SE LA PONE AL %d \n", indice_jugador_turno);
+	printf(" Le pongo el arma al personaje %d del jugador %d \n", jugador_actual->getPersonajeSeleccionado(), this->indice_jugador_turno);
 	if(tipo_arma ==1 ){
 		//jugador_actual = this->jugadores[this->jugador_actual];
 		this->arma_actual = new Bazooka(jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()]);
@@ -632,6 +633,7 @@ void Juego::resetNivel(){
 
 	this->reloj_ronda=60;
 	this->proj_in_air = false;
+	this->manejador->resetManejador();
 	for (int i =0; i< 4; i++){
 		if( this->jugadores[i] != NULL ){
 			this->jugadores[i]->reiniciarJugador(this->manejador, this->mundo);
