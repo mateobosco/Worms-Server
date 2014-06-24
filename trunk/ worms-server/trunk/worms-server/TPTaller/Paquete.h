@@ -47,7 +47,7 @@ typedef struct structPaquete{
 	int reloj;
 	char nombre_jugador_actual[MAX_MENSAJE];
 
-	int tipo_proyectil = 0;
+	int tipo_proyectil = 0; // 1-Bazooka/2-Granada/3-Dinamita/4-Holy/5-Kamikaze/6-Patada
 	bool show_proyectil = false;
 	b2Vec2 posicion_proyectil;
 	b2Vec2 direccion_proyectil;

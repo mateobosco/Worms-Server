@@ -95,10 +95,11 @@ int main_server(int argc,char* argv[]){
 		juego->checkColisionProyectil(paqueteCiclo);
 
 		if (paqueteCiclo->resetear) {
-			printf(" LO ENCOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa \n");
+			printf(" paqueteCiclo->resetear => LO ENCOLAAa \n");
 			servidor->encolarExplosion(paqueteCiclo);
 		}
 		juego->setResetear(false);
+
 		if(paqueteCiclo->radio_explosion != 0 && paqueteCiclo->radio_explosion != -1 && servidor->getTamanioColaExplosion()==0){
 			servidor->encolarExplosion(paqueteCiclo);
 			servidor->agregarExplosion(paqueteCiclo->posicion_proyectil ,paqueteCiclo->radio_explosion);
@@ -120,7 +121,9 @@ int main_server(int argc,char* argv[]){
 	    	for(int i = 0; i <= juego->getCantidadJugadores(); i++)
 	    		juego->pasarTurno();
 	    }
-		juego->getMundo()->comprobar_nivel_agua(juego->getArmaActual(), juego->getProjInAir());
+	    juego->getMundo()->comprobar_nivel_agua(juego->getArmaActual(), juego->getProjInAir());
+	    //juego->getMundo()->comprobar_nivel_agua(juego->getArmaActual());
+
 		check_winner = juego->checkGanador();
 		switch(check_winner){
 			case -1: //No hay ganador
@@ -149,12 +152,13 @@ int main_server(int argc,char* argv[]){
 					cant_winners = 1;
 					break;
 		}
+
 		if ((check_winner != -1 && servidor->getCantidadClientesActivos() >= CANT_NECESARIA_JUGADORES)/*|| reiniciar*/){
-			printf("RESETEA EL NIVEL EL SERVER, en maim server \n");
-			juego->resetNivel();
-			check_winner = -1;
-			cant_winners = -1;
-			winners[0] = '\0';
+//			strcpy(winner, juego->getJugadores()[numero_winner]->getNombre());	153				printf("RESETEA EL NIVEL EL SERVER, en maim server \n");
+//			printf("Ganó el jugador: %s\n", winner);	154				juego->resetNivel();
+//			//todo falta reiniciar el nivel	155				check_winner = -1;
+//			//juego->resetNivel();	156				cant_winners = -1;
+//		}	157				winners[0] = '\0';
 			juego->setResetear(true);
 			juego->getMundo()->setVectorPersonajes(manejador_personajes->getPersonajes(), manejador_personajes->getCantidadPersonajes(), manejador_personajes->getCantidadJugadores());
 			juego->getMundo()->setFiguras(juego->getFiguras(), juego->getCantidadFiguras());

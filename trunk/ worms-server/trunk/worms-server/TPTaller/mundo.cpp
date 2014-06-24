@@ -304,9 +304,10 @@ void Mundo::comprobar_nivel_agua(Arma* arma_actual, bool proj_in_air){
 			personaje_actual->setMuerto();
 		}
 	}
+
 	if (arma_actual == NULL ) return;
 	if(!proj_in_air) return;
- 	if (arma_actual->getTipo()!= 6 || arma_actual->getTipo() != 5){
+	if (arma_actual->getTipo()!= 6 || arma_actual->getTipo() != 5){
 		b2Body* body = arma_actual->getProyectil();
 		if (body == NULL) return;
 		b2Vec2 pos = body->GetPosition();

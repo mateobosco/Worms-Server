@@ -86,6 +86,7 @@ class Juego{
 		void setPaqueteProyectil(structPaquete *pack);
 		void explotarBomba(b2Vec2 posicion, float32 radio);
 		void cargarSiguienteNivel();
+
 		bool getProjInAir();
 
 

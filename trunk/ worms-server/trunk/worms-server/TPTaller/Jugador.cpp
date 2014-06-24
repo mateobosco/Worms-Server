@@ -124,7 +124,8 @@ int Jugador::getPersonajeSeleccionado(){
 void Jugador::reiniciarJugador(ManejadorPersonajes* manejador, Mundo* mundo){
 	for (int i = 0; i<4;i++){
 		if (this->personajes[i]) delete this->personajes[i];
-		this->personajes[i] = NULL;
+		this->personajes[i] = NULL; //todo
+
 	}
 	for(int i = 0; i < MAX_CANT_PERSONAJES; i++){
 		this->personajes[i] = new Personaje(mundo, this->numero, this->nombre);

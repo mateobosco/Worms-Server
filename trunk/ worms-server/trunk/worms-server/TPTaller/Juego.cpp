@@ -636,13 +636,16 @@ void Juego::resetNivel(){
 		if( this->jugadores[i] != NULL ){
 			this->jugadores[i]->reiniciarJugador(this->manejador, this->mundo);
 		}
-	this->perdedores[i] = NULL;
+		this->perdedores[i] = NULL;
+
 	}
+
 	this->total_perdedores = 0;
 	this->indice_jugador_turno = 0;
 	this->pasarTurno();
 	this->arma_actual = NULL;
 	this->proj_in_air= false;
+
 }
 
 Arma* Juego::getArmaActual(){
@@ -772,8 +775,8 @@ int Juego::getTotalPerdedores(){
 	return total_perdedores;
 }
 
-
 bool Juego::getProjInAir(){
 	return this->proj_in_air;
 }
+
 
