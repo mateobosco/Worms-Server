@@ -67,6 +67,7 @@ public:
 	void agregarExplosion(b2Vec2 posicion, float32 radio);
 	bool getHayClienteNuevo();
 	void clienteNuevoCargado();
+	void reiniciarExplosionesPaquete();
 
 private:
 	char paqueteEnviar[MAX_PACK];
@@ -89,6 +90,7 @@ private:
 	SDL_Thread *aceptar;
 	char mensaje_mostrar[MAX_MENSAJE];
 	bool hay_cliente_nuevo;
+	int envios;
 };
 
 #endif /* SERVIDOR_H_ */

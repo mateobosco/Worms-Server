@@ -16,6 +16,7 @@ Cliente::Cliente(int fd){
 	this->servidor_conectado = true;
 	this->conectado = false;
 	this->activo = false;
+//	this->activo = true;
 	this->hilos.enviar = NULL;
 	this->hilos.recibir = NULL;
 	this->jugador = NULL;
@@ -35,6 +36,7 @@ Cliente::Cliente(const char *name, const char *ip_sv, const char *puerto){
 	this->paqueteInicial = new structInicial();
 	this->conectado = false;
 	this->activo = false;
+//	this->activo = true;
 	this->hilos.enviar = NULL;
 	this->hilos.recibir = NULL;
 	this->enviarpaquete = true;
