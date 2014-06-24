@@ -120,7 +120,7 @@ int main_server(int argc,char* argv[]){
 	    	for(int i = 0; i <= juego->getCantidadJugadores(); i++)
 	    		juego->pasarTurno();
 	    }
-		juego->getMundo()->comprobar_nivel_agua(juego->getArmaActual());
+		juego->getMundo()->comprobar_nivel_agua(juego->getArmaActual(), juego->getProjInAir());
 		check_winner = juego->checkGanador();
 		switch(check_winner){
 			case -1: //No hay ganador

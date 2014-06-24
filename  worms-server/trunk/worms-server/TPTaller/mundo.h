@@ -21,7 +21,7 @@ class Mundo {
 		b2World* devolver_world();
 		void step(float32 timeStep, int32 velocityIterations, int32 positionIterations);
 		void Crear_Chains(b2Vec2* tierra, float32 pixelesX);
-		void comprobar_nivel_agua(Arma* arma);
+		void comprobar_nivel_agua(Arma* arma, bool proj_in_air);
 		size_t GetCantidadFiguras();
 		void despertar_figuras(Figura** figuras);
 		void dormir_figuras(Figura** figuras);

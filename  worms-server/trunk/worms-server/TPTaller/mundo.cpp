@@ -275,7 +275,7 @@ void Mundo::CrearTierraPoligono1(b2Vec2* tierra, float32 pixelesX,Escalador* esc
 
 }
 
-void Mundo::comprobar_nivel_agua(Arma* arma_actual){
+void Mundo::comprobar_nivel_agua(Arma* arma_actual, bool proj_in_air){
 	for (int i = 0; i < (int) cantidad_figuras; i++){
 		Figura* figura_actual = this->figuras[i];
 		b2Body* body_actual = figura_actual->getBody();
@@ -305,7 +305,8 @@ void Mundo::comprobar_nivel_agua(Arma* arma_actual){
 		}
 	}
 	if (arma_actual == NULL ) return;
-	if (arma_actual->getTipo()!= 6 || arma_actual->getTipo() != 5){
+	if(!proj_in_air) return;
+ 	if (arma_actual->getTipo()!= 6 || arma_actual->getTipo() != 5){
 		b2Body* body = arma_actual->getProyectil();
 		if (body == NULL) return;
 		b2Vec2 pos = body->GetPosition();

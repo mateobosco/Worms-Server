@@ -771,3 +771,9 @@ int* Juego::getPerdedores(){
 int Juego::getTotalPerdedores(){
 	return total_perdedores;
 }
+
+
+bool Juego::getProjInAir(){
+	return this->proj_in_air;
+}
+
