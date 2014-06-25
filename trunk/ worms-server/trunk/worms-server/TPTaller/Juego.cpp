@@ -306,7 +306,7 @@ void Juego::pasarTurno(){
 //	printf(" PASA DE TURNO \n");
 	indice_jugador_turno++;
 
-	if(indice_jugador_turno == CANT_NECESARIA_JUGADORES){
+	if(indice_jugador_turno == this->cantidad_jugadores){//CANT_NECESARIA_JUGADORES
 		indice_jugador_turno = 0;
 	}
 //	printf(" AHORA ES EL TURNO DE %d \n", indice_jugador_turno);

@@ -312,13 +312,14 @@ int Servidor::runRecibirInfo(void* cliente){
 			structEvento* evento = (structEvento*) paquete;
 			if ((evento == NULL) || (estaVacio(evento))) continue;
 			void* novedad = malloc (MAX_PACK);
+			memset(novedad,0,MAX_PACK);
 			SDL_LockMutex(this->mutex);
 			memcpy(novedad, paquete, MAX_PACK);
 			SDL_UnlockMutex(this->mutex);
 //			if(evento->arma_seleccionada != 0){
 //				printf(" RECIBE EN EL RECIBIR DE SERVER ESTA ARMA:%d", evento->arma_seleccionada);
 //			}
-			this->paquetesRecibir.push(novedad);
+			if(novedad!=NULL) this->paquetesRecibir.push(novedad);
 			structEvento* anterior = (structEvento*) this->paquetesRecibir.front();
 			if (anterior == NULL) continue;
 			if (anterior->aleatorio != evento->aleatorio){
