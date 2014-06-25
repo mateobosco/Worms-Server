@@ -37,6 +37,7 @@ void cargarNuevoCliente(Servidor *servidor, Juego *juego, ManejadorPersonajes *m
 }
 
 int main_server(int argc,char* argv[]){
+	printf("TAMANO DE PAQUETE %d \n", (int) sizeof(structPaquete));
 	int retorno = 0;
 	Servidor *servidor = new Servidor(MAX_CANT_JUGADORES);
 	printf("Servidor corriendo\n");
