@@ -6,6 +6,6 @@ escenario:
     alto-esc:      800  
     ancho-esc:     1200
     agua:          70
-    viento:        0.8
+    viento:        0.3
     tierra:        "TPTaller/imagenes/tierranuevaa.png"
     cielo:         "TPTaller/imagenes/cieloN.png"
