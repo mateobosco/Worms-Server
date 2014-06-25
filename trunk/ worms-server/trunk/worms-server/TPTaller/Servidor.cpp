@@ -24,6 +24,7 @@ Servidor::Servidor(int maxCon){
 	this->aceptar = NULL;
 	this->hay_cliente_nuevo = false;
 	this->envios = 0;
+	this->enviosSonido = 0;
 }
 
 Servidor::~Servidor() {
@@ -232,7 +233,8 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 			structPaquete* paqueteSonido = this->paquetesConSonido.front();
 			if(paqueteSonido!=NULL){
 				memcpy(envio, paqueteSonido, MAX_PACK );
-				this->paquetesConSonido.pop();
+				this->enviosSonido ++;
+				if (enviosSonido >= this->clientesActivos) this->paquetesExplosion.pop();
 				//delete paquete_explosion; //todo
 			}
 		}
