@@ -686,16 +686,20 @@ class QueryViento : public b2QueryCallback {
 	public:
     	bool tocando;
     	std::vector<b2Shape*> foundShapes;
+    	b2Body* llamador;
 
     	bool ReportFixture(b2Fixture* fixture) {
     		b2Shape* shape = fixture->GetShape();
+    		b2Body* body = fixture->GetBody();
     		tocando = false;
-    		if(shape->GetType() == 3){ // b2ChainShape == 3
-				vector<b2Shape*>::iterator it = std::find(foundShapes.begin(), foundShapes.end(), shape);
-				if(it==foundShapes.end()){
-					foundShapes.push_back( shape );
-					tocando = true;
-				}
+    		if((shape->GetType() == 3) && (shape->GetType() == 0)){ // b2ChainShape == 3
+    			if(body != llamador){
+					vector<b2Shape*>::iterator it = std::find(foundShapes.begin(), foundShapes.end(), shape);
+					if(it==foundShapes.end()){
+						foundShapes.push_back( shape );
+						tocando = true;
+					}
+    			}
     	   	}
     		return true;//keep going to find all fixtures in the query area
     	}
@@ -706,9 +710,14 @@ void Juego::aplicarViento(Arma *arma){
 		QueryViento query;
 		b2AABB aabb;
 		b2Body *proyectil = arma->getProyectil();
-		aabb.upperBound += proyectil->GetPosition();
-		b2Vec2 arreglo = {0, -0.1};
-		aabb.lowerBound += (proyectil->GetPosition() + arreglo);
+		float32 radio = proyectil->GetFixtureList()->GetShape()->m_radius;
+		b2Vec2 pos = proyectil->GetPosition();
+		query.llamador = arma->getProyectil();
+		aabb.upperBound = pos + b2Vec2(radio,radio);
+		aabb.lowerBound = pos - b2Vec2(radio,radio);
+//		aabb.upperBound += proyectil->GetPosition();
+//		b2Vec2 arreglo = {0, -0.1};
+//		aabb.lowerBound += (proyectil->GetPosition() + arreglo);
 		b2World* world = this->getMundo()->devolver_world();
 		world->QueryAABB(&query, aabb);
 		b2Vec2 fuerza = {this->viento, 0};
