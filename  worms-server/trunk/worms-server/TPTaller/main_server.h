@@ -93,7 +93,7 @@ int main_server(int argc,char* argv[]){
 
 		int nro_jugador_actual = juego->getJugadorActual();
 		Jugador* jugador_actual = juego->getJugadores()[nro_jugador_actual];
-		juego->dormirPersonajes(jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()]);
+//		juego->dormirPersonajes(jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()]);
 		char* nombre1 = jugador_actual->getNombre();
 		structPaquete* paqueteCiclo = crearPaqueteCiclo(juego, juego->getMundo(), servidor->getMensajeMostrar(), nro_jugador_actual, comenzar, juego->getRelojRonda(), nombre1, winners, cant_winners, juego->getResetear());
 		juego->setPaqueteProyectil(paqueteCiclo);
@@ -101,7 +101,7 @@ int main_server(int argc,char* argv[]){
 		if (paqueteCiclo->resetear) {
 			servidor->encolarExplosion(paqueteCiclo);
 		}
-
+		juego->setResetear(false);
 
 		if(contieneSonido(paqueteCiclo)){
 			servidor->encolarExplosion(paqueteCiclo);
@@ -159,10 +159,6 @@ int main_server(int argc,char* argv[]){
 						for(int i = juego->getTotalPerdedores(); i < juego->getCantidadJugadores(); i++){
 							char auxiliar[MAX_NAME_USER + 1];
 							sprintf(auxiliar, "%s,", juego->getJugadores()[juego->getPerdedores()[i]]->getNombre());
-//							int longitud = strlen(auxiliar);
-//							auxiliar[longitud] = ',';
-//							auxiliar[longitud + 1] = '\0';
-							//strcpy(auxiliar, juego->getJugadores()[juego->getPerdedores()[i]]->getNombre());
 							strcat(winners, auxiliar);
 							printf("Entró al for: %i", i);
 							printf("Winners dentro del for: %s", winners);
@@ -174,22 +170,32 @@ int main_server(int argc,char* argv[]){
 						SDL_Delay(10000);
 						break;
 				case 1: //Hay ganador
-						for(int i = 0; i < MAX_CANT_JUGADORES; i++){
-							int j;
-							for(j = 0; j < juego->getTotalPerdedores(); j++){
-								if(juego->getPerdedores()[j] == i){
-									break;
-								}
-							}
-							if(j == juego->getTotalPerdedores()){
-								check_winner = i;
-								strcpy(winners, juego->getJugadores()[check_winner]->getNombre());
-
-								break;
-							}
+//						for(int i = 0; i < MAX_CANT_JUGADORES; i++){
+//							int j;
+//							for(j = 0; j < juego->getTotalPerdedores(); j++){
+//								if(juego->getPerdedores()[j] == i){
+//									break;
+//								}
+//							}
+//							if(j == juego->getTotalPerdedores()){
+//								check_winner = i;
+//								strcpy(winners, juego->getJugadores()[check_winner]->getNombre());
+//
+//								break;
+//							}
+//						}
+//						cant_winners = 1;
+//						break;
+					Jugador** jugadores = juego->getJugadores();
+					for (int k = 0 ; k< juego->getCantidadJugadores(); k++){
+						Jugador* jugActual = jugadores[k];
+						if (!(jugActual->getPerdio())){
+							strcpy(winners, jugActual->getNombre());
+							printf("GANO %s \n", winners);
+							cant_winners=1;
+							break;
 						}
-						cant_winners = 1;
-						break;
+					}
 			}
 	    } else{
 //	    	if(servidor->getRecibir()){
