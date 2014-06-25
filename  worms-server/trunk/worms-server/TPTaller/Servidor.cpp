@@ -55,6 +55,7 @@ void Servidor::actualizarPaquete(char paquete[MAX_PACK]){
 
 void* Servidor::desencolarPaquete(){
 	if(!this->paquetesRecibir.empty()){
+		printf("DESENCOLO UN PAQUETE Y EN LA COLA HAY %d \n", (int) paquetesRecibir.size());
 		void* paquete = this->paquetesRecibir.front();
 		this->paquetesRecibir.pop();
 		return paquete;
@@ -221,8 +222,8 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 		if( this->paquetesExplosion.size()>=1 ){
 			structPaquete* paquete_explosion = this->paquetesExplosion.front();
 			if(paquete_explosion!=NULL){
-//				if (paquete_explosion->resetear) printf("ENVIO UN RESET \n");
-//				if (paquete_explosion->ganador[0]!='\0') printf("ENVIO UN GANADOR %s \n", paquete_explosion->ganador);
+				if (paquete_explosion->resetear) printf("ENVIO UN RESET \n");
+				if (paquete_explosion->ganador[0]!='\0') printf("ENVIO UN GANADOR %s \n", paquete_explosion->ganador);
 				memcpy(envio, paquete_explosion, MAX_PACK ); // todo creo que va sizeof(structPaquete) NO MAX_PACK
 				this->envios ++;
 				if (envios >= this->clientesActivos) this->paquetesExplosion.pop();

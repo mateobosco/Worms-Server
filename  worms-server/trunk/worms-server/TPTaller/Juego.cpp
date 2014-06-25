@@ -241,9 +241,9 @@ void Juego::aplicarPaquete(structEvento* evento, int comenzar){
 //					}
 //				}
 //			}
-			printf(" LE PONE EL ARMA AL JUGADOR %d \n", indice_jugador_turno);
+//			printf(" LE PONE EL ARMA AL JUGADOR %d \n", indice_jugador_turno);
 			Jugador* jugador_actual = this->getJugadores()[this->indice_jugador_turno];
-			printf(" OSEA A %s \n", jugador_actual->getNombre());
+//			printf(" OSEA A %s \n", jugador_actual->getNombre());
 
 			Personaje* personaje_actual = jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()];
 			personaje_actual->setArmaSeleccionada(evento->arma_seleccionada);

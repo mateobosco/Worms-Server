@@ -31,7 +31,7 @@ void Dinamita::disparar(Mundo* mundo){
 	proyectil = world->CreateBody(&bodyDef);
 
 	b2MassData massData = b2MassData();
-	massData.mass = 0.1;
+	massData.mass = 10;
 	massData.center = b2Vec2(0, 0);
 	massData.I = RECT_INERCIA_ROT;
 	proyectil->SetMassData(&massData);
