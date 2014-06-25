@@ -1,4 +1,6 @@
 #include "Paquete.h"
+#include "Jugador.h"
+#include "Juego.h"
 
 structFigura* crearPaqueteFigura(Figura* figura){
 	structFigura* paquete = new structFigura;
@@ -141,12 +143,33 @@ structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, i
 	return paquete;
 }
 
-structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje, int jugador_actual, int empezar_juego, int tiempo_ronda, char* nombre, char* winner, int cant_winners, bool boolReset){
+structPaquete* crearPaqueteCiclo(Juego* juego, Mundo* mundo, char* mensaje, int jugador_actual, int empezar_juego, int tiempo_ronda, char* nombre, char* winner, int cant_winners, bool boolReset){
 	structPaquete* paquete = (structPaquete*) malloc(MAX_PACK);
 	paquete->tipo = 1;
 	paquete->ganador[0]='\0';
 	Personaje** vector_personajes = mundo->getPersonajes();
 	int cantidad_personajes = mundo->getCantidadPersonajes();
+//<<<<<<< .mine
+////	for (int i=0 ; i<cantidad_personajes; i++){
+////		structPersonaje* paquetito = crearPaquetePersonaje(vector_personajes[i]);
+////		memcpy(&paquete->vector_personajes[i], paquetito, sizeof(structPersonaje));
+////		destruirPaquetePersonaje(paquetito);
+////
+//	int contador=0;
+//	Jugador** vector_jugadores = juego->getJugadores();
+//	for (int i=0 ; i<juego->getCantidadJugadores(); i++){
+//
+//			Personaje** vector_personajes = vector_jugadores[i]->getPersonajes();
+//			for(int j =0; j<4; j++){
+//				structPersonaje* paquetito = crearPaquetePersonaje(vector_personajes[j]);
+//				memcpy(&paquete->vector_personajes[j+contador], paquetito, sizeof(structPersonaje));
+//				destruirPaquetePersonaje(paquetito);
+//
+//			}
+//			contador+=4;
+//
+//		}
+//=======
 	for (int i=0 ; i<cantidad_personajes; i++){
 		structPersonaje* paquetito = crearPaquetePersonaje(vector_personajes[i]);
 		//if(vector_personajes[i]->getMovio() == 1)paquete->movio = 1;
@@ -156,20 +179,16 @@ structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje, int jugador_actual
 		memcpy(&paquete->vector_personajes[i], paquetito, sizeof(structPersonaje));
 		destruirPaquetePersonaje(paquetito);
 	}
-//	Figura** vector_figuras = mundo->getFiguras();
-//	int cantidad_figuras = mundo->getCantidadFiguras();
-//	for (int i=0 ; i<cantidad_figuras; i++){
-//		structFigura* paquetito = crearPaqueteFigura(vector_figuras[i]);
-//		memcpy(&paquete->vector_figuras[i],paquetito,sizeof(structFigura));
-//		destruirPaqueteFigura(paquetito);
-//	}
-//	paquete->cantidad_figuras = cantidad_figuras;
+//>>>>>>> .r145
+
+
 	paquete->cantidad_personajes = cantidad_personajes;
 	paquete->turno_jugador = jugador_actual;
 	paquete->comenzar = empezar_juego; // 1 si el juego debe comenzar, 0  si se debe esperar a mas jugadores a que se conecten
 	paquete->reloj = tiempo_ronda;
 	paquete->resetear = boolReset;
 	if (boolReset) printf("PONGO UN RESET EN EL PAQUETE CICLO \n");
+
 
 
 	strcpy(paquete->nombre_jugador_actual, nombre);

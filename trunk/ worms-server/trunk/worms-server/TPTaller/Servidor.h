@@ -70,6 +70,7 @@ public:
 
 	void encolarSonido(structPaquete* paquete);
 	void reiniciarExplosionesPaquete();
+	void actualizarArmasPaqueteInicial(Juego* juego);
 
 
 private:

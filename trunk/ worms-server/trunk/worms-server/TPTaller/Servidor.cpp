@@ -1,4 +1,5 @@
 #include "Servidor.h"
+#include "Juego.h"
 
 typedef struct conexion_t{
 	Cliente* cliente;
@@ -219,8 +220,9 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 
 
 
-		if( this->paquetesExplosion.size()>=1 ){
+		if( this->paquetesExplosion.size()==1 ){
 			structPaquete* paquete_explosion = this->paquetesExplosion.front();
+
 			if(paquete_explosion!=NULL){
 				if (paquete_explosion->resetear) printf("ENVIO UN RESET \n");
 				if (paquete_explosion->ganador[0]!='\0') printf("ENVIO UN GANADOR %s \n", paquete_explosion->ganador);
@@ -229,7 +231,9 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 				if (envios >= this->clientesActivos) this->paquetesExplosion.pop();
 				//delete paquete_explosion; //todo
 			}
+			printf("borra de la cola \n");
 		}
+
 		else if( this->paquetesConSonido.size()>=1 ){
 			structPaquete* paqueteSonido = this->paquetesConSonido.front();
 			if(paqueteSonido!=NULL){
@@ -239,7 +243,6 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 				//delete paquete_explosion; //todo
 			}
 		}
-
 
 		paqueteCiclo->id=cliente->getID();
 
@@ -520,4 +523,16 @@ void Servidor::reiniciarExplosionesPaquete(){
 		exp.posicion = b2Vec2(-1,-1);
 	}
 }
+
+void Servidor::actualizarArmasPaqueteInicial(Juego* juego){
+	structInicial* paquete = (structInicial*) this->paqueteInicial;
+	for(int i = 0; i < this->getCantidadClientesActivos(); i++){
+		structArmasDisponibles armas;
+		armas.cantidad_dinamitas = juego->getJugadores()[i]->getCantDinamita();
+		armas.cantidad_granadas = juego->getJugadores()[i]->getCantGranadas();
+		armas.cantidad_holys = juego->getJugadores()[i]->getCantHoly();
+		paquete->armas[i]=armas;
+	}
+}
+
 

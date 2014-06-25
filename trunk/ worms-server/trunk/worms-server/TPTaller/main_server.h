@@ -93,24 +93,25 @@ int main_server(int argc,char* argv[]){
 
 		int nro_jugador_actual = juego->getJugadorActual();
 		Jugador* jugador_actual = juego->getJugadores()[nro_jugador_actual];
+		juego->dormirPersonajes(jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()]);
 		char* nombre1 = jugador_actual->getNombre();
-		structPaquete* paqueteCiclo = crearPaqueteCiclo(juego->getMundo(), servidor->getMensajeMostrar(), nro_jugador_actual, comenzar, juego->getRelojRonda(), nombre1, winners, cant_winners, juego->getResetear());
+		structPaquete* paqueteCiclo = crearPaqueteCiclo(juego, juego->getMundo(), servidor->getMensajeMostrar(), nro_jugador_actual, comenzar, juego->getRelojRonda(), nombre1, winners, cant_winners, juego->getResetear());
 		juego->setPaqueteProyectil(paqueteCiclo);
 		juego->checkColisionProyectil(paqueteCiclo);
-
 		if (paqueteCiclo->resetear) {
 			servidor->encolarExplosion(paqueteCiclo);
 		}
-		juego->setResetear(false);
+
 
 		if(contieneSonido(paqueteCiclo)){
 			servidor->encolarExplosion(paqueteCiclo);
 		}
-
 		if(paqueteCiclo->radio_explosion != 0 && paqueteCiclo->radio_explosion != -1 && servidor->getTamanioColaExplosion()==0){
+			printf(" ENCOLA LA EXPLOSION\n");
 			servidor->encolarExplosion(paqueteCiclo);
 			servidor->agregarExplosion(paqueteCiclo->posicion_proyectil ,paqueteCiclo->radio_explosion);
-			printf("Agrega explosion");
+			servidor->actualizarArmasPaqueteInicial(juego);
+
 		}
 //		if (paqueteCiclo->cant_ganadores > 0) servidor->encolarExplosion(paqueteCiclo);
 		servidor->actualizarPaquete((char*)paqueteCiclo);
@@ -118,8 +119,10 @@ int main_server(int argc,char* argv[]){
 //		winners[0] = '\0';
 		structEvento* evento =NULL;
 	    evento = (structEvento*) servidor->desencolarPaquete();
-	    printf("Antes de free(evento)\n");
+
 	    if(evento!=NULL) {
+//		    if(evento->arma_seleccionada != 0){
+//		    }
 	    	juego->aplicarPaquete(evento, comenzar);
 	    	if(evento->arma_seleccionada <= 6 && evento->nro_jugador <=4 && evento->direccion != -9 && evento->direccion == -1 && evento->direccion == 0 && evento->direccion == 1){
 	    		//printf(" PUDO SER LEIDO ESTA MIERDA y es %d \n", evento->arma_seleccionada);
@@ -132,7 +135,7 @@ int main_server(int argc,char* argv[]){
 
 	    	evento = NULL;
 	    }
-	    printf("Después de free(evento)\n");
+
 	    if((!empezo_explosion) && (!termino_explosion)){
 //	    	if(!servidor->getRecibir()){
 //				printf("Está en el volver de recibir.\n");
@@ -227,6 +230,7 @@ int main_server(int argc,char* argv[]){
 //			//todo falta reiniciar el nivel	155				check_winner = -1;
 //			//juego->resetNivel();	156				cant_winners = -1;
 //		}	157				winners[0] = '\0';
+
 //			if (winners[0] != '\0') printf("GANADOR5 %s \n", winners);
 			printf("RESETEA EL NIVEL EL SERVER, en maim server \n");
 			juego->resetNivel();

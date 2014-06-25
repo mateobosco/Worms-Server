@@ -18,6 +18,12 @@ typedef struct structExplosion{
 	float32 radio = 0;
 }structExplosion;
 
+typedef struct structArmasDisponibles{
+	int cantidad_granadas=0;
+	int cantidad_dinamitas=0;
+	int cantidad_holys=0;
+}structArmasDisponibles;
+
 
 typedef struct structPersonaje{
 	char nombre_cliente[20];
@@ -80,6 +86,7 @@ typedef struct structInicial{
 	float32 alto_escenario = 0.0;
 	float32 viento = 0.0;
 	structExplosion explosiones[50];
+	structArmasDisponibles armas[4];
 	int cantidadExplosiones = 0;
 } structInicial;
 
@@ -96,8 +103,8 @@ typedef struct structEvento{
 
 
 structFigura* crearPaqueteFigura(Figura* figura);
-structPersonaje* crearPaquetePersonaje(Personaje* personaje, int nro_arma);
-structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje, int turno_jugador, int empezar_juego, int tiempo_ronda, char* nombre, char* winner, int cant_winners, bool resetear);
+structPersonaje* crearPaquetePersonaje(Personaje* personaje);
+structPaquete* crearPaqueteCiclo(Juego*  juego, Mundo* mundo, char* mensaje, int turno_jugador, int empezar_juego, int tiempo_ronda, char* nombre, char* winner, int cant_winners, bool resetear);
 structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, int cliente);
 
 void destruirPaqueteFigura(structFigura* paquete);

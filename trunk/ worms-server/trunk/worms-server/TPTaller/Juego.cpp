@@ -401,6 +401,8 @@ void Juego::checkColisionProyectil(structPaquete* paquete){
 	if(proj_in_air){
 		this->aplicarViento(arma_actual);
 		if(arma_actual->checkImpacto(this->mundo) ){
+	    	this->actualizarCantidadArmas();
+			this->despertarPersonajes();
 			proj_in_air = false;
 			if (this->arma_actual->getTipo() != 6 ) this->mundo->destruir_cuerpo(arma_actual->getProyectil());
 			this->arma_actual->aplicarExplosion(this->manejador);
@@ -779,6 +781,85 @@ int Juego::getTotalPerdedores(){
 bool Juego::getProjInAir(){
 	return this->proj_in_air;
 }
+
+
+
+void Juego::dormirPersonajes(Personaje* personaje_actual){
+	for(int i =0; i<this->jugadores_jugando.size(); i++){
+		Personaje** vector_personajes=this->jugadores[i]->getPersonajes();
+		for(int j = 0; j<4 ; j++){
+			if(vector_personajes[j] != personaje_actual){
+				b2Body* body_actual = vector_personajes[j]->getBody();
+				//body = world->CreateBody(&bodyDef);
+				b2MassData massData = b2MassData();
+				massData.mass = 10;
+				massData.center = b2Vec2(0, 0);
+				massData.I = RECT_INERCIA_ROT;
+				body_actual->SetMassData(&massData);
+				//vector_personajes[j]->getBody()->SetAwake(false);
+				//if(vector_personajes[j]->getBody()->GetLinearVelocity().x == 0 && vector_personajes[j]->getBody()->GetLinearVelocity().y ==0){
+					//vector_personajes[j]->getBody()->SetType(b2_staticBody);
+				//}
+
+			}
+		}
+	}
+}
+
+void Juego::despertarPersonajes(){
+	printf(" DESPIERTA A TODOS \n");
+	for(int i =0; i<this->jugadores_jugando.size(); i++){
+		Personaje** vector_personajes=this->jugadores[i]->getPersonajes();
+		for(int j = 0; j<4 ; j++){
+				//vector_personajes[j]->getBody()->SetType(b2_dynamicBody);
+			b2Body* body_actual = vector_personajes[j]->getBody();
+			//body = world->CreateBody(&bodyDef);
+			b2MassData massData = b2MassData();
+			massData.mass = 0.1;
+			massData.center = b2Vec2(0, 0);
+			massData.I = RECT_INERCIA_ROT;
+			body_actual->SetMassData(&massData);
+			}
+		}
+}
+
+
+void Juego::actualizarCantidadArmas(){
+//	Jugador** jugadores = this->jugadores;
+//	for(int i = 0; i <this->jugadores_jugando.size(); i++){
+//		if(evento->nro_jugador == jugadores[i]->numero){
+////			Personaje* personaje_seleccionado = jugadores[i]->getPersonajes()[jugadores[i]->getPersonajeSeleccionado()];
+//			if(evento->arma_seleccionada ==2 ){
+//				printf(" LE SACO UNA GRANADA")
+//				jugadores[i]->disminuirantGranadas();
+//			}
+//			if(evento->arma_seleccionada == 3 ){
+//				jugadores[i]->disminuirCantDinamita();
+//			}
+//			if(evento->arma_seleccionada == 4 ){
+//				jugadores[i]->disminuirCantHoly();
+//			}
+//		}
+//	}
+	if(proj_in_air){
+		Jugador* jugador_actual = this->getJugadores()[this->getJugadorActual()];
+		Personaje* personaje_actual = jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()];
+		if(personaje_actual->getArmaSeleccionada() ==2 ){
+			printf(" LE SACO UNA GRANADA \n ");
+			jugador_actual->disminuirantGranadas();
+		}
+		if(personaje_actual->getArmaSeleccionada() == 3 ){
+			printf(" LE SACO UNA DINAMITA EL PERSONAJE %d \n ", jugador_actual->getNumero());
+			jugador_actual->disminuirCantDinamita();
+		}
+		if(personaje_actual->getArmaSeleccionada() == 4 ){
+			jugador_actual->disminuirCantHoly();
+		}
+	}
+
+}
+
+
 
 
 void Juego::setearDanoPaquete(structPaquete* paquete){
