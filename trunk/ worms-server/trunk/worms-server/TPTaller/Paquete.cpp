@@ -76,7 +76,7 @@ structPersonaje* crearPaquetePersonaje(Personaje* personaje){
 	}else{
 		paquete->perdioVida = 1;
 	}
-	printf("pone en el paquete vida %d, movio %d,salto %d \n", paquete->perdioVida,paquete->movio,paquete->salto);
+//	printf("pone en el paquete vida %d, movio %d,salto %d \n", paquete->perdioVida,paquete->movio,paquete->salto);
 	return paquete;
 }
 
