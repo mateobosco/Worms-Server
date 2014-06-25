@@ -62,14 +62,14 @@ void Mundo::Crear_Chains(b2Vec2* tierra, float32 pixelesX){
 	int cantidad = pixelesX;
 	b2Vec2* vs = new b2Vec2[cantidad+3];
 	size_t i;
-	vs[0].Set(-10, 200);
+	vs[0].Set(tierra[0].x, 200);
 	float32 aux = 0;
-	for(i = 0; i < cantidad; i++){
+	for(i = 0; i < (int) cantidad; i++){
 		vs[i+1].Set(tierra[i].x ,tierra[i].y);
 		aux = tierra[i].x;
 	}
-	vs[cantidad+1].Set(aux + 100, 200);
-	vs[cantidad+2].Set(-10,200);
+	vs[cantidad+1].Set(aux, 200);
+	vs[cantidad+2].Set(tierra[0].x,200);
 	b2Body* body;
 	b2BodyDef bodyDef = b2BodyDef();
 	body = my_world->CreateBody(&bodyDef);

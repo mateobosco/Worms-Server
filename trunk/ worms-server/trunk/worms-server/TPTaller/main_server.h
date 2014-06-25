@@ -104,8 +104,7 @@ int main_server(int argc,char* argv[]){
 		juego->setResetear(false);
 
 		if(contieneSonido(paqueteCiclo)){
-			servidor->encolarSonido(paqueteCiclo);
-			printf("Encola sonido\n");
+			servidor->encolarExplosion(paqueteCiclo);
 		}
 
 		if(paqueteCiclo->radio_explosion != 0 && paqueteCiclo->radio_explosion != -1 && servidor->getTamanioColaExplosion()==0){
@@ -219,6 +218,7 @@ int main_server(int argc,char* argv[]){
 //			if (winners[0] != '\0') printf("GANADOR5 %s \n", winners);
 			printf("RESETEA EL NIVEL EL SERVER, en maim server \n");
 			juego->resetNivel();
+//			if (juego->getResetear()) printf("EN EL JUEGO DICE QUE HAY QUE RESETEAR \n");
 			check_winner = -1;
 //			cant_winners = -1;
 //			winners[0] = '\0';

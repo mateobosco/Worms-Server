@@ -167,6 +167,7 @@ structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje, int jugador_actual
 	paquete->comenzar = empezar_juego; // 1 si el juego debe comenzar, 0  si se debe esperar a mas jugadores a que se conecten
 	paquete->reloj = tiempo_ronda;
 	paquete->resetear = boolReset;
+	if (boolReset) printf("PONGO UN RESET EN EL PAQUETE CICLO \n");
 
 
 	strcpy(paquete->nombre_jugador_actual, nombre);
