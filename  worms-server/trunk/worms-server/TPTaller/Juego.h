@@ -20,13 +20,11 @@ class Juego{
 		ManejadorPersonajes *manejador;
 		Escalador *escalador;
 		LectorMascara *lector;
-
 		Figura **figuras;
 		uint8 cantidad_figuras;
 		string cielo;
 		Agua *agua;
 		float32 viento;
-
 		void abrirLog();
 		Node* cargaInicial(Cargador* cargador);
 		void cargarEscalador(Cargador *cargador, Node nodo_escenario);
@@ -42,10 +40,8 @@ class Juego{
 		int indice_jugador_turno;
 		int reloj_ronda;
 		std::vector<Jugador*> jugadores_jugando;
-
 		void cargar();
 		structInicial* inicial;
-
 		bool proj_in_air;
 		Arma *arma_actual;
 		bool resetear;
@@ -55,10 +51,8 @@ class Juego{
 	public:
 		Juego();
 		~Juego();
-
 		void crearJugador();
 		void setArmaVacia();
-
 		Jugador** getJugadores();
 		uint8 getCantidadJugadores();
 		Mundo* getMundo();
@@ -73,26 +67,25 @@ class Juego{
 		Jugador* agregarJugador(int id, char* nombre_cliente);
 		ManejadorPersonajes* getManejadorPersonajes();
 		Arma* getArmaActual();
-
 		int getJugadorActual();
 		void pasarTurno();
 		void resetearRelojRonda();
 		int getRelojRonda();
 		void resetNivel();
-
 		void setArma(int tipo_arma, b2Vec2 posicion, int angulo, int direc);
 		void disparar();
 		void checkColisionProyectil(structPaquete* paquete);
 		void setPaqueteProyectil(structPaquete *pack);
 		void explotarBomba(b2Vec2 posicion, float32 radio);
 		void cargarSiguienteNivel();
-
 		bool getProjInAir();
+		void dormirPersonajes(Personaje* personaje_actual);
+		void despertarPersonajes();
+		void actualizarCantidadArmas();
 		void setearDanoPaquete(structPaquete* paquete);
 		void setearMovioPersonaje(structPaquete* paquete);
 
 		int* jugadoresActivos();
-
 		void aplicarViento(Arma *arma);
 		int checkGanador();
 		void setResetear(bool valor);

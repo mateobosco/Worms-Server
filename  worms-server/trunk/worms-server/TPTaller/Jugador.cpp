@@ -36,6 +36,10 @@ Jugador::Jugador(Mundo *mundo, uint8 cantidad, ManejadorPersonajes *manejador, c
 		manejador->agregarPersonaje(this->personajes[i], this->numero);
 	}
 	this->personajes[personaje_seleccionado]->setSeleccionado(true, numero);
+	this->cantidad_holy=1;
+	this->cantidad_granadas=3;
+	this->cantidad_bazookas=15;
+	this->cantidad_dinamita=10;
 }
 
 Jugador::~Jugador(){
@@ -144,3 +148,31 @@ bool Jugador::tienePersonajesVivos(uint8 cantidad_jugadores){
 	}
 	return false;
 }
+
+int Jugador::getCantBazooka(){
+	return this->cantidad_bazookas;
+}
+int Jugador::getCantGranadas(){
+	return this->cantidad_granadas;
+}
+int Jugador::getCantDinamita(){
+	return this->cantidad_dinamita;
+}
+int Jugador::getCantHoly(){
+	return this->cantidad_holy;
+}
+
+void Jugador::disminuirCantBazooka(){
+	this->cantidad_bazookas--;
+}
+void Jugador::disminuirantGranadas(){
+	this->cantidad_granadas--;
+}
+void Jugador::disminuirCantDinamita(){
+	this->cantidad_dinamita--;
+}
+void Jugador::disminuirCantHoly(){
+	this->cantidad_holy--;
+}
+
+

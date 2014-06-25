@@ -33,6 +33,20 @@ class Jugador{
 		int getPersonajeSeleccionado();
 		void reiniciarJugador(ManejadorPersonajes* manejador, Mundo* mundo);
 		bool tienePersonajesVivos(uint8 cantidad_jugadores);
+		int cantidad_holy;
+		int cantidad_granadas;
+		int cantidad_bazookas;
+		int cantidad_dinamita;
+
+		int getCantBazooka();
+		int getCantGranadas();
+		int getCantDinamita();
+		int getCantHoly();
+
+		void disminuirCantBazooka();
+		void disminuirantGranadas();
+		void disminuirCantDinamita();
+		void disminuirCantHoly();
 };
 
 #endif /* JUGADOR_H_ */
