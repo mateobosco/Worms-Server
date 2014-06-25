@@ -152,6 +152,7 @@ int main_server(int argc,char* argv[]){
 			}
 			 juego->getMundo()->comprobar_nivel_agua(juego->getArmaActual(), juego->getProjInAir());
 			check_winner = juego->checkGanador();
+			Jugador** jugadores = juego->getJugadores();
 			switch(check_winner){
 				case -1: //No hay ganador
 						break;
@@ -167,8 +168,8 @@ int main_server(int argc,char* argv[]){
 						cant_winners = (juego->getCantidadJugadores() - juego->getTotalPerdedores());
 //						printf("Cant_Jugadores: %i\nCant_Perdedores: %i\n", winners);
 						printf("Cant_winners: %i\nWinners: %s\n", cant_winners,winners);
-						SDL_Delay(10000);
 						break;
+
 				case 1: //Hay ganador
 //						for(int i = 0; i < MAX_CANT_JUGADORES; i++){
 //							int j;
@@ -186,7 +187,6 @@ int main_server(int argc,char* argv[]){
 //						}
 //						cant_winners = 1;
 //						break;
-					Jugador** jugadores = juego->getJugadores();
 					for (int k = 0 ; k< juego->getCantidadJugadores(); k++){
 						Jugador* jugActual = jugadores[k];
 						if (!(jugActual->getPerdio())){
