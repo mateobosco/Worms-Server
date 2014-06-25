@@ -95,6 +95,7 @@ private:
 	char mensaje_mostrar[MAX_MENSAJE];
 	bool hay_cliente_nuevo;
 	int envios;
+	int enviosSonido;
 };
 
 #endif /* SERVIDOR_H_ */
