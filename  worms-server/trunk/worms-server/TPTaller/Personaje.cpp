@@ -318,9 +318,9 @@ int Personaje::getMovio(){
 }
 
 void Personaje::setSalto(int estado){
-	this->salto = 0;
+	this->salto = estado;
 }
 
 void Personaje::setMovio(int estado){
-	this->movio = 0;
+	this->movio = estado;
 }
