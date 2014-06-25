@@ -304,13 +304,13 @@ void Juego::pasarTurno(){
 	Jugador* jugador_anterior = this->jugadores[this->indice_jugador_turno];
 	jugador_anterior->getPersonajes()[jugador_anterior->getPersonajeSeleccionado()]->setArmaSeleccionada(0);
 	jugador_anterior->seleccionarSiguientePersonaje();
-	printf(" PASA DE TURNO \n");
+//	printf(" PASA DE TURNO \n");
 	indice_jugador_turno++;
 
 	if(indice_jugador_turno == CANT_NECESARIA_JUGADORES){
 		indice_jugador_turno = 0;
 	}
-	printf(" AHORA ES EL TURNO DE %d \n", indice_jugador_turno);
+//	printf(" AHORA ES EL TURNO DE %d \n", indice_jugador_turno);
 //	Jugador* jugador_actual = jugadores_jugando.at(indice_jugador_turno);
 //	while(jugador_actual->getConectado() == false){
 //////		indice_jugador_turno++;
@@ -354,8 +354,8 @@ void Juego::resetearRelojRonda(){
 
 void Juego::setArma(int tipo_arma, b2Vec2 posicion, int angulo, int direccion){
 	Jugador* jugador_actual = this->getJugadores()[this->indice_jugador_turno];
-	printf(" DENTRO DEL SET ARMA SE LA PONE AL %d \n", indice_jugador_turno);
-	printf(" Le pongo el arma al personaje %d del jugador %d \n", jugador_actual->getPersonajeSeleccionado(), this->indice_jugador_turno);
+//	printf(" DENTRO DEL SET ARMA SE LA PONE AL %d \n", indice_jugador_turno);
+//	printf(" Le pongo el arma al personaje %d del jugador %d \n", jugador_actual->getPersonajeSeleccionado(), this->indice_jugador_turno);
 	if(tipo_arma ==1 ){
 		//jugador_actual = this->jugadores[this->jugador_actual];
 		this->arma_actual = new Bazooka(jugador_actual->getPersonajes()[jugador_actual->getPersonajeSeleccionado()]);

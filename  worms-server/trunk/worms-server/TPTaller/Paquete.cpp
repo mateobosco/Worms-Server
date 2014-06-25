@@ -172,6 +172,9 @@ structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje, int jugador_actual
 	if(winner[0] != '\0')
 		strcpy(paquete->ganador, winner);
 	paquete->cant_ganadores = cant_winners;
+	if (cant_winners == 1) paquete->resultado = 1;
+	if (cant_winners > 1) paquete->resultado = 0;
+	if (cant_winners <= 0) paquete->resultado = -1;
 	return paquete;
 }
 
