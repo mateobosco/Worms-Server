@@ -506,12 +506,12 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 }
 
 void Dibujador::dibujarPaquete(structPaquete* paquete, char* nombre_cliente, int cliente_id, float aux){
-	int figuras = paquete->cantidad_figuras;
+//	int figuras = paquete->cantidad_figuras;
 	int personajes = paquete->cantidad_personajes;
-	for (int i = 0 ; i < figuras ; i++ ){
-		structFigura* vector = paquete->vector_figuras;
-		this->dibujarPaqueteFigura(vector[i]);
-	}
+//	for (int i = 0 ; i < figuras ; i++ ){
+//		structFigura* vector = paquete->vector_figuras;
+//		this->dibujarPaqueteFigura(vector[i]);
+//	}
 	SDL_Color color = {0,0,0};
 	SDL_Texture* nombre = RenderText(nombre_cliente, "TPTaller/imagenes/Hilarious.ttf", color, 20); // despues preguntar el nombre de cada uno
 	renderTexture2(nombre, this->renderizador, 0 , 0 , 100, 30 );
