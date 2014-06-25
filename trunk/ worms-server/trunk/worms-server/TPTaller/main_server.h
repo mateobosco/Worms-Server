@@ -19,11 +19,11 @@ int aceptarConex(void* servidor){
 }
 
 void cargarNuevoCliente(Servidor *servidor, Juego *juego, ManejadorPersonajes *manejador_personajes){
-//	if(servidor->getHayClienteNuevo()){
+	if(servidor->getHayClienteNuevo()){
 		for (int i=0 ; i < servidor->getCantidadClientes() ; i++){
 			int* clientes = servidor->getVectorClientes();
 			if (clientes[i] != -1 && juego->getJugadores()[i] == NULL){
-				SDL_Delay(1500);
+				SDL_Delay(500);
 				Cliente* clienteActual = servidor->getClientes()[i];
 				char *nombre = clienteActual->getNombre();
 				Jugador* jug = juego->agregarJugador(i, nombre);
@@ -33,7 +33,7 @@ void cargarNuevoCliente(Servidor *servidor, Juego *juego, ManejadorPersonajes *m
 		servidor->clienteNuevoCargado();
 		juego->getMundo()->setVectorPersonajes(manejador_personajes->getPersonajes(), manejador_personajes->getCantidadPersonajes(), manejador_personajes->getCantidadJugadores());
 		juego->getMundo()->setFiguras(juego->getFiguras(), juego->getCantidadFiguras());
-//	}
+	}
 }
 
 int main_server(int argc,char* argv[]){
@@ -106,8 +106,10 @@ int main_server(int argc,char* argv[]){
 			servidor->encolarExplosion(paqueteCiclo);
 			servidor->agregarExplosion(paqueteCiclo->posicion_proyectil ,paqueteCiclo->radio_explosion);
 		}
+//		if (paqueteCiclo->cant_ganadores > 0) servidor->encolarExplosion(paqueteCiclo);
 		servidor->actualizarPaquete((char*)paqueteCiclo);
 		destruirPaqueteCiclo(paqueteCiclo);
+//		winners[0] = '\0';
 		structEvento* evento =NULL;
 	    evento = (structEvento*) servidor->desencolarPaquete();
 	    if(evento!=NULL) {
@@ -162,6 +164,7 @@ int main_server(int argc,char* argv[]){
 							if(j == juego->getTotalPerdedores()){
 								check_winner = i;
 								strcpy(winners, juego->getJugadores()[check_winner]->getNombre());
+
 								break;
 							}
 						}
@@ -193,11 +196,12 @@ int main_server(int argc,char* argv[]){
 //			//todo falta reiniciar el nivel	155				check_winner = -1;
 //			//juego->resetNivel();	156				cant_winners = -1;
 //		}	157				winners[0] = '\0';
+//			if (winners[0] != '\0') printf("GANADOR5 %s \n", winners);
 			printf("RESETEA EL NIVEL EL SERVER, en maim server \n");
 			juego->resetNivel();
 			check_winner = -1;
-			cant_winners = -1;
-			winners[0] = '\0';
+//			cant_winners = -1;
+//			winners[0] = '\0';
 			juego->setResetear(true);
 			juego->getMundo()->setVectorPersonajes(manejador_personajes->getPersonajes(), manejador_personajes->getCantidadPersonajes(), manejador_personajes->getCantidadJugadores());
 			juego->getMundo()->setFiguras(juego->getFiguras(), juego->getCantidadFiguras());

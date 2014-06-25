@@ -219,6 +219,7 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 			structPaquete* paquete_explosion = this->paquetesExplosion.front();
 			if(paquete_explosion!=NULL){
 				if (paquete_explosion->resetear) printf("ENVIO UN RESET \n");
+				if (paquete_explosion->ganador[0]!='\0') printf("ENVIO UN GANADOR %s \n", paquete_explosion->ganador);
 				memcpy(envio, paquete_explosion, MAX_PACK ); // todo creo que va sizeof(structPaquete) NO MAX_PACK
 				this->envios ++;
 				if (envios >= this->clientesActivos) this->paquetesExplosion.pop();
