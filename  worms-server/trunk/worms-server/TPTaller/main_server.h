@@ -110,6 +110,7 @@ int main_server(int argc,char* argv[]){
 		if(paqueteCiclo->radio_explosion != 0 && paqueteCiclo->radio_explosion != -1 && servidor->getTamanioColaExplosion()==0){
 			servidor->encolarExplosion(paqueteCiclo);
 			servidor->agregarExplosion(paqueteCiclo->posicion_proyectil ,paqueteCiclo->radio_explosion);
+			printf("Agrega explosion");
 		}
 //		if (paqueteCiclo->cant_ganadores > 0) servidor->encolarExplosion(paqueteCiclo);
 		servidor->actualizarPaquete((char*)paqueteCiclo);
@@ -234,8 +235,8 @@ int main_server(int argc,char* argv[]){
 		juego->getMundo()->step(0.025, 4, 2);
 	}
 	logFile.close();
-	delete juego;
-	delete servidor;
+	if(juego) delete juego; juego = NULL;
+	if(servidor) delete servidor; servidor = NULL;
 	SDL_DestroyMutex(un_mutex);
 	return retorno;
 }

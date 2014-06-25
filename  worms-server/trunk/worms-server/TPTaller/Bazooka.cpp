@@ -12,7 +12,7 @@ Bazooka::Bazooka(Personaje* personaje){
 }
 
 Bazooka::~Bazooka(){
-	if (shape_proy) delete shape_proy;
+	if (shape_proy) delete shape_proy; shape_proy = NULL;
 }
 
 void Bazooka::disparar(Mundo* mundo){

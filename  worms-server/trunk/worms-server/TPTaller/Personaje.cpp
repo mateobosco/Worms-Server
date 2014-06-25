@@ -108,7 +108,7 @@ float32* Personaje::getVecX(){
 	for (int i = cantidad-1 ; i>=0 ; i-- ){
 		vector_x[i] = vertices[i].x;
 	}
-	delete[] vertices;
+	if(vertices) delete[] vertices;
 	return vector_x;
 }
 
@@ -121,7 +121,7 @@ float32* Personaje::getVecY(){
 	for (int i = cantidad-1 ; i>=0 ; i-- ){
 		vector_y[i] = vertices[i].y;
 	}
-	delete[] vertices;
+	if(vertices) delete[] vertices;
 	return vector_y;
 }
 
@@ -161,7 +161,7 @@ void Personaje::leermovimiento(int direccion, int id_jugador){
 			resultado = b2TestOverlap(shape_actual,0, over , 0,  transformada_actual, transformOver);
 			if (resultado) break;
 		}
-		delete over;
+		if(over) delete over; over = NULL;
 		if((direccion == 2  && resultado) || ((direccion == 2) && (body->GetContactList() != NULL))){ // para arriba
 			this->mover(b2Vec2(0,-3));
 			this->salto = 1;

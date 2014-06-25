@@ -29,12 +29,12 @@ Servidor::Servidor(int maxCon){
 
 Servidor::~Servidor() {
 	for (int i=0; i < MAX_CANT_JUGADORES; i++){
-			if (this->clientes[i] != NULL) delete this->clientes[i];
+			if (this->clientes[i] != NULL) delete this->clientes[i]; this->clientes[i] = NULL;
 	}
 	this->finalizar = true;
 //	SDL_WaitThread(this->escuchar, 0);
 //	SDL_WaitThread(this->aceptar, 0);
-	delete this->listener;
+	if(this->listener) delete this->listener; this->listener = NULL;
 	SDL_DestroyMutex(mutex);
 }
 
@@ -128,7 +128,7 @@ int Servidor::aceptarConexiones(){
 						cliente->setJugador(cliente_viejo->getJugador());
 						cliente->getJugador()->conectar();
 						cliente->setID(cliente_viejo->getID());
-						delete cliente_viejo;
+						if(cliente_viejo) delete cliente_viejo; cliente_viejo = NULL;
 					} else{
 						this->cantClientes++;
 					}
@@ -168,7 +168,7 @@ int Servidor::aceptarConexiones(){
 						loguear();
 						logFile << " Cliente: "<< cliente->getNombre()  << "rechazado." << endl;
 					}
-					delete cliente;
+					if(cliente) delete cliente; cliente= NULL;
 					return EXIT_FAILURE;
 				}
 			} else{
@@ -178,7 +178,7 @@ int Servidor::aceptarConexiones(){
 				if(this->runEnviarInfoInicial(cliente)<=0)	return EXIT_FAILURE;
 			}
 		}else {
-			delete cliente;
+			if(cliente) delete cliente; cliente = NULL;
 			return EXIT_FAILURE;
 		}
 	}else{

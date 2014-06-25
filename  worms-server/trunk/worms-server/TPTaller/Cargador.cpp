@@ -258,7 +258,7 @@ Rectangulo* Cargador::loadRectangulo(Node nodo, Mundo* mundo, Escalador *escalad
 	if (mundo->checkOverlap(rect, escalador,i)){
 		return rect;
 	} else{
-		delete rect;
+		if(rect) delete rect; rect = NULL;
 		return NULL;
 	}
 }
@@ -274,7 +274,7 @@ Circulo* Cargador::loadCirculo (Node nodo, Mundo* mundo, Escalador *escalador,si
 	if (mundo->checkOverlap(circulo, escalador,i)){
 		return circulo;
 	} else{
-		delete circulo;
+		if(circulo) delete circulo; circulo = NULL;
 		return NULL;
 	}
 }

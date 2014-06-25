@@ -10,7 +10,7 @@ Dinamita::Dinamita(Personaje *personaje) {
 }
 
 Dinamita::~Dinamita() {
-	if (this->shape_proy) delete this->shape_proy;
+	if (this->shape_proy) delete this->shape_proy; this->shape_proy = NULL;
 }
 
 void Dinamita::disparar(Mundo* mundo){

@@ -19,7 +19,7 @@ Agua::Agua(float32 nivel_agua, string &origen){
 }
 
 Agua::~Agua(){
-	SDL_FreeSurface(this->surface);
+	if(this->surface) SDL_FreeSurface(this->surface);
 }
 
 float32 Agua::GetNivel(){

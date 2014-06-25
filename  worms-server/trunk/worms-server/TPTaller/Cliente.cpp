@@ -44,9 +44,9 @@ Cliente::Cliente(const char *name, const char *ip_sv, const char *puerto){
 }
 
 Cliente::~Cliente(){
-	delete this->paqueteInicial;
+	if(this->paqueteInicial) delete this->paqueteInicial; this->paqueteInicial = NULL;
 	this->activo = false;
-	delete this->socket_cl;
+	if(this->socket_cl) delete this->socket_cl; this->socket_cl = NULL;
 	SDL_DestroyMutex(mutex);
 	Cliente::cant_clientes--;
 }

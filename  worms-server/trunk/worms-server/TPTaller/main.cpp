@@ -59,7 +59,7 @@ int mainPrueba(int argc,char* argv[]){
 	dibujador->close();
 
 	logFile.close();
-	delete juego;
+	if(juego) delete juego; juego = NULL;
 	return retorno;
 
 }

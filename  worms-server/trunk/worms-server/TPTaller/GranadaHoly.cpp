@@ -10,7 +10,7 @@ GranadaHoly::GranadaHoly(Personaje* personaje){
 }
 
 GranadaHoly::~GranadaHoly(){
-	if (shape_proy) delete shape_proy;
+	if (shape_proy) delete shape_proy; this->shape_proy = NULL;
 }
 
 void GranadaHoly::disparar(Mundo* mundo){
