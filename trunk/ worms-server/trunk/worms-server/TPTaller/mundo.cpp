@@ -17,9 +17,9 @@ Mundo::Mundo(b2Vec2 gravedad, Agua* el_agua, b2Vec2 las_escalas){
 }
 
 Mundo::~Mundo(){
-	if(this->shapeTierra) delete this->shapeTierra;
-	if(this->vertices_tierra) delete[] this->vertices_tierra;
-	delete this->my_world;
+	if(this->shapeTierra) delete this->shapeTierra; this->shapeTierra = NULL;
+	if(this->vertices_tierra) delete[] this->vertices_tierra; this->vertices_tierra = NULL;
+	if(this->my_world) delete this->my_world; this->my_world = NULL;
 }
 
 b2Body* Mundo::devolverBodies(){
@@ -83,7 +83,7 @@ void Mundo::Crear_Chains(b2Vec2* tierra, float32 pixelesX){
 	body->CreateFixture(&fd);
 	this->vertices_tierra = vs;
 	this->cantidad_vertices_tierra = cantidad+3;
-	delete[] tierra;
+	if(tierra) delete[] tierra;
 	this->shapeTierra = shape;
 	this->bodyTierra = body;
 	//delete[] vs;
@@ -141,7 +141,7 @@ void Mundo::crearEdge(b2Vec2* tierra, float32 pixelesX){
 
 	this->vertices_tierra = vs;
 	this->cantidad_vertices_tierra = cantidad+2;
-	delete[] tierra;
+	if(tierra) delete[] tierra;
 }
 
 void Mundo::CrearTierraPoligono(b2Vec2* tierra, float32 pixelesX,Escalador* escalador){
@@ -208,7 +208,7 @@ void Mundo::CrearTierraPoligono(b2Vec2* tierra, float32 pixelesX,Escalador* esca
 
 	this->vertices_tierra = vs;
 	this->cantidad_vertices_tierra = cantidad+2;
-	delete[] tierra;
+	if(tierra) delete[] tierra;
 
 }
 
@@ -271,7 +271,7 @@ void Mundo::CrearTierraPoligono1(b2Vec2* tierra, float32 pixelesX,Escalador* esc
 
 	this->vertices_tierra = vs;
 	this->cantidad_vertices_tierra = cantidad+2;
-	delete[] tierra;
+	if(tierra) delete[] tierra;
 
 }
 
@@ -392,10 +392,10 @@ bool Mundo::checkOverlap(Figura* figura_ins, Escalador *escalador,size_t i){
 					if(pos_ins.y > vector_tierra[(int)(indice_tierra->x)].y) {
 						loguear();
 						logFile <<"    Warning " <<"\t Figura número: "<<i<<" se inicializa en tierra. Se destruye."<< endl;
-						delete indice_tierra;
+						if(indice_tierra) delete indice_tierra;
 						return false;
 					}
-					delete indice_tierra;
+					if(indice_tierra) delete indice_tierra;
 				}
 			}
 		}

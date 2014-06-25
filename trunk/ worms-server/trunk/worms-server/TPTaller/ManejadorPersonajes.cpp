@@ -16,7 +16,7 @@ ManejadorPersonajes::ManejadorPersonajes() {
 
 ManejadorPersonajes::~ManejadorPersonajes() {
 	//Es responsabilidad de cada Jugador borrar sus personajes
-	delete[] this->vector_personajes;
+	if(this->vector_personajes) delete[] this->vector_personajes; this->vector_personajes = NULL;
 }
 
 void ManejadorPersonajes::seleccionarPersonaje(b2Vec2 posicion, int id_jugador){
@@ -40,7 +40,7 @@ void ManejadorPersonajes::seleccionarPersonaje(b2Vec2 posicion, int id_jugador){
 			int dueno = personaje->getNrojugador();
 		}
 	}
-	delete shapeMouse;
+	if(shapeMouse) delete shapeMouse; shapeMouse = NULL;
 }
 
 void ManejadorPersonajes::AgregarJugador(Mundo* mundo, int id_jugador, Personaje** vectorPersonajes){

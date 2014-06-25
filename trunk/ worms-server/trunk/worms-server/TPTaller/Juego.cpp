@@ -35,23 +35,23 @@ Juego::~Juego(){
 	for(size_t i= 0; i < cantidad_figuras ; i++){
 		if (figuras != NULL){
 			if(figuras[i] != NULL){
-				delete figuras[i];
+				if(figuras[i] )delete figuras[i]; figuras[i] = NULL;
 			}
 		}
 	}
-	delete[] figuras;
-	delete agua;
-	delete lector;
-	delete mundo;
-	delete manejador;
-	delete escalador;
+	if(figuras) delete[] figuras; figuras = NULL;
+	if(agua) delete agua; agua = NULL;
+	if(lector) delete lector; lector = NULL;
+	if(mundo) delete mundo; mundo = NULL;
+	if(manejador) delete manejador; manejador = NULL;
+	if(escalador) delete escalador; escalador = NULL;
 	for(Uint8 i = 0; i < cantidad_jugadores; i++){
 		if(jugadores[i] != NULL){
-			delete jugadores[i];
+			if(jugadores[i]) delete jugadores[i]; jugadores[i] = NULL;
 		}
 	}
 	if(arma_actual){
-		delete arma_actual;
+		delete arma_actual; arma_actual = NULL;
 	}
 }
 
@@ -98,8 +98,8 @@ void Juego::cargar() {
 	this->cargaPrincipal(cargador, *nodo_escenario);
 	this->viento = cargador->getViento();
 	inicial = cargador->getPaqueteInicial();
-	delete nodo_escenario;
-	delete cargador;
+	if(nodo_escenario) delete nodo_escenario; nodo_escenario = NULL;
+	if(cargador )delete cargador; cargador = NULL;
 }
 
 // Funciones Privadas:
@@ -118,7 +118,7 @@ Node* Juego::cargaInicial(Cargador* cargador){
 			(cargador->getNodo(cargador->getNodo(),*nodo_escenario,"Escenario"))||(cargador->getNodo(cargador->getNodo(),*nodo_escenario,"Esc")))){
 		loguear();
 		logFile << "    Error   " << "\t No se encuentra el escenario. Se carga escenario por defecto."<<endl;
-		delete cargador;
+		if(cargador) delete cargador; cargador = NULL;
 		cargador = new Cargador(pathDefEs.c_str());
 		(*nodo_escenario) = cargador->getNodo()["escenario"];
 	}
@@ -210,8 +210,7 @@ void Juego::cargaPrincipal(Cargador *cargador, Node nodo_escenario){
 	cargarLector(tierra);
 	cargador->loadViento(nodo_escenario);
 	if(this->lector == NULL){
-		delete this->mundo;
-		this->mundo = NULL;
+		if(this->mundo) delete this->mundo; this->mundo = NULL;
 	}
 	generarTierra();
 	cargarFiguras(cargador, nodo_escenario);
@@ -616,7 +615,7 @@ void Juego::setPaqueteProyectil(structPaquete *pack){
 			b2FixtureDef fd;
 			fd.shape = &shape;
 			body->CreateFixture(&fd);
-			delete[] verticesNuevo;
+			if(verticesNuevo) delete[] verticesNuevo;
 		}
 	}
     return;

@@ -47,15 +47,15 @@ Dibujador::Dibujador(SDL_Renderer* renderer, Escalador* esc){
 }
 
 Dibujador::~Dibujador(){
-	delete this->escalador;
-	if(this->textureAgua) SDL_DestroyTexture(this->textureAgua);
-	if(this->textureCielo) SDL_DestroyTexture(this->textureCielo);
-	if (this->textureTierra) SDL_DestroyTexture(textureTierra);
-	if (this->texturederecha) SDL_DestroyTexture(texturederecha);
-	if (this->textureizquierda) SDL_DestroyTexture(textureizquierda);
-	if (this->texturederechaNEGRO) SDL_DestroyTexture(texturederechaNEGRO);
-	if (this->textureizquierdaNEGRO) SDL_DestroyTexture(textureizquierdaNEGRO);
-	if (this->surfaceTierra) SDL_FreeSurface(this->surfaceTierra);
+	if(this->escalador) delete this->escalador; this->escalador = NULL;
+	if(this->textureAgua) SDL_DestroyTexture(this->textureAgua); this->textureAgua = NULL;
+	if(this->textureCielo) SDL_DestroyTexture(this->textureCielo); this->textureCielo = NULL;
+	if (this->textureTierra) SDL_DestroyTexture(textureTierra); this->textureTierra = NULL;
+	if (this->texturederecha) SDL_DestroyTexture(texturederecha); this->texturederecha = NULL;
+	if (this->textureizquierda) SDL_DestroyTexture(textureizquierda); this->textureizquierda = NULL;
+	if (this->texturederechaNEGRO) SDL_DestroyTexture(texturederechaNEGRO); this->texturederechaNEGRO = NULL;
+	if (this->textureizquierdaNEGRO) SDL_DestroyTexture(textureizquierdaNEGRO); this->textureizquierdaNEGRO = NULL;
+	if (this->surfaceTierra) SDL_FreeSurface(this->surfaceTierra); this->surfaceTierra = NULL;
 	this->close();
 }
 

@@ -41,7 +41,7 @@ Jugador::Jugador(Mundo *mundo, uint8 cantidad, ManejadorPersonajes *manejador, c
 Jugador::~Jugador(){
 	for(int i = 0; i < MAX_CANT_PERSONAJES; i++){
 		if(this->personajes[i] != NULL){
-			delete this->personajes[i];
+			if(personajes[i]) delete this->personajes[i]; this->personajes[i] = NULL;
 		}
 	}
 }

@@ -9,7 +9,7 @@ Suicida::Suicida(Personaje *un_personaje) {
 }
 
 Suicida::~Suicida() {
-	if (this->shape_proy) delete this->shape_proy;
+	if (this->shape_proy) delete this->shape_proy; this->shape_proy = NULL;
 }
 
 void Suicida::disparar(Mundo* mundo){

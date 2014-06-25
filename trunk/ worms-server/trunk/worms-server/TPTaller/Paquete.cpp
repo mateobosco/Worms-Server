@@ -19,7 +19,7 @@ structFigura* crearPaqueteFigura(Figura* figura){
 			paquete->vector_vertices[i].x = vertices[i].x;
 			paquete->vector_vertices[i].y = vertices[i].y;
 		}
-		delete[] vertices;
+		if(vertices) delete[] vertices;
 		paquete->cantidad = 4;
 
 	}
@@ -32,7 +32,7 @@ structFigura* crearPaqueteFigura(Figura* figura){
 			paquete->vector_vertices[i].x = vertices[i].x;
 			paquete->vector_vertices[i].y = vertices[i].y;
 		}
-		delete[] vertices;
+		if(vertices) delete[] vertices;
 	}
 	return paquete;
 }
@@ -76,17 +76,17 @@ structPersonaje* crearPaquetePersonaje(Personaje* personaje){
 	}else{
 		paquete->perdioVida = 1;
 	}
-//	printf("pone en el paquete vida %d, movio %d,salto %d \n", paquete->perdioVida,paquete->movio,paquete->salto);
+
 	return paquete;
 }
 
 
 void destruirPaqueteFigura(structFigura* paquete){
-	delete paquete;
+	if(paquete) delete paquete;
 }
 
 void destruirPaquetePersonaje(structPersonaje* paquete){
-	delete paquete;
+	if(paquete) delete paquete;
 }
 
 structEvento* crearPaqueteClick(int* click, Escalador* escalador, int cliente){
@@ -149,6 +149,8 @@ structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje, int jugador_actual
 	int cantidad_personajes = mundo->getCantidadPersonajes();
 	for (int i=0 ; i<cantidad_personajes; i++){
 		structPersonaje* paquetito = crearPaquetePersonaje(vector_personajes[i]);
+		//if(vector_personajes[i]->getMovio() == 1)paquete->movio = 1;
+		//if(vector_personajes[i]->getSalto() == 1)paquete->salto = 1;
 		//printf(" le pone al paquete en nombre %s , %d \n", paquete->nombre_jugador_actual, paquete->turno_jugador);
 		resetBoolPersonaje(vector_personajes[i]);
 		memcpy(&paquete->vector_personajes[i], paquetito, sizeof(structPersonaje));
