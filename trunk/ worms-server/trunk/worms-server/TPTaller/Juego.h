@@ -88,7 +88,8 @@ class Juego{
 		void cargarSiguienteNivel();
 
 		bool getProjInAir();
-
+		void setearDanoPaquete(structPaquete* paquete);
+		void setearMovioPersonaje(structPaquete* paquete);
 
 		int* jugadoresActivos();
 

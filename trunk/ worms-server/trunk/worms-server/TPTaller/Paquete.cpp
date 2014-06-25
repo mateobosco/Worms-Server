@@ -60,8 +60,6 @@ structPersonaje* crearPaquetePersonaje(Personaje* personaje){
 	//paquete->nombre_cliente = personaje->getNombreCliente();
 	paquete->arma_seleccionada = personaje->getArmaSeleccionada();
 	paquete->angulo_arma = personaje->getAnguloArma();
-
-
 	bool* seleccion = personaje->getSeleccion();
 	for (int i = 0 ; i<4; i++){
 		if (seleccion[i]){
@@ -71,6 +69,14 @@ structPersonaje* crearPaquetePersonaje(Personaje* personaje){
 			paquete->seleccionado[i]=0;
 		}
 	}
+	paquete->movio = personaje->getMovio();
+	paquete->salto = personaje->getSalto();
+	if(personaje->getDaniadoTurnoActual()== false){
+		paquete->perdioVida = 0;
+	}else{
+		paquete->perdioVida = 1;
+	}
+	printf("pone en el paquete vida %d, movio %d,salto %d \n", paquete->perdioVida,paquete->movio,paquete->salto);
 	return paquete;
 }
 
@@ -143,6 +149,8 @@ structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje, int jugador_actual
 	int cantidad_personajes = mundo->getCantidadPersonajes();
 	for (int i=0 ; i<cantidad_personajes; i++){
 		structPersonaje* paquetito = crearPaquetePersonaje(vector_personajes[i]);
+		//printf(" le pone al paquete en nombre %s , %d \n", paquete->nombre_jugador_actual, paquete->turno_jugador);
+		resetBoolPersonaje(vector_personajes[i]);
 		memcpy(&paquete->vector_personajes[i], paquetito, sizeof(structPersonaje));
 		destruirPaquetePersonaje(paquetito);
 	}
@@ -184,4 +192,19 @@ void destruirPaqueteCiclo(structPaquete* paquete){
 
 bool estaVacio(structEvento* paquete){
 	return (paquete->nro_jugador == MAX_CANT_JUGADORES);
+}
+
+void resetBoolPersonaje(Personaje* personaje){
+	personaje->setMovio(0);
+	personaje->setSalto(0);
+}
+
+bool contieneSonido(structPaquete* paqueteCiclo){
+	structPersonaje* personajes = paqueteCiclo->vector_personajes;
+	for(int i = 0;i< paqueteCiclo->cantidad_personajes;i++){
+		if((personajes[i].perdioVida ==1) || (personajes[i].movio ==1)||(personajes[i].salto==1)){
+			return true;
+		}
+	}
+	return false;
 }
