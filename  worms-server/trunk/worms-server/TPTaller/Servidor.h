@@ -67,13 +67,17 @@ public:
 	void agregarExplosion(b2Vec2 posicion, float32 radio);
 	bool getHayClienteNuevo();
 	void clienteNuevoCargado();
+
+	void encolarSonido(structPaquete* paquete);
 	void reiniciarExplosionesPaquete();
+
 
 private:
 	char paqueteEnviar[MAX_PACK];
 	char paqueteInicial[MAX_PACK];
 	queue<void*> paquetesRecibir;
 	queue<structPaquete*> paquetesExplosion;
+	queue<structPaquete*> paquetesConSonido;
 	int cantidadMaxConexiones;
 	int cantClientes;
 	int clientesActivos;

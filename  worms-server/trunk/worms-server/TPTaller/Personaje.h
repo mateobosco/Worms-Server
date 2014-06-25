@@ -51,6 +51,11 @@ public:
 	void quitarEnergia(int descontar);
 	bool getDaniadoTurnoActual();
 	void setDaniadoTurnoActual(bool estado);
+	int getSalto();
+	int getMovio();
+
+	void setSalto(int estado);
+	void setMovio(int estado);
 
 private:
 	const char* dir_imagen;
@@ -68,6 +73,8 @@ private:
 	int arma_seleccionada;
 	int energia;
 	int angulo_arma;
+	int salto;
+	int movio;
 
 	b2CircleShape* shape2;
 	float32 radio;

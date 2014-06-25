@@ -63,6 +63,8 @@ Personaje::Personaje(Mundo* mundo, Uint8 numero_jugador, char* nombre_client) {
 	}
 	orientacion = 1;
 	daniado_turno_actual = false;
+	this->movio = 0;
+	this->salto = 0;
 }
 
 Personaje::~Personaje() {
@@ -130,12 +132,14 @@ void Personaje::leermovimiento(int direccion, int id_jugador){
 		if (direccion == 3 && body->GetLinearVelocity().x < 0.7){ // para la derecha
 			dir_imagen = "TPTaller/imagenes/gusanitoderecha.png";
 			orientacion=1;
+			this->movio = 1;
 			this->mover(b2Vec2(2,0));
 			return;
 		}
 		if (direccion == 1 && body->GetLinearVelocity().x > -0.7 ){ // para la izquierda
 			dir_imagen = "TPTaller/imagenes/gusanitoizquierda.png";
 			orientacion=-1;
+			this->movio = 1;
 			this->mover(b2Vec2(-2,0));
 			return;
 		}
@@ -160,10 +164,12 @@ void Personaje::leermovimiento(int direccion, int id_jugador){
 		delete over;
 		if((direccion == 2  && resultado) || ((direccion == 2) && (body->GetContactList() != NULL))){ // para arriba
 			this->mover(b2Vec2(0,-3));
+			this->salto = 1;
 			return;
 		}
 		if ( (direccion == 4  && body->GetLinearVelocity().x <0.7 ) && (body->GetContactList() != NULL) ){ // para arriba a la derecha
 			this->mover(b2Vec2(2,-3));
+			this->salto = 1;
 //			if(body->GetLinearVelocity().y == 0)
 //				this->mover(b2Vec2(2,-3));
 //			else
@@ -172,6 +178,7 @@ void Personaje::leermovimiento(int direccion, int id_jugador){
 		}
 		if ( (direccion == 5 && body->GetLinearVelocity().x >-0.7 ) && (body->GetContactList() != NULL)){ // para arriba a la izq
 			this->mover(b2Vec2(-2,-3));
+			this->salto = 1;
 //			if(body->GetLinearVelocity().y == 0)
 //				this->mover(b2Vec2(-2,-3));
 //			else
@@ -181,6 +188,7 @@ void Personaje::leermovimiento(int direccion, int id_jugador){
 		}
 		if((direccion == 5) && (body->GetContactList() != NULL)){ // para arriba a la izq
 			this->mover(b2Vec2(-2,-3));
+			this->salto = 1;
 
 		}
 	}
@@ -299,4 +307,20 @@ bool Personaje::getDaniadoTurnoActual(){
 
 void Personaje::setDaniadoTurnoActual(bool estado){
 	daniado_turno_actual = estado;
+}
+
+int Personaje::getSalto(){
+	return this->salto;
+}
+
+int Personaje::getMovio(){
+	return this->movio;
+}
+
+void Personaje::setSalto(int estado){
+	this->salto = 0;
+}
+
+void Personaje::setMovio(int estado){
+	this->movio = 0;
 }

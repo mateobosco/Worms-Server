@@ -102,6 +102,11 @@ int main_server(int argc,char* argv[]){
 		}
 		juego->setResetear(false);
 
+		if(contieneSonido(paqueteCiclo)){
+			servidor->encolarSonido(paqueteCiclo);
+			printf("Encola sonido\n");
+		}
+
 		if(paqueteCiclo->radio_explosion != 0 && paqueteCiclo->radio_explosion != -1 && servidor->getTamanioColaExplosion()==0){
 			servidor->encolarExplosion(paqueteCiclo);
 			servidor->agregarExplosion(paqueteCiclo->posicion_proyectil ,paqueteCiclo->radio_explosion);
@@ -190,6 +195,20 @@ int main_server(int argc,char* argv[]){
 	    }
 
 
+//
+//		if ((check_winner != -1 && servidor->getCantidadClientesActivos() >= CANT_NECESARIA_JUGADORES)/*|| reiniciar*/){
+////			strcpy(winner, juego->getJugadores()[numero_winner]->getNombre());	153				printf("RESETEA EL NIVEL EL SERVER, en maim server \n");
+////			printf("Ganó el jugador: %s\n", winner);	154				juego->resetNivel();
+////			//todo falta reiniciar el nivel	155				check_winner = -1;
+////			//juego->resetNivel();	156				cant_winners = -1;
+////		}	157				winners[0] = '\0';
+//			juego->setResetear(true);
+//			juego->getMundo()->setVectorPersonajes(manejador_personajes->getPersonajes(), manejador_personajes->getCantidadPersonajes(), manejador_personajes->getCantidadJugadores());
+//			juego->getMundo()->setFiguras(juego->getFiguras(), juego->getCantidadFiguras());
+////			reiniciar = false;
+//		}
+
+
 		if ((check_winner != -1 && servidor->getCantidadClientesActivos() >= CANT_NECESARIA_JUGADORES)/*|| reiniciar*/){
 //			strcpy(winner, juego->getJugadores()[numero_winner]->getNombre());	153				printf("RESETEA EL NIVEL EL SERVER, en maim server \n");
 //			printf("Ganó el jugador: %s\n", winner);	154				juego->resetNivel();
@@ -208,6 +227,7 @@ int main_server(int argc,char* argv[]){
 //			reiniciar = false;
 			servidor->reiniciarExplosionesPaquete();
 		}
+
 
 		SDL_Delay(10);
 		juego->getMundo()->step(0.025, 4, 2);

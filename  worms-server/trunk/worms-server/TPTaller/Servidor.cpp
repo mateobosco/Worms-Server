@@ -214,7 +214,16 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 		structPaquete* paqueteCiclo = (structPaquete*) envio;
 
 
-		if( this->paquetesExplosion.size()>=1 ){
+
+		if( this->paquetesConSonido.size()>=1 ){
+			//printf(" ///////paquetesExplosion.size()>=1/////////////// \n");
+			structPaquete* paqueteSonido = this->paquetesConSonido.front();
+			if(paqueteSonido!=NULL){
+				memcpy(envio, paqueteSonido, MAX_PACK );
+				this->paquetesConSonido.pop();
+				//delete paquete_explosion; //todo
+			}
+		}else if( this->paquetesExplosion.size()>=1 ){
 			//printf(" ///////paquetesExplosion.size()>=1/////////////// \n");
 			structPaquete* paquete_explosion = this->paquetesExplosion.front();
 			if(paquete_explosion!=NULL){
@@ -226,6 +235,8 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 				//delete paquete_explosion; //todo
 			}
 		}
+
+
 		paqueteCiclo->id=cliente->getID();
 
 		if (setsockopt (cliente->getSocket()->getFD(), SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout,
@@ -487,6 +498,14 @@ void Servidor::clienteNuevoCargado(){
 	this->hay_cliente_nuevo = false;
 }
 
+void Servidor::encolarSonido(structPaquete* paquete){
+	if(paquete!=NULL){
+		structPaquete* nuevo = new structPaquete;
+		memcpy(nuevo, paquete, sizeof(structPaquete));
+		this->paquetesConSonido.push(nuevo);
+	}
+}
+
 void Servidor::reiniciarExplosionesPaquete(){
 	structInicial* paquete = (structInicial*) this->paqueteInicial;
 	paquete->cantidadExplosiones = 0;
@@ -496,3 +515,4 @@ void Servidor::reiniciarExplosionesPaquete(){
 		exp.posicion = b2Vec2(-1,-1);
 	}
 }
+
