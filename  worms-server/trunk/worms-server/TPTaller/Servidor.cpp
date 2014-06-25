@@ -212,26 +212,27 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 		SDL_UnlockMutex(this->mutex);
 
 		structPaquete* paqueteCiclo = (structPaquete*) envio;
+//		printf("TAMANO DE LAS COLAS, explosiones %d -------- sonidos %d \n", (int) paquetesExplosion.size(), (int) paquetesConSonido.size());
 
 
 
-		if( this->paquetesConSonido.size()>=1 ){
-			//printf(" ///////paquetesExplosion.size()>=1/////////////// \n");
+
+		if( this->paquetesExplosion.size()>=1 ){
+			structPaquete* paquete_explosion = this->paquetesExplosion.front();
+			if(paquete_explosion!=NULL){
+//				if (paquete_explosion->resetear) printf("ENVIO UN RESET \n");
+//				if (paquete_explosion->ganador[0]!='\0') printf("ENVIO UN GANADOR %s \n", paquete_explosion->ganador);
+				memcpy(envio, paquete_explosion, MAX_PACK ); // todo creo que va sizeof(structPaquete) NO MAX_PACK
+				this->envios ++;
+				if (envios >= this->clientesActivos) this->paquetesExplosion.pop();
+				//delete paquete_explosion; //todo
+			}
+		}
+		else if( this->paquetesConSonido.size()>=1 ){
 			structPaquete* paqueteSonido = this->paquetesConSonido.front();
 			if(paqueteSonido!=NULL){
 				memcpy(envio, paqueteSonido, MAX_PACK );
 				this->paquetesConSonido.pop();
-				//delete paquete_explosion; //todo
-			}
-		}else if( this->paquetesExplosion.size()>=1 ){
-			//printf(" ///////paquetesExplosion.size()>=1/////////////// \n");
-			structPaquete* paquete_explosion = this->paquetesExplosion.front();
-			if(paquete_explosion!=NULL){
-				if (paquete_explosion->resetear) printf("ENVIO UN RESET \n");
-				if (paquete_explosion->ganador[0]!='\0') printf("ENVIO UN GANADOR %s \n", paquete_explosion->ganador);
-				memcpy(envio, paquete_explosion, MAX_PACK ); // todo creo que va sizeof(structPaquete) NO MAX_PACK
-				this->envios ++;
-				if (envios >= this->clientesActivos) this->paquetesExplosion.pop();
 				//delete paquete_explosion; //todo
 			}
 		}
