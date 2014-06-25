@@ -118,10 +118,21 @@ int main_server(int argc,char* argv[]){
 //		winners[0] = '\0';
 		structEvento* evento =NULL;
 	    evento = (structEvento*) servidor->desencolarPaquete();
+	    printf("Antes de free(evento)\n");
 	    if(evento!=NULL) {
 	    	juego->aplicarPaquete(evento, comenzar);
-	    	free(evento);
+	    	if(evento->arma_seleccionada <= 6 && evento->nro_jugador <=4 && evento->direccion != -9 && evento->direccion == -1 && evento->direccion == 0 && evento->direccion == 1){
+	    		//printf(" PUDO SER LEIDO ESTA MIERDA y es %d \n", evento->arma_seleccionada);
+	    		//printf(" PUDO SER LEIDO ESTA MIERDA y jug %d \n", evento->nro_jugador);
+	    		//printf(" PUDO SER LEIDO ESTA MIERDA y alet %d \n", evento->aleatorio);
+	    		//printf(" PUDO SER LEIDO ESTA MIERDA y direcc %d \n", evento->direccion);
+	    		//printf(" PUDO SER LEIDO ESTA MIERDA y fuerza %d \n", evento->fuerza);
+	    		free(evento);
+	    	}
+
+	    	evento = NULL;
 	    }
+	    printf("Después de free(evento)\n");
 	    if((!empezo_explosion) && (!termino_explosion)){
 //	    	if(!servidor->getRecibir()){
 //				printf("Está en el volver de recibir.\n");
