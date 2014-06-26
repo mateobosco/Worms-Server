@@ -99,6 +99,7 @@ int main_server(int argc,char* argv[]){
 		juego->setPaqueteProyectil(paqueteCiclo);
 		juego->checkColisionProyectil(paqueteCiclo);
 		if (paqueteCiclo->resetear) {
+			printf("encola el reset \n");
 			servidor->encolarExplosion(paqueteCiclo);
 		}
 		juego->setResetear(false);
@@ -106,8 +107,7 @@ int main_server(int argc,char* argv[]){
 		if(contieneSonido(paqueteCiclo)){
 			servidor->encolarExplosion(paqueteCiclo);
 		}
-		if(paqueteCiclo->radio_explosion != 0 && paqueteCiclo->radio_explosion != -1 && servidor->getTamanioColaExplosion()==0){
-			printf(" ENCOLA LA EXPLOSION\n");
+		if(paqueteCiclo->radio_explosion != 0 && paqueteCiclo->radio_explosion != -1 && servidor->getTamanioColaExplosion()>=0){
 			servidor->encolarExplosion(paqueteCiclo);
 			servidor->agregarExplosion(paqueteCiclo->posicion_proyectil ,paqueteCiclo->radio_explosion);
 			servidor->actualizarArmasPaqueteInicial(juego);
@@ -120,6 +120,8 @@ int main_server(int argc,char* argv[]){
 		structEvento* evento =NULL;
 	    evento = (structEvento*) servidor->desencolarPaquete();
 
+	   // printf("Antes de free(evento)\n");
+
 	    if(evento!=NULL) {
 //		    if(evento->arma_seleccionada != 0){
 //		    }
@@ -130,11 +132,13 @@ int main_server(int argc,char* argv[]){
 	    		//printf(" PUDO SER LEIDO ESTA MIERDA y alet %d \n", evento->aleatorio);
 	    		//printf(" PUDO SER LEIDO ESTA MIERDA y direcc %d \n", evento->direccion);
 	    		//printf(" PUDO SER LEIDO ESTA MIERDA y fuerza %d \n", evento->fuerza);
-	    		free(evento);
+	    		//free(evento);
 	    	}
 
 	    	evento = NULL;
 	    }
+
+	    //printf("Después de free(evento)\n");
 
 	    if((!empezo_explosion) && (!termino_explosion)){
 //	    	if(!servidor->getRecibir()){
