@@ -56,7 +56,7 @@ void Servidor::actualizarPaquete(char paquete[MAX_PACK]){
 
 void* Servidor::desencolarPaquete(){
 	if(!this->paquetesRecibir.empty()){
-		printf("DESENCOLO UN PAQUETE Y EN LA COLA HAY %d \n", (int) paquetesRecibir.size());
+		//printf("DESENCOLO UN PAQUETE Y EN LA COLA HAY %d \n", (int) paquetesRecibir.size());
 		void* paquete = this->paquetesRecibir.front();
 		this->paquetesRecibir.pop();
 		return paquete;
@@ -220,7 +220,7 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 
 
 
-		if( this->paquetesExplosion.size()==1 ){
+		if( this->paquetesExplosion.size()>=1 ){
 			structPaquete* paquete_explosion = this->paquetesExplosion.front();
 
 			if(paquete_explosion!=NULL){
@@ -496,6 +496,7 @@ void Servidor::agregarExplosion(b2Vec2 posicion, float32 radio){
 	explosion.radio = radio;
 	paqueteInicial->explosiones[paqueteInicial->cantidadExplosiones] = explosion;
 	paqueteInicial->cantidadExplosiones += 1;
+	printf("Explosion: cantidad: %d",paqueteInicial->cantidadExplosiones);
 }
 
 bool Servidor::getHayClienteNuevo(){

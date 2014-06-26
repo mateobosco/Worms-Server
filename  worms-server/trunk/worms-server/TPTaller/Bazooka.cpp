@@ -24,17 +24,27 @@ void Bazooka::disparar(Mundo* mundo){
 	b2World* world = mundo->devolver_world();
 	b2BodyDef bodyDef = b2BodyDef(); // creo el body def
 	b2Vec2 direccion;
+	bool crear_arriba=false;
 	if(this->personaje_duenio->getOrientacion() == -1){
 		int angulo_aux = (180 - angulo);
 		direccion.x = cos(angulo_aux * PI / 180 ); //Orientacion IZQ
 		direccion.y = sin(angulo_aux * PI / 180 );
+
 	} else{
 		direccion.x = cos( angulo * PI / 180 ); //Orientacion DER
 		direccion.y = sin( angulo * PI / 180 );
 	}
+	if(direccion.y > 0) crear_arriba = true;
 	float32 modulo = sqrt((direccion.x * direccion.x) + (direccion.y * direccion.y) );
-	bodyDef.position.x = 2 * (direccion.x / modulo) + this->personaje_duenio->getPosition().x;
-	bodyDef.position.y = 2 * (direccion.y / modulo) + this->personaje_duenio->getPosition().y;
+	if(crear_arriba){
+		bodyDef.position.x = 1.2 * (direccion.x / modulo) + this->personaje_duenio->getPosition().x;
+		bodyDef.position.y = 1.2 * (direccion.y / modulo) + this->personaje_duenio->getPosition().y-3;
+	}else {
+		bodyDef.position.x = 2 * (direccion.x / modulo) + this->personaje_duenio->getPosition().x;
+		bodyDef.position.y = 2 * (direccion.y / modulo) + this->personaje_duenio->getPosition().y;
+	}
+
+
 
 	posicion_proyectil.x = bodyDef.position.x;
 	posicion_proyectil.y = bodyDef.position.y;
@@ -53,7 +63,8 @@ void Bazooka::disparar(Mundo* mundo){
 	proyectil->SetMassData(&massData);
 
 	shape_proy = new b2CircleShape();
-	shape_proy->m_radius = tamanio_proyectil.x/2;
+	shape_proy->m_radius = tamanio_proyectil.x/4;
+	printf( "RADIOOO: %f\n", tamanio_proyectil.x/4);
 	b2Filter filtro = b2Filter();
 	filtro.groupIndex = INDICE_GRUPO;
 

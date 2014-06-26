@@ -402,7 +402,7 @@ void Juego::checkColisionProyectil(structPaquete* paquete){
 		this->aplicarViento(arma_actual);
 		if(arma_actual->checkImpacto(this->mundo) ){
 	    	this->actualizarCantidadArmas();
-			this->despertarPersonajes();
+			//this->despertarPersonajes();
 			proj_in_air = false;
 			if (this->arma_actual->getTipo() != 6 ) this->mundo->destruir_cuerpo(arma_actual->getProyectil());
 			this->arma_actual->aplicarExplosion(this->manejador);
