@@ -1,7 +1,0 @@
-Log File. Ejecución Worms
-   Fecha  | Hora |  Gravedad  | 	 Mensaje 
-25/06/2014 16:08  Warning 	 Imagen de agua no fue cargada. Path incorrecto. Por defecto se carga imagen de agua de:TPTaller/imagenes/aguita.png
-25/06/2014 16:08    Warning 	  No hay objetos para cargar 
-25/06/2014 16:08 Error 	 No se pudo enviar paquete incial.
-25/06/2014 16:08 Error 	 No se pudo enviar paquete incial.
-25/06/2014 16:10Error al recibir información del cliente: pepe
