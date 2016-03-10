@@ -32,3 +32,5 @@ Required libraries
 8.SDL2_ttf
 
 9.yaml-cpp
+
+All the required libraries are in the libraries folder with the instructions on how to install them
