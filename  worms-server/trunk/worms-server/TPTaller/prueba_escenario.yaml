@@ -3,7 +3,7 @@ escenario:
     ancho-px:      800
     alto-un:       80
     ancho-un:      100
-    alto-esc:      800  
+    alto-esc:      800
     ancho-esc:     1200
     agua:          70
     viento:        0.3

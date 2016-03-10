@@ -532,7 +532,7 @@ void Dibujador::dibujarPaquete(structPaquete* paquete, char* nombre_cliente, int
 
 bool Dibujador::init(){
 	bool success = true;
-	if(SDL_Init(SDL_INIT_VIDEO) < 0){
+/*	if(SDL_Init(SDL_INIT_VIDEO) < 0){
 		loguear();
 		logFile << "    Error   " << "\t  SDL No pudo inicializar! SDL Error: " <<  SDL_GetError()<< endl;
 		success = false;
@@ -571,7 +571,17 @@ bool Dibujador::init(){
 	this->texturederechaNEGRO = loadTexture("TPTaller/imagenes/gusanitonegroder.png", this->renderizador);
 	this->textureizquierdaNEGRO = loadTexture("TPTaller/imagenes/gusanitonegroizq.png" , this->renderizador);
 	this->flechitaroja = loadTexture("TPTaller/imagenes/flechitaroja.png", this->renderizador);
-	return success;
+	return success;*/
+
+	int imgFlags = (IMG_INIT_PNG |IMG_INIT_JPG); //
+					int iniciadas = IMG_Init(imgFlags);
+					if((iniciadas & imgFlags) != imgFlags){
+						loguear();
+						logFile << "    Error   " << "\t  SDL_image no puedo ser inicializado! SDL_image Error: " <<  SDL_GetError()<< endl;
+						cout<<"    Error   " << "\t  SDL_image no puedo ser inicializado! SDL_image Error: " <<  SDL_GetError()<<endl;
+						success = false;
+					}
+					return success;
 }
 
 void Dibujador::close(){
